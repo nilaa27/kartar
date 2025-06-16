@@ -86,8 +86,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // Buat pesan WhatsApp dengan format yang diinginkan (ini yang akan dikirim ke WA)
         const waMessage = `Data Regist Pemain\n` + // \n untuk baris baru
                         `————————————\n` +
-                        `Nama Ketua   : ${namaKetua}\n` +
-                        `No Ketua       : ${noKetua}\n` +
+                        `Captain   : ${namaKetua}\n` +
+                        `No Captain       : ${noKetua}\n` +
                         `Nama Team    : ${namaTeam}\n` +
                         `Asal Rw          : ${asalRw}\n` +
                         `————————————\n` +
