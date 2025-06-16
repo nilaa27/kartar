@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrasi Turnamen Sepak Bola</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="hero-section">
+        <div class="soccer-field-animation"></div> <h1>Registrasi Turnamen Sepak Bola</h1>
+    </div>
+
+    <div class="container">
+        <div class="registration-card">
+            <h2>Daftarkan Timmu Sekarang!</h2>
+            <form id="registrationForm">
+                <div class="input-group">
+                    <label for="namaKetua">Nama Ketua Tim</label>
+                    <input type="text" id="namaKetua" name="namaKetua" required>
+                </div>
+                <div class="input-group">
+                    <label for="namaTeam">Nama Tim</label>
+                    <input type="text" id="namaTeam" name="namaTeam" required>
+                </div>
+                <div class="input-group">
+                    <label for="asalRw">Asal RW</label>
+                    <input type="text" id="asalRw" name="asalRw" required>
+                </div>
+                <div class="input-group">
+                    <label for="noKetua">No. Ketua/Perwakilan (WhatsApp)</label>
+                    <input type="tel" id="noKetua" name="noKetua" placeholder="Contoh: 628123456789" required>
+                    <small>Pastikan nomor aktif WhatsApp diawali kode negara (misal: 62).</small>
+                </div>
+                <button type="submit" class="submit-button">Daftar Sekarang</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Turnamen Sepak Bola. All Rights Reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
