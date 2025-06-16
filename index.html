@@ -6,52 +6,72 @@
     <title>Mini Soccer Dr Soetomo</title>
     <link rel="stylesheet" href="style.css"/>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <div class="hero-section">
-        <div class="soccer-field-animation"></div>
-        <!-- Ganti h1 jadi gambar -->
-        <img src="EC3017FE-A178-41A2-8A2E-69ED08DB5E26.jpeg" alt="Pendaftaran Mini Soccer" class="logo-hero">
-    </div>
-
-    <div class="container">
-        <div class="registration-card">
-            <h2>Daftarkan Timmu Sekarang!</h2>
-            <form id="registrationForm">
-                <div class="input-group">
-                    <input type="text" id="namaKetua" name="namaKetua" required placeholder=" ">
-                    <label for="namaKetua">Nama Ketua Tim</label>
+    <div class="loading-container">
+        <div class="background-overlay"></div>
+        <div class="content-wrapper">
+            <h1>Mini Soccer Dr. Soetomo</h1>
+            <div class="soccer-ball-animation">
+                <img src="assets/soccer-ball-fire.png" alt="Soccer Ball with Fire" id="soccerBall">
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill">
+                        <img src="assets/soccer-ball-icon.png" alt="Soccer Ball Icon" class="progress-icon" id="progressIcon">
+                    </div>
                 </div>
-                <div class="input-group">
-                    <input type="text" id="namaTeam" name="namaTeam" required placeholder=" ">
-                    <label for="namaTeam">Nama Tim</label>
-                </div>
-                <div class="input-group">
-                    <select id="asalRw" name="asalRw" required>
-                        <option value="">Pilih RW</option>
-                        <option value="RW 1">RW 1</option>
-                        <option value="RW 2">RW 2</option>
-                        <option value="RW 3">RW 3</option>
-                        <option value="RW 4">RW 4</option>
-                        <option value="RW 5">RW 5</option>
-                        <option value="RW 6">RW 6</option>
-                        <option value="RW 7">RW 7</option>
-                    </select>
-                    <label for="asalRw" class="select-label">Asal RW</label>
-                </div>
-                <div class="input-group">
-                    <input type="tel" id="noKetua" name="noKetua" required placeholder=" ">
-                    <label for="noKetua">No WhatsApp</label>
-                    <small>Pastikan nomor aktif diawali kode negara (misal: 6281xxxxxx).</small>
-                </div>
-                <button type="submit" class="submit-button">Daftar Sekarang</button>
-            </form>
+                <div class="loading-text" id="loadingText">0%</div>
+            </div>
         </div>
     </div>
 
-    <footer>
-        <p>&copy; 2025 Kartar Dr Sutomo. All Rights Reserved.</p>
-    </footer>
+    <div class="main-content" style="display: none;">
+        <div class="hero-section">
+            <div class="soccer-field-animation"></div>
+            <img src="https://i.postimg.cc/G21LVWjg/Desain-tanpa-judul.png" alt="Mini Soccer Logo" class="logo-mini-soccer">
+        </div>
+
+        <div class="container">
+            <div class="registration-card">
+                <h2>Daftarkan Timmu Sekarang!</h2>
+                <form id="registrationForm">
+                    <div class="input-group">
+                        <input type="text" id="namaKetua" name="namaKetua" required placeholder=" ">
+                        <label for="namaKetua">Nama Ketua Tim</label>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="namaTeam" name="namaTeam" required placeholder=" ">
+                        <label for="namaTeam">Nama Tim</label>
+                    </div>
+                    <div class="input-group">
+                        <select id="asalRw" name="asalRw" required>
+                            <option value="">Pilih RW</option>
+                            <option value="RW 1">RW 1</option>
+                            <option value="RW 2">RW 2</option>
+                            <option value="RW 3">RW 3</option>
+                            <option value="RW 4">RW 4</option>
+                            <option value="RW 5">RW 5</option>
+                            <option value="RW 6">RW 6</option>
+                            <option value="RW 7">RW 7</option>
+                        </select>
+                        <label for="asalRw" class="select-label">Asal RW</label>
+                    </div>
+                    <div class="input-group">
+                        <input type="tel" id="noKetua" name="noKetua" required placeholder=" ">
+                        <label for="noKetua">No WhatsApp</label>
+                        <small>Pastikan nomor aktif diawali kode negara (misal: 6281xxxxxx).</small>
+                    </div>
+                    <button type="submit" class="submit-button">Daftar Sekarang</button>
+                </form>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2025 Kartar Dr Sutomo. All Rights Reserved.</p>
+        </footer>
+    </div>
 
     <script src="script.js"></script>
 </body>
