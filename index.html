@@ -1,249 +1,55 @@
-:root {
-    --primary-color: #4CAF50; /* Hijau Rumput */
-    --secondary-color: #2196F3; /* Biru Langit */
-    --text-color: #333;
-    --bg-color: #f0f2f5; /* Abu-abu muda */
-    --card-bg: #ffffff;
-    --shadow-light: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrasi Turnamen Sepak Bola</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="hero-section">
+        <div class="soccer-field-animation"></div> <h1>Registrasi Turnamen Sepak Bola</h1>
+    </div>
 
-body {
-    font-family: 'Poppins', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    line-height: 1.6;
-    overflow-x: hidden; /* Mencegah scroll horizontal */
-}
+    <div class="container">
+        <div class="registration-card">
+            <h2>Daftarkan Timmu Sekarang!</h2>
+            <form id="registrationForm">
+                <div class="input-group">
+                    <label for="namaKetua">Nama Ketua Tim</label>
+                    <input type="text" id="namaKetua" name="namaKetua" required>
+                </div>
+                <div class="input-group">
+                    <label for="namaTeam">Nama Tim</label>
+                    <input type="text" id="namaTeam" name="namaTeam" required>
+                </div>
+                <div class="input-group">
+                    <label for="asalRw" class="active">Asal RW</label> <select id="asalRw" name="asalRw" required>
+                        <option value="">Pilih RW</option>
+                        <option value="RW 1">RW 1</option>
+                        <option value="RW 2">RW 2</option>
+                        <option value="RW 3">RW 3</option>
+                        <option value="RW 4">RW 4</option>
+                        <option value="RW 5">RW 5</option>
+                        <option value="RW 6">RW 6</option>
+                        <option value="RW 7">RW 7</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="noKetua">No. Ketua/Perwakilan (WhatsApp)</label>
+                    <input type="tel" id="noKetua" name="noKetua" placeholder="Contoh: 628123456789" required>
+                    <small>Pastikan nomor aktif WhatsApp diawali kode negara (misal: 62).</small>
+                </div>
+                <button type="submit" class="submit-button">Daftar Sekarang</button>
+            </form>
+        </div>
+    </div>
 
-/* --- Hero Section & Animasi Latar Belakang --- */
-.hero-section {
-    position: relative;
-    width: 100%;
-    height: 300px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    background: linear-gradient(to bottom, var(--primary-color), #388E3C); /* Gradien hijau */
-    box-shadow: inset 0 -10px 20px rgba(0,0,0,0.2); /* Bayangan untuk efek kedalaman */
-}
+    <footer>
+        <p>&copy; 2025 Turnamen Sepak Bola. All Rights Reserved.</p>
+    </footer>
 
-.hero-section h1 {
-    color: white;
-    font-size: 2.8em;
-    text-align: center;
-    z-index: 2; /* Pastikan teks di atas animasi */
-    text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
-}
-
-/* Animasi Rumput Lapangan 3D */
-.soccer-field-animation {
-    position: absolute;
-    width: 150%; /* Lebih lebar dari viewpor tuntuk efek parallax */
-    height: 100%;
-    background-image:
-        repeating-linear-gradient(to right,
-            rgba(0,0,0,0.05) 0, rgba(0,0,0,0.05) 2px, transparent 2px, transparent 20px),
-        repeating-linear-gradient(to bottom,
-            rgba(0,0,0,0.05) 0, rgba(0,0,0,0.05) 2px, transparent 2px, transparent 20px);
-    background-size: 20px 20px;
-    /* Efek 3D dan Gerak Parallax */
-    transform: perspective(1000px) rotateX(10deg) translateY(50px);
-    opacity: 0.8;
-    animation: fieldMovement 30s linear infinite alternate; /* Gerak perlahan */
-    z-index: 1;
-}
-
-@keyframes fieldMovement {
-    0% { transform: perspective(1000px) rotateX(10deg) translateY(50px) translateX(0); }
-    100% { transform: perspective(1000px) rotateX(10deg) translateY(50px) translateX(-20%); }
-}
-
-
-/* --- Konten Utama & Kartu Registrasi --- */
-.container {
-    max-width: 800px;
-    margin: -80px auto 50px auto; /* Menaikkan kartu agar tumpang tindih hero */
-    padding: 20px;
-    position: relative;
-    z-index: 3; /* Pastikan kontainer di atas hero dan animasinya */
-}
-
-.registration-card {
-    background-color: var(--card-bg);
-    padding: 40px;
-    border-radius: 15px;
-    box-shadow: var(--shadow-light); /* Bayangan lembut untuk efek 3D */
-    transition: transform 0.3s ease-in-out; /* Animasi saat hover */
-}
-
-.registration-card:hover {
-    transform: translateY(-5px); /* Sedikit naik saat di-hover */
-}
-
-.registration-card h2 {
-    text-align: center;
-    color: var(--primary-color);
-    margin-bottom: 30px;
-    font-size: 2em;
-}
-
-/* --- Input Group & Label Floating --- */
-.input-group {
-    position: relative;
-    margin-bottom: 30px;
-}
-
-.input-group label {
-    position: absolute;
-    top: 15px; /* Posisi awal label */
-    left: 15px;
-    color: #999;
-    font-size: 1em;
-    transition: all 0.3s ease;
-    pointer-events: none; /* Agar tidak menghalangi klik input */
-    background-color: transparent;
-    padding: 0 5px;
-    z-index: 5;
-    transform: translateY(0); /* Default: tidak ada translasi */
-    transform-origin: left top; /* Penting untuk scaling */
-}
-
-/* Base style untuk input dan select */
-.input-group input,
-.input-group select {
-    width: calc(100% - 30px);
-    padding: 15px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 1.1em;
-    outline: none;
-    background-color: #f9f9f9;
-    transition: all 0.3s ease;
-    -webkit-appearance: none; /* Untuk menghilangkan default style select di beberapa browser */
-    -moz-appearance: none;
-    appearance: none;
-}
-
-/* Tambahkan arrow kustom untuk select */
-.input-group select {
-    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23000000%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13%205.7L146.2%20202.7%2018.8%2075.1a17.6%2017.6%200%200%200-25.3%2024.7l128%20127.9c7%206.9%2017.2%207%2024.2%200l128-127.9c7.5-7.4%207.5-19.5.2-26.8z%22%2F%3E%3C%2Fsvg%3E');
-    background-repeat: no-repeat;
-    background-position: right 15px center;
-    background-size: 1em;
-    padding-right: 40px; /* Ruang untuk arrow */
-}
-
-
-.input-group input:focus,
-.input-group select:focus {
-    border-color: var(--secondary-color);
-    box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.2);
-}
-
-/* Animasi Label Floating */
-/* Label akan aktif jika input dalam fokus ATAU input TIDAK KOSONG */
-.input-group input:focus + label,
-.input-group input:not(:placeholder-shown) + label,
-.input-group input.has-value + label, /* Dipicu dari JS */
-.input-group select + label.active { /* Untuk select, label selalu aktif via JS */
-    top: 0; /* Ubah ke 0 dari -10px */
-    left: 10px;
-    font-size: 0.85em;
-    color: var(--secondary-color);
-    background-color: var(--card-bg);
-    transform: translateY(-50%) scale(0.8); /* Tambah scale agar terlihat "kecil" */
-}
-
-/* Tambahkan gaya khusus untuk placeholder-shown agar tidak tumpang tindih dengan label yang sudah naik */
-.input-group input:placeholder-shown:not(:focus) + label {
-    top: 15px; /* Kembali ke posisi awal */
-    left: 15px;
-    font-size: 1em;
-    color: #999;
-    background-color: transparent;
-    transform: translateY(0) scale(1);
-}
-
-.input-group small {
-    display: block;
-    margin-top: 5px;
-    color: #777;
-    font-size: 0.85em;
-    padding-left: 5px;
-}
-
-/* --- Tombol Submit --- */
-.submit-button {
-    display: block;
-    width: 100%;
-    padding: 18px;
-    background-color: var(--primary-color);
-    color: white;
-    font-size: 1.2em;
-    font-weight: 600;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    position: relative; /* Untuk efek tekan */
-    overflow: hidden;
-    box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
-}
-
-.submit-button:hover {
-    background-color: #388E3C; /* Warna lebih gelap saat hover */
-    transform: translateY(-2px); /* Sedikit naik */
-    box-shadow: 0 8px 20px rgba(76, 175, 80, 0.5);
-}
-
-.submit-button:active {
-    transform: translateY(1px); /* Efek tekan ke dalam */
-    box-shadow: 0 2px 5px rgba(76, 175, 80, 0.3);
-}
-
-/* --- Footer --- */
-footer {
-    text-align: center;
-    padding: 30px;
-    color: #777;
-    font-size: 0.9em;
-    margin-top: 50px;
-}
-
-/* --- Responsif --- */
-@media (max-width: 768px) {
-    .hero-section h1 {
-        font-size: 2em;
-    }
-    .container {
-        margin: -50px 20px 30px 20px;
-        padding: 0;
-    }
-    .registration-card {
-        padding: 25px;
-    }
-    .input-group input,
-    .input-group select {
-        padding: 12px;
-        font-size: 1em;
-    }
-    .submit-button {
-        padding: 15px;
-        font-size: 1.1em;
-    }
-}
-
-@media (max-width: 480px) {
-    .hero-section {
-        height: 200px;
-    }
-    .hero-section h1 {
-        font-size: 1.5em;
-    }
-    .registration-card h2 {
-        font-size: 1.5em;
-    }
-}
+    <script src="script.js"></script>
+</body>
+</html>
