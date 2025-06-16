@@ -1,0 +1,124 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    overflow: hidden; /* Mencegah scroll saat loading */
+}
+
+.loading-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #1a1a1a; /* Warna latar belakang gelap */
+    z-index: 9999;
+    color: white;
+}
+
+.background-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('soccer-field-bg.png'); /* Ganti dengan gambar lapangan Anda */
+    background-size: cover;
+    background-position: center;
+    filter: blur(8px) brightness(50%); /* Efek blur dan gelap pada latar belakang */
+    z-index: 1;
+}
+
+.content-wrapper {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.5); /* Latar belakang transparan untuk konten */
+}
+
+h1 {
+    font-size: 3em;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.soccer-ball-animation {
+    margin-bottom: 40px;
+}
+
+.soccer-ball-animation img {
+    width: 150px; /* Ukuran bola */
+    height: auto;
+    animation: bounce 1s infinite alternate; /* Animasi memantul */
+}
+
+@keyframes bounce {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-20px); }
+}
+
+.progress-bar-container {
+    width: 80%;
+    max-width: 500px;
+    background-color: #333;
+    border-radius: 25px;
+    height: 30px;
+    overflow: hidden;
+    margin: 0 auto;
+    position: relative;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.progress-bar {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.progress-fill {
+    height: 100%;
+    width: 0%; /* Lebar awal 0% */
+    background-color: #4CAF50; /* Warna hijau untuk progress */
+    border-radius: 25px;
+    position: relative;
+    transition: width 0.1s linear; /* Transisi halus untuk lebar */
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; /* Ikon di akhir progress bar */
+}
+
+.progress-icon {
+    width: 40px; /* Ukuran ikon bola di progress bar */
+    height: 40px;
+    position: absolute; /* Posisikan absolut agar bisa bergerak */
+    right: -20px; /* Atur posisi awal ikon */
+    top: 50%;
+    transform: translateY(-50%);
+    transition: right 0.1s linear; /* Transisi halus untuk posisi ikon */
+}
+
+.loading-text {
+    margin-top: 15px;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+/* Animasi untuk transisi saat loading selesai */
+.loading-container.fade-out {
+    opacity: 0;
+    transition: opacity 1s ease-out;
+    pointer-events: none; /* Mencegah interaksi saat fade out */
+}
+
+.main-content {
+    /* Gaya untuk konten utama Anda */
+    padding: 20px;
+    text-align: center;
+    color: #333;
+}
