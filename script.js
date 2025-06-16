@@ -1,132 +1,106 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // --- Bagian Loading Screen ---
-    const progressFill = document.getElementById('progressFill');
-    const progressIcon = document.getElementById('progressIcon');
-    const loadingText = document.getElementById('loadingText');
-    const loadingContainer = document.querySelector('.loading-container');
-    const mainContent = document.querySelector('.main-content'); // Konten utama Anda
+    const registrationForm = document.getElementById('registrationForm');
+    const WA_NUMBER = '62881036683241'; // NOMOR WHATSAPP PENYELENGGARA
 
-    let progress = 0;
-    const totalSteps = 100;
-    const simulationDuration = 2500; // Total durasi simulasi loading dalam milidetik (2.5 detik)
-    const intervalTime = 50; // Update progress setiap 50ms
+    registrationForm.addEventListener('submit', (event) => {
+        event.preventDefault(); // Mencegah form reload halaman
 
-    const simulateLoading = () => {
-        const interval = setInterval(() => {
-            if (progress < totalSteps) {
-                progress += (intervalTime / simulationDuration) * totalSteps;
-                if (progress > totalSteps) progress = totalSteps;
+        // Ambil nilai dari input
+        const namaKetua = document.getElementById('namaKetua').value.trim(); // Trim whitespace
+        const noKetua = document.getElementById('noKetua').value.trim();
+        const namaTeam = document.getElementById('namaTeam').value.trim();
+        const asalRw = document.getElementById('asalRw').value;
 
-                const progressBarWidth = (progress / totalSteps) * 100;
-                progressFill.style.width = `${progressBarWidth}%`;
-                loadingText.textContent = `${Math.round(progress)}%`;
+        // Validasi
+        if (!namaKetua) {
+            alert('Nama Ketua Tim tidak boleh kosong!');
+            document.getElementById('namaKetua').focus();
+            return;
+        }
+        if (!namaTeam) {
+            alert('Nama Tim tidak boleh kosong!');
+            document.getElementById('namaTeam').focus();
+            return;
+        }
+        if (asalRw === "") {
+            alert('Mohon pilih Asal RW!');
+            document.getElementById('asalRw').focus();
+            return;
+        }
+        if (!noKetua) {
+            alert('Nomor Ketua/Perwakilan tidak boleh kosong!');
+            document.getElementById('noKetua').focus();
+            return;
+        }
+        // Validasi format nomor telepon sederhana (misal harus angka)
+        if (!/^\d+$/.test(noKetua)) {
+             alert('Nomor Ketua/Perwakilan harus berupa angka!');
+             document.getElementById('noKetua').focus();
+             return;
+        }
 
-                // Atur posisi ikon bola di ujung progress bar
-                const iconOffset = 22.5; // Setengah dari lebar ikon (45px/2)
-                const containerWidth = progressFill.parentElement.offsetWidth; // Lebar total progress bar container
-                const fillWidthPixels = (progressBarWidth / 100) * containerWidth; // Lebar fill saat ini dalam piksel
 
-                // Hitung posisi 'right' agar ikon berada di tengah ujung fill
-                const iconRightPosition = containerWidth - fillWidthPixels - iconOffset;
-                progressIcon.style.right = `${iconRightPosition}px`;
+        // Dapatkan tanggal dan jam saat ini
+        const now = new Date();
+        const options = {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            timeZoneName: 'short',
+            timeZone: 'Asia/Jakarta' // Pastikan zona waktu WIB
+        };
+        const registDate = now.toLocaleDateString('id-ID', options);
 
-                // Aktifkan atau nonaktifkan animasi putar bola
-                if (progressBarWidth > 0 && progressBarWidth < 100) {
-                    progressIcon.style.animationPlayState = 'running';
-                } else {
-                    progressIcon.style.animationPlayState = 'paused';
-                }
+        // Buat pesan WhatsApp dengan format yang diinginkan (ini yang akan dikirim ke WA)
+        const waMessage = `Data Regist Pemain\n` + // \n untuk baris baru
+                        `————————————\n` +
+                        `Nama Ketua   : ${namaKetua}\n` +
+                        `No Ketua       : ${noKetua}\n` +
+                        `Nama Team    : ${namaTeam}\n` +
+                        `Asal Rw          : ${asalRw}\n` +
+                        `————————————\n` +
+                        `Regist Date  : ${registDate}`;
 
-            } else {
-                clearInterval(interval);
-                // Loading selesai
-                setTimeout(() => {
-                    loadingContainer.classList.add('fade-out'); // Mulai fade-out loading screen
-                    setTimeout(() => {
-                        loadingContainer.style.display = 'none'; // Sembunyikan setelah fade-out
-                        mainContent.style.display = 'flex'; // Tampilkan konten utama (menggunakan flexbox)
-                        mainContent.classList.add('show'); // Aktifkan transisi opacity konten utama
-                        document.body.style.overflow = 'auto'; // Izinkan scroll di body setelah loading
-                    }, 1000); // Tunggu sampai animasi fade-out loading selesai (sesuai transisi CSS)
-                }, 500); // Jeda sebentar sebelum fade out loading
-            }
-        }, intervalTime);
+        // Encode pesan agar aman untuk URL
+        const encodedMessage = encodeURIComponent(waMessage);
+
+        // Buat link WhatsApp
+        const whatsappLink = `https://wa.me/${WA_NUMBER}?text=${encodedMessage}`;
+
+        // Buka link WhatsApp di tab baru
+        window.open(whatsappLink, '_blank');
+
+        // Reset form setelah berhasil kirim
+        registrationForm.reset();
+        updateSelectLabel(); // Pastikan label select kembali ke posisi awal
+
+        // Tampilkan alert yang lebih informatif dan rapi
+        alert('Pendaftaran berhasil! Anda akan diarahkan ke WhatsApp untuk konfirmasi. Pesan yang akan dikirim:\n\n' + waMessage);
+    });
+
+    // Inisialisasi floating label untuk input teks
+    document.querySelectorAll('.input-group input').forEach(input => {
+        if (!input.placeholder) {
+            input.placeholder = ' ';
+        }
+    });
+
+    // Logika floating label untuk select (Asal RW)
+    const asalRwSelect = document.getElementById('asalRw');
+    const asalRwLabel = document.querySelector('label[for="asalRw"]');
+
+    const updateSelectLabel = () => {
+        if (asalRwSelect.value !== "") {
+            asalRwLabel.classList.add('active');
+        } else {
+            asalRwLabel.classList.remove('active');
+        }
     };
 
-    simulateLoading(); // Panggil fungsi simulasi loading saat DOM siap
-
-    // --- Bagian Form Registrasi & Pengiriman WhatsApp ---
-    const registrationForm = document.getElementById('registrationForm');
-    if (registrationForm) {
-        registrationForm.addEventListener('submit', function(event) {
-            event.preventDefault(); // Mencegah reload halaman
-
-            const namaKetua = document.getElementById('namaKetua').value.trim();
-            const namaTeam = document.getElementById('namaTeam').value.trim();
-            const asalRw = document.getElementById('asalRw').value; // Value dari select tidak perlu trim
-            const noKetua = document.getElementById('noKetua').value.trim();
-
-            // Validasi Input
-            if (!namaKetua || !namaTeam || !asalRw || !noKetua) {
-                alert('Mohon lengkapi semua data pendaftaran!');
-                return;
-            }
-
-            if (asalRw === "") { // Pastikan pengguna memilih RW
-                alert('Mohon pilih Asal RW Anda.');
-                return;
-            }
-
-            // Validasi format nomor WhatsApp (sederhana: hanya angka dan dimulai 62)
-            // Anda bisa menggunakan regex yang lebih kompleks jika diperlukan
-            if (!/^(62)[0-9]{8,15}$/.test(noKetua)) {
-                alert('Format No WhatsApp tidak valid. Pastikan diawali 62 dan hanya angka (contoh: 6281234567890).');
-                return;
-            }
-
-            // 1. Buat Pesan untuk WhatsApp
-            const message = `Halo Admin Kartar Dr. Soetomo, saya ingin mendaftarkan tim saya:\n\n` +
-                            `*Nama Ketua Tim:* ${namaKetua}\n` +
-                            `*Nama Tim:* ${namaTeam}\n` +
-                            `*Asal RW:* ${asalRw}\n` +
-                            `*No WhatsApp Ketua:* ${noKetua}\n\n` +
-                            `Mohon informasinya lebih lanjut mengenai pendaftaran. Terima kasih!`;
-
-            // 2. Encode Pesan untuk URL
-            const encodedMessage = encodeURIComponent(message);
-
-            // 3. Tentukan Nomor WhatsApp Tujuan (Nomor Admin)
-            // GANTI DENGAN NOMOR WHATSAPP ADMIN ANDA!
-            // Pastikan formatnya: kode negara tanpa '+' atau '00' (misal 62 untuk Indonesia).
-            const adminWhatsAppNumber = '62881036683241'; // <-- GANTI DENGAN NOMOR WA ADMIN YANG AKAN MENERIMA
-
-            // 4. Buat URL WhatsApp
-            const whatsappUrl = `https://wa.me/${adminWhatsAppNumber}?text=${encodedMessage}`;
-
-            // 5. Buka Link WhatsApp di tab/jendela baru
-            window.open(whatsappUrl, '_blank');
-
-            // 6. Beri tahu pengguna dan reset formulir
-            alert('Pendaftaran berhasil! Anda akan diarahkan ke WhatsApp untuk mengirimkan detail pendaftaran ke admin.');
-            registrationForm.reset(); // Reset form setelah berhasil dikirim
-        });
-    }
-
-    // --- Floating label adjustment for select ---
-    const selectElement = document.getElementById('asalRw');
-    if (selectElement) {
-        // Fungsi untuk mengupdate kelas label
-        const updateSelectLabel = () => {
-            const label = selectElement.nextElementSibling; // Asumsi label adalah sibling berikutnya
-            if (selectElement.value !== "") {
-                label.classList.add('active');
-            } else {
-                label.classList.remove('active');
-            }
-        };
-
-        selectElement.addEventListener('change', updateSelectLabel);
-        // Panggil saat DOMContentLoaded untuk kasus autofill browser
-        updateSelectLabel();
-    }
+    updateSelectLabel();
+    asalRwSelect.addEventListener('change', updateSelectLabel);
+    asalRwSelect.addEventListener('focus', updateSelectLabel);
+    asalRwSelect.addEventListener('blur', updateSelectLabel);
 });
