@@ -9,7 +9,8 @@
 </head>
 <body>
     <div class="hero-section">
-        <div class="soccer-field-animation"></div> <h1>Registrasi Turnamen Sepak Bola</h1>
+        <div class="soccer-field-animation"></div>
+        <h1>Registrasi Turnamen Sepak Bola</h1>
     </div>
 
     <div class="container">
@@ -17,15 +18,15 @@
             <h2>Daftarkan Timmu Sekarang!</h2>
             <form id="registrationForm">
                 <div class="input-group">
+                    <input type="text" id="namaKetua" name="namaKetua" required placeholder=" ">
                     <label for="namaKetua">Nama Ketua Tim</label>
-                    <input type="text" id="namaKetua" name="namaKetua" required>
                 </div>
                 <div class="input-group">
+                    <input type="text" id="namaTeam" name="namaTeam" required placeholder=" ">
                     <label for="namaTeam">Nama Tim</label>
-                    <input type="text" id="namaTeam" name="namaTeam" required>
                 </div>
                 <div class="input-group">
-                    <label for="asalRw" class="active">Asal RW</label> <select id="asalRw" name="asalRw" required>
+                    <select id="asalRw" name="asalRw" required>
                         <option value="">Pilih RW</option>
                         <option value="RW 1">RW 1</option>
                         <option value="RW 2">RW 2</option>
@@ -35,11 +36,12 @@
                         <option value="RW 6">RW 6</option>
                         <option value="RW 7">RW 7</option>
                     </select>
+                    <label for="asalRw" class="select-label">Asal RW</label>
                 </div>
                 <div class="input-group">
+                    <input type="tel" id="noKetua" name="noKetua" required placeholder=" ">
                     <label for="noKetua">No. Ketua/Perwakilan (WhatsApp)</label>
-                    <input type="tel" id="noKetua" name="noKetua" placeholder="Contoh: 628123456789" required>
-                    <small>Pastikan nomor aktif WhatsApp diawali kode negara (misal: 62).</small>
+                    <small>Pastikan nomor aktif WhatsApp diawali kode negara (misal: 6281xxxxxx).</small>
                 </div>
                 <button type="submit" class="submit-button">Daftar Sekarang</button>
             </form>
