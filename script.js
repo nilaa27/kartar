@@ -8,12 +8,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Elemen loading screen
     const loadingScreen = document.getElementById('loading-screen');
+    const progressBarFill = document.querySelector('.progress-bar-fill');
+    const progressBarContainer = document.querySelector('.progress-bar-container');
 
-    // Sembunyikan loading screen setelah halaman benar-benar siap
-    // Anda bisa mengatur durasi minimum loading jika diperlukan
-    setTimeout(() => {
-        loadingScreen.classList.add('hidden');
-    }, 1000); // Contoh: loading screen akan terlihat minimal 1 detik
+    // Fungsi untuk menyembunyikan loading screen
+    const hideLoadingScreen = () => {
+        // Atur lebar progress bar menjadi 100%
+        progressBarFill.style.width = '100%';
+        // Tambahkan kelas 'loaded' untuk animasi bola
+        progressBarContainer.classList.add('loaded');
+
+        // Setelah animasi progress bar selesai (sesuai transition CSS)
+        setTimeout(() => {
+            loadingScreen.classList.add('hidden'); // Memudar dan menyembunyikan
+            // Opsional: Hapus elemen dari DOM setelah disembunyikan total
+            // setTimeout(() => loadingScreen.remove(), 700);
+        }, 2000); // Durasi ini harus >= durasi transition 'width' di CSS progress-bar-fill
+    };
+
+    // Panggil fungsi hideLoadingScreen setelah beberapa saat (simulasi pemuatan)
+    // Anda bisa menunda ini sampai semua aset (gambar, font) benar-benar dimuat jika perlu
+    window.addEventListener('load', () => {
+        hideLoadingScreen();
+    });
+
 
     registrationForm.addEventListener('submit', (event) => {
         event.preventDefault(); // Mencegah form reload halaman
