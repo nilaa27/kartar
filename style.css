@@ -106,9 +106,12 @@ body {
     pointer-events: none; /* Agar tidak menghalangi klik input */
     background-color: transparent; /* Pastikan tidak ada background saat floating */
     padding: 0 5px; /* Sedikit padding untuk efek 'terangkat' */
+    z-index: 5; /* Pastikan label di atas input */
 }
 
-.input-group input {
+/* Base style untuk input dan select */
+.input-group input,
+.input-group select {
     width: calc(100% - 30px); /* Kurangi padding */
     padding: 15px;
     border: 1px solid #ddd;
@@ -117,16 +120,41 @@ body {
     outline: none;
     background-color: #f9f9f9;
     transition: all 0.3s ease;
+    -webkit-appearance: none; /* Untuk menghilangkan default style select di beberapa browser */
+    -moz-appearance: none;
+    appearance: none;
 }
 
-.input-group input:focus {
+/* Tambahkan arrow kustom untuk select */
+.input-group select {
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23000000%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13%205.7L146.2%20202.7%2018.8%2075.1a17.6%2017.6%200%200%200-25.3%2024.7l128%20127.9c7%206.9%2017.2%207%2024.2%200l128-127.9c7.5-7.4%207.5-19.5.2-26.8z%22%2F%3E%3C%2Fsvg%3E');
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 1em;
+    padding-right: 40px; /* Ruang untuk arrow */
+}
+
+
+.input-group input:focus,
+.input-group select:focus {
     border-color: var(--secondary-color);
     box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.2); /* Bayangan fokus */
 }
 
 /* Animasi Label Floating */
+/* Untuk input teks */
 .input-group input:focus + label,
 .input-group input:not(:placeholder-shown) + label {
+    top: -10px;
+    left: 10px;
+    font-size: 0.85em;
+    color: var(--secondary-color);
+    background-color: var(--card-bg); /* Warna background label saat floating */
+    transform: translateY(-50%);
+}
+
+/* Untuk select (label harus selalu "active" karena select selalu ada nilai) */
+.input-group label.active {
     top: -10px;
     left: 10px;
     font-size: 0.85em;
@@ -193,7 +221,8 @@ footer {
     .registration-card {
         padding: 25px;
     }
-    .input-group input {
+    .input-group input,
+    .input-group select {
         padding: 12px;
         font-size: 1em;
     }
