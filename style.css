@@ -8,7 +8,7 @@
 }
 
 * {
-    box-sizing: border-box; /* Pastikan padding dan border masuk hitungan lebar/tinggi elemen */
+    box-sizing: border-box;
 }
 
 body {
@@ -19,7 +19,7 @@ body {
     color: var(--text-color);
     line-height: 1.6;
     overflow-x: hidden;
-    min-height: 100vh; /* Pastikan body setidaknya setinggi viewport */
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
@@ -28,7 +28,7 @@ body {
 .hero-section {
     position: relative;
     width: 100%;
-    height: 300px; /* Tinggi hero section tetap */
+    height: 300px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -37,17 +37,6 @@ body {
     box-shadow: inset 0 -10px 20px rgba(0,0,0,0.2);
 }
 
-.hero-section h1 {
-    color: white;
-    font-size: 2.8em;
-    text-align: center;
-    z-index: 2;
-    text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
-    margin: 0;
-    padding: 0 20px;
-}
-
-/* Animasi Rumput Lapangan 3D */
 .soccer-field-animation {
     position: absolute;
     width: 150%;
@@ -69,14 +58,22 @@ body {
     100% { transform: perspective(1000px) rotateX(10deg) translateY(50px) translateX(-20%); }
 }
 
+/* --- Tambahan: Logo Mini Soccer --- */
+.logo-mini-soccer {
+    max-height: 150px;
+    width: auto;
+    z-index: 2;
+    position: relative;
+}
+
 /* --- Konten Utama & Kartu Registrasi --- */
 .container {
-    flex-grow: 1; /* Isi sisa ruang */
+    flex-grow: 1;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    min-height: calc(100vh - 300px); /* Sisa viewport setelah hero */
+    min-height: calc(100vh - 300px);
     margin: 0 auto 50px auto;
     padding: 20px;
     position: relative;
@@ -104,12 +101,12 @@ body {
     font-size: 2em;
 }
 
-/* --- Input Group & Label Floating Canggih --- */
+/* --- Input Group & Label Floating --- */
 .input-group {
     position: relative;
     margin-bottom: 30px;
-    overflow: visible;   /* Agar label bisa naik tanpa terpotong */
-    padding-top: 5px;    /* Ruang ekstra untuk label */
+    overflow: visible;
+    padding-top: 5px;
 }
 
 .input-group label {
@@ -147,7 +144,6 @@ body {
     box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.2);
 }
 
-/* Floating label aktif */
 .input-group input:not(:placeholder-shown) + label,
 .input-group input:focus + label {
     top: -5px;
@@ -182,7 +178,7 @@ body {
     z-index: 2;
 }
 
-/* Arrow kustom untuk select */
+/* Panah kustom dropdown */
 .input-group select {
     background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23000000%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13%205.7L146.2%20202.7%2018.8%2075.1a17.6%2017.6%200%200%200-25.3%2024.7l128%20127.9c7%206.9%2017.2%207%2024.2%200l128-127.9c7.5-7.4%207.5-19.5.2-26.8z%22%2F%3E%3C%2Fsvg%3E');
     background-repeat: no-repeat;
@@ -243,9 +239,6 @@ footer {
     .hero-section {
         height: 250px;
     }
-    .hero-section h1 {
-        font-size: 2em;
-    }
     .container {
         min-height: auto;
         margin: -50px 15px 30px 15px;
@@ -269,13 +262,13 @@ footer {
     .hero-section {
         height: 180px;
     }
-    .hero-section h1 {
-        font-size: 1.5em;
-    }
     .registration-card h2 {
         font-size: 1.5em;
     }
     .registration-card {
         padding: 20px;
+    }
+    .logo-mini-soccer {
+        max-height: 100px;
     }
 }
