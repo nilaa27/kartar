@@ -7,6 +7,10 @@
     --shadow-light: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
+* {
+    box-sizing: border-box; /* Pastikan padding dan border masuk hitungan lebar/tinggi elemen */
+}
+
 body {
     font-family: 'Poppins', sans-serif;
     margin: 0;
@@ -14,34 +18,39 @@ body {
     background-color: var(--bg-color);
     color: var(--text-color);
     line-height: 1.6;
-    overflow-x: hidden; /* Mencegah scroll horizontal */
+    overflow-x: hidden;
+    min-height: 100vh; /* Pastikan body setidaknya setinggi viewport */
+    display: flex;
+    flex-direction: column;
 }
 
 /* --- Hero Section & Animasi Latar Belakang --- */
 .hero-section {
     position: relative;
     width: 100%;
-    height: 300px;
+    height: 300px; /* Tinggi hero section tetap */
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    background: linear-gradient(to bottom, var(--primary-color), #388E3C); /* Gradien hijau */
-    box-shadow: inset 0 -10px 20px rgba(0,0,0,0.2); /* Bayangan untuk efek kedalaman */
+    background: linear-gradient(to bottom, var(--primary-color), #388E3C);
+    box-shadow: inset 0 -10px 20px rgba(0,0,0,0.2);
 }
 
 .hero-section h1 {
     color: white;
     font-size: 2.8em;
     text-align: center;
-    z-index: 2; /* Pastikan teks di atas animasi */
+    z-index: 2;
     text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+    margin: 0; /* Hapus margin default */
+    padding: 0 20px; /* Padding untuk responsif */
 }
 
 /* Animasi Rumput Lapangan 3D */
 .soccer-field-animation {
     position: absolute;
-    width: 150%; /* Lebih lebar dari viewpor tuntuk efek parallax */
+    width: 150%;
     height: 100%;
     background-image:
         repeating-linear-gradient(to right,
@@ -49,10 +58,9 @@ body {
         repeating-linear-gradient(to bottom,
             rgba(0,0,0,0.05) 0, rgba(0,0,0,0.05) 2px, transparent 2px, transparent 20px);
     background-size: 20px 20px;
-    /* Efek 3D dan Gerak Parallax */
     transform: perspective(1000px) rotateX(10deg) translateY(50px);
     opacity: 0.8;
-    animation: fieldMovement 30s linear infinite alternate; /* Gerak perlahan */
+    animation: fieldMovement 30s linear infinite alternate;
     z-index: 1;
 }
 
@@ -61,26 +69,26 @@ body {
     100% { transform: perspective(1000px) rotateX(10deg) translateY(50px) translateX(-20%); }
 }
 
-
 /* --- Konten Utama & Kartu Registrasi --- */
 .container {
+    flex-grow: 1; /* Agar konten mengisi sisa ruang */
     max-width: 800px;
-    margin: -80px auto 50px auto; /* Menaikkan kartu agar tumpang tindih hero */
+    margin: -80px auto 50px auto;
     padding: 20px;
     position: relative;
-    z-index: 3; /* Pastikan kontainer di atas hero dan animasinya */
+    z-index: 3;
 }
 
 .registration-card {
     background-color: var(--card-bg);
     padding: 40px;
     border-radius: 15px;
-    box-shadow: var(--shadow-light); /* Bayangan lembut untuk efek 3D */
-    transition: transform 0.3s ease-in-out; /* Animasi saat hover */
+    box-shadow: var(--shadow-light);
+    transition: transform 0.3s ease-in-out;
 }
 
 .registration-card:hover {
-    transform: translateY(-5px); /* Sedikit naik saat di-hover */
+    transform: translateY(-5px);
 }
 
 .registration-card h2 {
@@ -90,7 +98,7 @@ body {
     font-size: 2em;
 }
 
-/* --- Input Group & Label Floating --- */
+/* --- Input Group & Label Floating Canggih --- */
 .input-group {
     position: relative;
     margin-bottom: 30px;
@@ -98,23 +106,23 @@ body {
 
 .input-group label {
     position: absolute;
-    top: 15px; /* Posisi awal label */
+    top: 50%; /* Tengah vertikal dengan input */
     left: 15px;
     color: #999;
     font-size: 1em;
+    transform: translateY(-50%); /* Penyesuaian agar benar-benar di tengah */
     transition: all 0.3s ease;
-    pointer-events: none; /* Agar tidak menghalangi klik input */
+    pointer-events: none; /* Jangan halangi klik input */
     background-color: transparent;
     padding: 0 5px;
     z-index: 5;
-    transform: translateY(0); /* Default: tidak ada translasi */
-    transform-origin: left top; /* Penting untuk scaling */
+    /* transform-origin: left center; */ /* Tidak perlu jika pakai translateY(-50%) */
 }
 
-/* Base style untuk input dan select */
+/* Gaya dasar untuk input dan select */
 .input-group input,
 .input-group select {
-    width: calc(100% - 30px);
+    width: 100%; /* Lebar penuh */
     padding: 15px;
     border: 1px solid #ddd;
     border-radius: 8px;
@@ -122,10 +130,50 @@ body {
     outline: none;
     background-color: #f9f9f9;
     transition: all 0.3s ease;
-    -webkit-appearance: none; /* Untuk menghilangkan default style select di beberapa browser */
+    -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
 }
+
+/* Gaya saat input/select dalam fokus */
+.input-group input:focus,
+.input-group select:focus {
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.2);
+}
+
+/* --- LOGIKA FLOATING LABEL --- */
+/* Ketika input ada isinya (bukan placeholder) ATAU sedang fokus */
+.input-group input:not(:placeholder-shown) + label,
+.input-group input:focus + label {
+    top: 0; /* Naik ke atas */
+    left: 10px;
+    font-size: 0.85em;
+    color: var(--secondary-color);
+    background-color: var(--card-bg);
+    transform: translateY(-50%) scale(0.8); /* Naik dan mengecil */
+}
+
+/* Khusus untuk select (label selalu di atas karena select selalu ada value) */
+.input-group select:not([value=""]) + .select-label, /* Jika select ada nilai selain kosong */
+.input-group select:focus + .select-label { /* Atau sedang fokus */
+    top: 0;
+    left: 10px;
+    font-size: 0.85em;
+    color: var(--secondary-color);
+    background-color: var(--card-bg);
+    transform: translateY(-50%) scale(0.8);
+}
+/* Untuk select dengan value kosong ('Pilih RW'), label tetap di bawah */
+.input-group select[value=""] + .select-label {
+    top: 50%;
+    left: 15px;
+    font-size: 1em;
+    color: #999;
+    background-color: transparent;
+    transform: translateY(-50%);
+}
+
 
 /* Tambahkan arrow kustom untuk select */
 .input-group select {
@@ -136,36 +184,6 @@ body {
     padding-right: 40px; /* Ruang untuk arrow */
 }
 
-
-.input-group input:focus,
-.input-group select:focus {
-    border-color: var(--secondary-color);
-    box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.2);
-}
-
-/* Animasi Label Floating */
-/* Label akan aktif jika input dalam fokus ATAU input TIDAK KOSONG */
-.input-group input:focus + label,
-.input-group input:not(:placeholder-shown) + label,
-.input-group input.has-value + label, /* Dipicu dari JS */
-.input-group select + label.active { /* Untuk select, label selalu aktif via JS */
-    top: 0; /* Ubah ke 0 dari -10px */
-    left: 10px;
-    font-size: 0.85em;
-    color: var(--secondary-color);
-    background-color: var(--card-bg);
-    transform: translateY(-50%) scale(0.8); /* Tambah scale agar terlihat "kecil" */
-}
-
-/* Tambahkan gaya khusus untuk placeholder-shown agar tidak tumpang tindih dengan label yang sudah naik */
-.input-group input:placeholder-shown:not(:focus) + label {
-    top: 15px; /* Kembali ke posisi awal */
-    left: 15px;
-    font-size: 1em;
-    color: #999;
-    background-color: transparent;
-    transform: translateY(0) scale(1);
-}
 
 .input-group small {
     display: block;
@@ -188,19 +206,19 @@ body {
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.3s ease;
-    position: relative; /* Untuk efek tekan */
+    position: relative;
     overflow: hidden;
     box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
 }
 
 .submit-button:hover {
-    background-color: #388E3C; /* Warna lebih gelap saat hover */
-    transform: translateY(-2px); /* Sedikit naik */
+    background-color: #388E3C;
+    transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(76, 175, 80, 0.5);
 }
 
 .submit-button:active {
-    transform: translateY(1px); /* Efek tekan ke dalam */
+    transform: translateY(1px);
     box-shadow: 0 2px 5px rgba(76, 175, 80, 0.3);
 }
 
@@ -210,16 +228,19 @@ footer {
     padding: 30px;
     color: #777;
     font-size: 0.9em;
-    margin-top: 50px;
+    margin-top: auto; /* Mendorong footer ke bawah */
 }
 
 /* --- Responsif --- */
 @media (max-width: 768px) {
+    .hero-section {
+        height: 250px; /* Sedikit lebih pendek di tablet */
+    }
     .hero-section h1 {
         font-size: 2em;
     }
     .container {
-        margin: -50px 20px 30px 20px;
+        margin: -50px 15px 30px 15px; /* Margin lebih kecil */
         padding: 0;
     }
     .registration-card {
@@ -238,12 +259,15 @@ footer {
 
 @media (max-width: 480px) {
     .hero-section {
-        height: 200px;
+        height: 180px; /* Lebih pendek di HP */
     }
     .hero-section h1 {
         font-size: 1.5em;
     }
     .registration-card h2 {
         font-size: 1.5em;
+    }
+    .registration-card {
+        padding: 20px;
     }
 }
