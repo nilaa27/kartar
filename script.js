@@ -1,106 +1,129 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const registrationForm = document.getElementById('registrationForm');
-    const WA_NUMBER = '62881036683241'; // NOMOR WHATSAPP PENYELENGGARA
+    const progressFill = document.getElementById('progressFill');
+    const progressIcon = document.getElementById('progressIcon');
+    const loadingText = document.getElementById('loadingText');
+    const loadingContainer = document.querySelector('.loading-container');
+    const mainContent = document.querySelector('.main-content'); // Konten utama Anda
 
-    registrationForm.addEventListener('submit', (event) => {
-        event.preventDefault(); // Mencegah form reload halaman
+    let progress = 0;
+    const totalSteps = 100;
+    const simulationDuration = 2500; // Total durasi simulasi loading dalam milidetik (misal: 2.5 detik)
+    const intervalTime = 50; // Update progress setiap 50ms
 
-        // Ambil nilai dari input
-        const namaKetua = document.getElementById('namaKetua').value.trim(); // Trim whitespace
-        const noKetua = document.getElementById('noKetua').value.trim();
-        const namaTeam = document.getElementById('namaTeam').value.trim();
-        const asalRw = document.getElementById('asalRw').value;
+    const simulateLoading = () => {
+        const interval = setInterval(() => {
+            if (progress < totalSteps) {
+                progress += (intervalTime / simulationDuration) * totalSteps;
+                if (progress > totalSteps) progress = totalSteps;
 
-        // Validasi
-        if (!namaKetua) {
-            alert('Nama Ketua Tim tidak boleh kosong!');
-            document.getElementById('namaKetua').focus();
-            return;
-        }
-        if (!namaTeam) {
-            alert('Nama Tim tidak boleh kosong!');
-            document.getElementById('namaTeam').focus();
-            return;
-        }
-        if (asalRw === "") {
-            alert('Mohon pilih Asal RW!');
-            document.getElementById('asalRw').focus();
-            return;
-        }
-        if (!noKetua) {
-            alert('Nomor Ketua/Perwakilan tidak boleh kosong!');
-            document.getElementById('noKetua').focus();
-            return;
-        }
-        // Validasi format nomor telepon sederhana (misal harus angka)
-        if (!/^\d+$/.test(noKetua)) {
-             alert('Nomor Ketua/Perwakilan harus berupa angka!');
-             document.getElementById('noKetua').focus();
-             return;
-        }
+                const progressBarWidth = (progress / totalSteps) * 100;
+                progressFill.style.width = `${progressBarWidth}%`;
+                loadingText.textContent = `${Math.round(progress)}%`;
 
+                // Atur posisi ikon bola di ujung progress bar
+                const iconOffset = 22.5; // Setengah dari lebar ikon (45px/2)
+                const containerWidth = progressFill.parentElement.offsetWidth; // Lebar total progress bar container
+                const fillWidthPixels = (progressBarWidth / 100) * containerWidth; // Lebar fill saat ini dalam piksel
 
-        // Dapatkan tanggal dan jam saat ini
-        const now = new Date();
-        const options = {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-            timeZoneName: 'short',
-            timeZone: 'Asia/Jakarta' // Pastikan zona waktu WIB
-        };
-        const registDate = now.toLocaleDateString('id-ID', options);
+                // Hitung posisi 'right' agar ikon berada di tengah ujung fill
+                // Ikon harus bergerak dari kanan ke kiri seiring fill bertambah
+                // Posisi 'right' harus negatif saat fill mencapai 100% (ikon di luar kanan)
+                // dan positif saat fill kecil (ikon di dalam kiri)
+                const iconRightPosition = containerWidth - fillWidthPixels - iconOffset; // Perhitungan dasar
+                progressIcon.style.right = `${iconRightPosition}px`; // Menggunakan ini saja sudah cukup
 
-        // Buat pesan WhatsApp dengan format yang diinginkan (ini yang akan dikirim ke WA)
-        const waMessage = `Data Regist Pemain\n` + // \n untuk baris baru
-                        `————————————\n` +
-                        `Nama Ketua   : ${namaKetua}\n` +
-                        `No Ketua       : ${noKetua}\n` +
-                        `Nama Team    : ${namaTeam}\n` +
-                        `Asal Rw          : ${asalRw}\n` +
-                        `————————————\n` +
-                        `Regist Date  : ${registDate}`;
+                // Aktifkan atau nonaktifkan animasi putar bola
+                if (progressBarWidth > 0 && progressBarWidth < 100) { // Hanya berputar saat bergerak
+                    progressIcon.style.animationPlayState = 'running';
+                } else {
+                    progressIcon.style.animationPlayState = 'paused';
+                }
 
-        // Encode pesan agar aman untuk URL
-        const encodedMessage = encodeURIComponent(waMessage);
-
-        // Buat link WhatsApp
-        const whatsappLink = `https://wa.me/${WA_NUMBER}?text=${encodedMessage}`;
-
-        // Buka link WhatsApp di tab baru
-        window.open(whatsappLink, '_blank');
-
-        // Reset form setelah berhasil kirim
-        registrationForm.reset();
-        updateSelectLabel(); // Pastikan label select kembali ke posisi awal
-
-        // Tampilkan alert yang lebih informatif dan rapi
-        alert('Pendaftaran berhasil! Anda akan diarahkan ke WhatsApp untuk konfirmasi. Pesan yang akan dikirim:\n\n' + waMessage);
-    });
-
-    // Inisialisasi floating label untuk input teks
-    document.querySelectorAll('.input-group input').forEach(input => {
-        if (!input.placeholder) {
-            input.placeholder = ' ';
-        }
-    });
-
-    // Logika floating label untuk select (Asal RW)
-    const asalRwSelect = document.getElementById('asalRw');
-    const asalRwLabel = document.querySelector('label[for="asalRw"]');
-
-    const updateSelectLabel = () => {
-        if (asalRwSelect.value !== "") {
-            asalRwLabel.classList.add('active');
-        } else {
-            asalRwLabel.classList.remove('active');
-        }
+            } else {
+                clearInterval(interval);
+                // Loading selesai
+                setTimeout(() => {
+                    loadingContainer.classList.add('fade-out'); // Mulai fade-out loading screen
+                    setTimeout(() => {
+                        loadingContainer.style.display = 'none'; // Sembunyikan setelah fade-out
+                        mainContent.style.display = 'flex'; // Tampilkan konten utama (menggunakan flexbox)
+                        mainContent.classList.add('show'); // Aktifkan transisi opacity konten utama
+                        document.body.style.overflow = 'auto'; // Izinkan scroll di body setelah loading
+                    }, 1000); // Tunggu sampai animasi fade-out loading selesai (sesuai transisi CSS)
+                }, 500); // Jeda sebentar sebelum fade out loading
+            }
+        }, intervalTime);
     };
 
-    updateSelectLabel();
-    asalRwSelect.addEventListener('change', updateSelectLabel);
-    asalRwSelect.addEventListener('focus', updateSelectLabel);
-    asalRwSelect.addEventListener('blur', updateSelectLabel);
+    simulateLoading(); // Panggil fungsi simulasi loading saat DOM siap
+
+    // --- LOGIKA UNTUK FORM REGISTRASI ANDA ---
+    const registrationForm = document.getElementById('registrationForm');
+    if (registrationForm) {
+        registrationForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Mencegah reload halaman
+            const namaKetua = document.getElementById('namaKetua').value;
+            const namaTeam = document.getElementById('namaTeam').value;
+            const asalRw = document.getElementById('asalRw').value;
+            const noKetua = document.getElementById('noKetua').value;
+
+            // Validasi sederhana (Anda bisa menambahkan lebih banyak)
+            if (!namaKetua || !namaTeam || !asalRw || !noKetua) {
+                alert('Semua field harus diisi!');
+                return;
+            }
+
+            // Contoh: Kirim data ke console atau ke API
+            console.log('Data Registrasi Tim:');
+            console.log('Nama Ketua:', namaKetua);
+            console.log('Nama Tim:', namaTeam);
+            console.log('Asal RW:', asalRw);
+            console.log('No WhatsApp:', noKetua);
+
+            // Di sini Anda bisa menambahkan logika untuk mengirim data ke server
+            // Misalnya menggunakan fetch API:
+            /*
+            fetch('/api/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ namaKetua, namaTeam, asalRw, noKetua }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Registrasi berhasil!');
+                    registrationForm.reset(); // Reset form
+                } else {
+                    alert('Registrasi gagal: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Terjadi kesalahan saat registrasi.');
+            });
+            */
+
+            alert('Registrasi Tim berhasil!\n\nNama Ketua: ' + namaKetua + '\nNama Tim: ' + namaTeam + '\nAsal RW: ' + asalRw + '\nNo WhatsApp: ' + noKetua);
+            registrationForm.reset(); // Reset form setelah berhasil
+        });
+
+        // Floating label adjustment for select
+        const selectElement = document.getElementById('asalRw');
+        if (selectElement) {
+            selectElement.addEventListener('change', function() {
+                const label = this.nextElementSibling; // Assuming label is the next sibling
+                if (this.value !== "") {
+                    label.classList.add('active'); // Add a class to move label up
+                } else {
+                    label.classList.remove('active'); // Remove class to move label back
+                }
+            });
+            // Initial check for select if it already has a value (e.g., from browser autofill)
+            if (selectElement.value !== "") {
+                selectElement.nextElementSibling.classList.add('active');
+            }
+        }
+    }
 });
