@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // --- Bagian Loading Screen ---
     const progressFill = document.getElementById('progressFill');
     const progressIcon = document.getElementById('progressIcon');
     const loadingText = document.getElementById('loadingText');
@@ -7,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let progress = 0;
     const totalSteps = 100;
-    const simulationDuration = 2500; // Total durasi simulasi loading dalam milidetik (misal: 2.5 detik)
+    const simulationDuration = 2500; // Total durasi simulasi loading dalam milidetik (2.5 detik)
     const intervalTime = 50; // Update progress setiap 50ms
 
     const simulateLoading = () => {
@@ -26,14 +27,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 const fillWidthPixels = (progressBarWidth / 100) * containerWidth; // Lebar fill saat ini dalam piksel
 
                 // Hitung posisi 'right' agar ikon berada di tengah ujung fill
-                // Ikon harus bergerak dari kanan ke kiri seiring fill bertambah
-                // Posisi 'right' harus negatif saat fill mencapai 100% (ikon di luar kanan)
-                // dan positif saat fill kecil (ikon di dalam kiri)
-                const iconRightPosition = containerWidth - fillWidthPixels - iconOffset; // Perhitungan dasar
-                progressIcon.style.right = `${iconRightPosition}px`; // Menggunakan ini saja sudah cukup
+                const iconRightPosition = containerWidth - fillWidthPixels - iconOffset;
+                progressIcon.style.right = `${iconRightPosition}px`;
 
                 // Aktifkan atau nonaktifkan animasi putar bola
-                if (progressBarWidth > 0 && progressBarWidth < 100) { // Hanya berputar saat bergerak
+                if (progressBarWidth > 0 && progressBarWidth < 100) {
                     progressIcon.style.animationPlayState = 'running';
                 } else {
                     progressIcon.style.animationPlayState = 'paused';
@@ -57,73 +55,78 @@ document.addEventListener('DOMContentLoaded', () => {
 
     simulateLoading(); // Panggil fungsi simulasi loading saat DOM siap
 
-    // --- LOGIKA UNTUK FORM REGISTRASI ANDA ---
+    // --- Bagian Form Registrasi & Pengiriman WhatsApp ---
     const registrationForm = document.getElementById('registrationForm');
     if (registrationForm) {
         registrationForm.addEventListener('submit', function(event) {
             event.preventDefault(); // Mencegah reload halaman
-            const namaKetua = document.getElementById('namaKetua').value;
-            const namaTeam = document.getElementById('namaTeam').value;
-            const asalRw = document.getElementById('asalRw').value;
-            const noKetua = document.getElementById('noKetua').value;
 
-            // Validasi sederhana (Anda bisa menambahkan lebih banyak)
+            const namaKetua = document.getElementById('namaKetua').value.trim();
+            const namaTeam = document.getElementById('namaTeam').value.trim();
+            const asalRw = document.getElementById('asalRw').value; // Value dari select tidak perlu trim
+            const noKetua = document.getElementById('noKetua').value.trim();
+
+            // Validasi Input
             if (!namaKetua || !namaTeam || !asalRw || !noKetua) {
-                alert('Semua field harus diisi!');
+                alert('Mohon lengkapi semua data pendaftaran!');
                 return;
             }
 
-            // Contoh: Kirim data ke console atau ke API
-            console.log('Data Registrasi Tim:');
-            console.log('Nama Ketua:', namaKetua);
-            console.log('Nama Tim:', namaTeam);
-            console.log('Asal RW:', asalRw);
-            console.log('No WhatsApp:', noKetua);
-
-            // Di sini Anda bisa menambahkan logika untuk mengirim data ke server
-            // Misalnya menggunakan fetch API:
-            /*
-            fetch('/api/register', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ namaKetua, namaTeam, asalRw, noKetua }),
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Registrasi berhasil!');
-                    registrationForm.reset(); // Reset form
-                } else {
-                    alert('Registrasi gagal: ' + data.message);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Terjadi kesalahan saat registrasi.');
-            });
-            */
-
-            alert('Registrasi Tim berhasil!\n\nNama Ketua: ' + namaKetua + '\nNama Tim: ' + namaTeam + '\nAsal RW: ' + asalRw + '\nNo WhatsApp: ' + noKetua);
-            registrationForm.reset(); // Reset form setelah berhasil
-        });
-
-        // Floating label adjustment for select
-        const selectElement = document.getElementById('asalRw');
-        if (selectElement) {
-            selectElement.addEventListener('change', function() {
-                const label = this.nextElementSibling; // Assuming label is the next sibling
-                if (this.value !== "") {
-                    label.classList.add('active'); // Add a class to move label up
-                } else {
-                    label.classList.remove('active'); // Remove class to move label back
-                }
-            });
-            // Initial check for select if it already has a value (e.g., from browser autofill)
-            if (selectElement.value !== "") {
-                selectElement.nextElementSibling.classList.add('active');
+            if (asalRw === "") { // Pastikan pengguna memilih RW
+                alert('Mohon pilih Asal RW Anda.');
+                return;
             }
-        }
+
+            // Validasi format nomor WhatsApp (sederhana: hanya angka dan dimulai 62)
+            // Anda bisa menggunakan regex yang lebih kompleks jika diperlukan
+            if (!/^(62)[0-9]{8,15}$/.test(noKetua)) {
+                alert('Format No WhatsApp tidak valid. Pastikan diawali 62 dan hanya angka (contoh: 6281234567890).');
+                return;
+            }
+
+            // 1. Buat Pesan untuk WhatsApp
+            const message = `Halo Admin Kartar Dr. Soetomo, saya ingin mendaftarkan tim saya:\n\n` +
+                            `*Nama Ketua Tim:* ${namaKetua}\n` +
+                            `*Nama Tim:* ${namaTeam}\n` +
+                            `*Asal RW:* ${asalRw}\n` +
+                            `*No WhatsApp Ketua:* ${noKetua}\n\n` +
+                            `Mohon informasinya lebih lanjut mengenai pendaftaran. Terima kasih!`;
+
+            // 2. Encode Pesan untuk URL
+            const encodedMessage = encodeURIComponent(message);
+
+            // 3. Tentukan Nomor WhatsApp Tujuan (Nomor Admin)
+            // GANTI DENGAN NOMOR WHATSAPP ADMIN ANDA!
+            // Pastikan formatnya: kode negara tanpa '+' atau '00' (misal 62 untuk Indonesia).
+            const adminWhatsAppNumber = '62881036683241'; // <-- GANTI DENGAN NOMOR WA ADMIN YANG AKAN MENERIMA
+
+            // 4. Buat URL WhatsApp
+            const whatsappUrl = `https://wa.me/${adminWhatsAppNumber}?text=${encodedMessage}`;
+
+            // 5. Buka Link WhatsApp di tab/jendela baru
+            window.open(whatsappUrl, '_blank');
+
+            // 6. Beri tahu pengguna dan reset formulir
+            alert('Pendaftaran berhasil! Anda akan diarahkan ke WhatsApp untuk mengirimkan detail pendaftaran ke admin.');
+            registrationForm.reset(); // Reset form setelah berhasil dikirim
+        });
+    }
+
+    // --- Floating label adjustment for select ---
+    const selectElement = document.getElementById('asalRw');
+    if (selectElement) {
+        // Fungsi untuk mengupdate kelas label
+        const updateSelectLabel = () => {
+            const label = selectElement.nextElementSibling; // Asumsi label adalah sibling berikutnya
+            if (selectElement.value !== "") {
+                label.classList.add('active');
+            } else {
+                label.classList.remove('active');
+            }
+        };
+
+        selectElement.addEventListener('change', updateSelectLabel);
+        // Panggil saat DOMContentLoaded untuk kasus autofill browser
+        updateSelectLabel();
     }
 });
