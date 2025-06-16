@@ -87,10 +87,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // *teks* untuk tebal, spasi non-breaking (&nbsp;) atau indentasi manual
         let message = `*🌟 PENDAFTARAN TIM BARU 🌟*\n\n`;
         message += `*📝 Detail Pendaftaran:*\n`;
-        message += `├─ Nama Ketua Team   : *${namaKetua}*\n`;
+        message += `├─ Nama Captain      : *${namaKetua}*\n`;
         message += `├─ No. WhatsApp      : *${noKetua}*\n`;
         message += `├─ Nama Tim          : *${namaTeam}*\n`;
-        message += `└─ Asal RW           : *${asalRw}*\n\n`;
+        message += `└─ Domisili          : *${asalRw}*\n\n`;
         message += `*📅 Waktu Pendaftaran:*\n`;
         message += `└─ _${registDate}_\n\n`;
         message += `_Terima kasih atas pendaftaran tim Anda! Kami akan segera menghubungi Anda untuk langkah selanjutnya._\n`;
