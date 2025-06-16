@@ -98,21 +98,23 @@ body {
 
 .input-group label {
     position: absolute;
-    top: 15px;
+    top: 15px; /* Posisi awal label */
     left: 15px;
     color: #999;
     font-size: 1em;
     transition: all 0.3s ease;
     pointer-events: none; /* Agar tidak menghalangi klik input */
-    background-color: transparent; /* Pastikan tidak ada background saat floating */
-    padding: 0 5px; /* Sedikit padding untuk efek 'terangkat' */
-    z-index: 5; /* Pastikan label di atas input */
+    background-color: transparent;
+    padding: 0 5px;
+    z-index: 5;
+    transform: translateY(0); /* Default: tidak ada translasi */
+    transform-origin: left top; /* Penting untuk scaling */
 }
 
 /* Base style untuk input dan select */
 .input-group input,
 .input-group select {
-    width: calc(100% - 30px); /* Kurangi padding */
+    width: calc(100% - 30px);
     padding: 15px;
     border: 1px solid #ddd;
     border-radius: 8px;
@@ -138,29 +140,31 @@ body {
 .input-group input:focus,
 .input-group select:focus {
     border-color: var(--secondary-color);
-    box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.2); /* Bayangan fokus */
+    box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.2);
 }
 
 /* Animasi Label Floating */
-/* Untuk input teks */
+/* Label akan aktif jika input dalam fokus ATAU input TIDAK KOSONG */
 .input-group input:focus + label,
-.input-group input:not(:placeholder-shown) + label {
-    top: -10px;
+.input-group input:not(:placeholder-shown) + label,
+.input-group input.has-value + label, /* Dipicu dari JS */
+.input-group select + label.active { /* Untuk select, label selalu aktif via JS */
+    top: 0; /* Ubah ke 0 dari -10px */
     left: 10px;
     font-size: 0.85em;
     color: var(--secondary-color);
-    background-color: var(--card-bg); /* Warna background label saat floating */
-    transform: translateY(-50%);
+    background-color: var(--card-bg);
+    transform: translateY(-50%) scale(0.8); /* Tambah scale agar terlihat "kecil" */
 }
 
-/* Untuk select (label harus selalu "active" karena select selalu ada nilai) */
-.input-group label.active {
-    top: -10px;
-    left: 10px;
-    font-size: 0.85em;
-    color: var(--secondary-color);
-    background-color: var(--card-bg); /* Warna background label saat floating */
-    transform: translateY(-50%);
+/* Tambahkan gaya khusus untuk placeholder-shown agar tidak tumpang tindih dengan label yang sudah naik */
+.input-group input:placeholder-shown:not(:focus) + label {
+    top: 15px; /* Kembali ke posisi awal */
+    left: 15px;
+    font-size: 1em;
+    color: #999;
+    background-color: transparent;
+    transform: translateY(0) scale(1);
 }
 
 .input-group small {
