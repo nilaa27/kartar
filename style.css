@@ -24,14 +24,16 @@ body {
     flex-direction: column;
 }
 
-/* --- LOADING SCREEN STYLES --- */
+/* --- LOADING SCREEN STYLES (REVISI & GABUNGAN) --- */
 #loading-screen {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: var(--primary-color); /* Warna latar belakang loading */
+    background-color: #004d40; /* Hijau gelap, sesuai tema bola */
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2220%22%3E%3Cpath%20fill%3D%22%23ffffff%22%20fill-opacity%3D%220.05%22%20d%3D%22M8%200H0V8h8V0zM20%200h-8v8h8V0zM8%2012H0v8h8v-8zM20%2012h-8v8h8v-8z%22%2F%3E%3C%2Fsvg%3E'); /* Pola samar lapangan */
+    background-size: 40px 40px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -47,19 +49,71 @@ body {
     visibility: hidden;
 }
 
-.spinner {
-    border: 8px solid rgba(255, 255, 255, 0.3);
-    border-top: 8px solid white;
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    animation: spin 1.2s linear infinite;
-    margin-bottom: 20px;
+.loading-logo {
+    max-width: 80%; /* Agar tidak terlalu besar di mobile */
+    height: auto;
+    margin-bottom: 50px; /* Jarak antara logo dan progress bar */
+    animation: pulse 2s infinite alternate; /* Efek berdenyut */
 }
 
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(1.05); opacity: 1; }
+}
+
+.progress-bar-container {
+    width: 80%; /* Lebar container progress bar */
+    max-width: 400px; /* Batasan lebar maksimal */
+    height: 35px; /* Tinggi progress bar */
+    background-color: rgba(255, 255, 255, 0.2); /* Latar belakang bar */
+    border-radius: 20px;
+    overflow: hidden; /* Penting agar fill tidak keluar */
+    position: relative;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.progress-bar-fill {
+    height: 100%;
+    width: 0%; /* Dimulai dari 0% */
+    background: linear-gradient(to right, var(--secondary-color), #00BCD4); /* Warna gradien biru */
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; /* Bola akan di kanan saat mengisi */
+    padding-right: 10px; /* Jarak bola dari ujung */
+    transition: width 2s ease-out; /* Animasi lebar */
+    position: relative;
+}
+
+.loading-text {
+    color: white;
+    font-weight: 600;
+    position: absolute; /* Posisi teks di tengah bar */
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap; /* Mencegah teks patah */
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+}
+
+.loading-ball {
+    height: 45px; /* Ukuran bola */
+    width: auto;
+    position: absolute; /* Biarkan bola bergerak bebas di dalam fill */
+    right: -15px; /* Agar sebagian bola terlihat di luar bar */
+    animation: ballRoll 2s linear infinite; /* Animasi bola */
+    transform: scale(0); /* Mulai dari kecil */
+    transition: transform 0.5s ease-out;
+}
+
+/* Animasi untuk bola saat progress bar mengisi */
+.progress-bar-container.loaded .progress-bar-fill .loading-ball {
+    transform: scale(1);
+}
+
+
+@keyframes ballRoll {
+    0% { transform: translateX(0) rotate(0deg); }
+    100% { transform: translateX(calc(100% - 40px)) rotate(360deg); } /* Sesuaikan pergerakan bola */
 }
 /* --- AKHIR LOADING SCREEN STYLES --- */
 
@@ -296,6 +350,23 @@ footer {
         padding: 15px;
         font-size: 1.1em;
     }
+    /* Responsif untuk loading screen */
+    .loading-logo {
+        margin-bottom: 30px;
+    }
+    .progress-bar-container {
+        width: 90%;
+    }
+    .progress-bar-fill {
+        padding-right: 8px;
+    }
+    .loading-ball {
+        height: 35px;
+        right: -10px;
+    }
+    .loading-text {
+        font-size: 0.9em;
+    }
 }
 
 @media (max-width: 480px) {
@@ -311,9 +382,16 @@ footer {
     .logo-mini-soccer {
         max-height: 100px;
     }
+    /* Responsif untuk loading screen */
+    .loading-logo {
+        max-width: 90%; /* Lebih besar sedikit di mobile kecil */
+    }
+    .progress-bar-container {
+        width: 95%;
+    }
 }
 
-/* --- POP-UP NOTIFIKASI --- */
+/* --- POP-UP NOTIFIKASI (Gabungan) --- */
 .popup-container {
     display: none; /* Awalnya tersembunyi */
     position: fixed;
