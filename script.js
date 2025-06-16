@@ -1,27 +1,44 @@
 document.addEventListener('DOMContentLoaded', () => {
     const registrationForm = document.getElementById('registrationForm');
-    const WA_NUMBER = '881036683241'; // NOMOR WHATSAPP PENYELENGGARA
+    const WA_NUMBER = '+62881036684241'; // NOMOR WHATSAPP PENYELENGGARA
 
     registrationForm.addEventListener('submit', (event) => {
         event.preventDefault(); // Mencegah form reload halaman
 
         // Ambil nilai dari input
-        const namaKetua = document.getElementById('namaKetua').value;
-        const noKetua = document.getElementById('noKetua').value;
-        const namaTeam = document.getElementById('namaTeam').value;
-        const asalRw = document.getElementById('asalRw').value; // Mengambil nilai dari select
+        const namaKetua = document.getElementById('namaKetua').value.trim(); // Trim whitespace
+        const noKetua = document.getElementById('noKetua').value.trim();
+        const namaTeam = document.getElementById('namaTeam').value.trim();
+        const asalRw = document.getElementById('asalRw').value;
 
-        // Validasi sederhana (bisa dikembangkan)
-        if (!namaKetua || !noKetua || !namaTeam || !asalRw) {
-            alert('Mohon lengkapi semua kolom pendaftaran!');
+        // Validasi
+        if (!namaKetua) {
+            alert('Nama Ketua Tim tidak boleh kosong!');
+            document.getElementById('namaKetua').focus();
             return;
         }
-
-        // Validasi khusus untuk select Asal RW
-        if (asalRw === "") { // Jika opsi 'Pilih RW' masih terpilih
+        if (!namaTeam) {
+            alert('Nama Tim tidak boleh kosong!');
+            document.getElementById('namaTeam').focus();
+            return;
+        }
+        if (asalRw === "") {
             alert('Mohon pilih Asal RW!');
+            document.getElementById('asalRw').focus();
             return;
         }
+        if (!noKetua) {
+            alert('Nomor Ketua/Perwakilan tidak boleh kosong!');
+            document.getElementById('noKetua').focus();
+            return;
+        }
+        // Validasi format nomor telepon sederhana (misal harus angka)
+        if (!/^\d+$/.test(noKetua)) {
+             alert('Nomor Ketua/Perwakilan harus berupa angka!');
+             document.getElementById('noKetua').focus();
+             return;
+        }
+
 
         // Dapatkan tanggal dan jam saat ini
         const now = new Date();
@@ -31,13 +48,12 @@ document.addEventListener('DOMContentLoaded', () => {
             day: 'numeric',
             hour: '2-digit',
             minute: '2-digit',
-            timeZoneName: 'short'
+            timeZoneName: 'short',
+            timeZone: 'Asia/Jakarta' // Pastikan zona waktu WIB (Surabaya)
         };
-        // Format tanggal dan waktu untuk locale Indonesia (Surabaya, WIB)
         const registDate = now.toLocaleDateString('id-ID', options);
 
         // Buat pesan WhatsApp dengan format yang diinginkan
-        // %0A untuk baris baru
         const message = `Data Regist Pemain%0A` +
                         `————————————%0A` +
                         `Nama Ketua   : ${namaKetua}%0A` +
@@ -47,62 +63,39 @@ document.addEventListener('DOMContentLoaded', () => {
                         `————————————%0A` +
                         `Regist Date  : ${registDate}`;
 
-        // Encode pesan agar aman untuk URL
         const encodedMessage = encodeURIComponent(message);
-
-        // Buat link WhatsApp
         const whatsappLink = `https://wa.me/${WA_NUMBER}?text=${encodedMessage}`;
 
         // Buka link WhatsApp di tab baru
         window.open(whatsappLink, '_blank');
 
-        // Opsional: Reset form setelah berhasil kirim
+        // Reset form setelah berhasil kirim
         registrationForm.reset();
-        // Setelah reset, pastikan label kembali ke posisi awal jika input kosong
-        document.querySelectorAll('.input-group input').forEach(input => {
-            input.classList.remove('has-value');
-        });
-        document.getElementById('asalRw').value = ""; // Reset select ke opsi default
+        // Pastikan label untuk select kembali ke posisi awal jika di-reset ke "Pilih RW"
+        updateSelectLabel();
 
         alert('Pendaftaran berhasil! Anda akan diarahkan ke WhatsApp untuk konfirmasi.');
     });
 
-    // Efek floating label untuk input (teks dan tel)
+    // Inisialisasi floating label untuk input teks
     document.querySelectorAll('.input-group input').forEach(input => {
-        // Fungsi untuk memeriksa nilai input dan menambahkan/menghapus kelas 'has-value'
-        const checkValue = () => {
-            if (input.value !== '') {
-                input.classList.add('has-value');
-            } else {
-                input.classList.remove('has-value');
-            }
-        };
-
-        // Panggil saat DOMContentLoaded (saat halaman pertama kali dimuat)
-        // Ini menangani kasus auto-fill browser
-        checkValue();
-
-        // Panggil saat event 'input' (saat mengetik atau menghapus teks)
-        input.addEventListener('input', checkValue);
-
-        // Panggil saat fokus
-        input.addEventListener('focus', () => {
-            input.classList.add('has-value'); // Pastikan label naik saat fokus
-        });
-
-        // Panggil saat blur (keluar dari input)
-        input.addEventListener('blur', checkValue);
+        // Panggil saat halaman dimuat untuk menangani autocomplete browser
+        // Event 'input' dan 'focus' tidak lagi perlu manipulasi kelas 'has-value' karena CSS sudah pakai :not(:placeholder-shown)
+        // Cukup pastikan placeholder ada untuk memicu CSS
+        if (!input.placeholder) {
+            input.placeholder = ' '; // Pastikan ada placeholder, penting untuk :not(:placeholder-shown)
+        }
     });
 
-    // Untuk elemen select (Asal RW), label harus selalu aktif jika tidak di "Pilih RW"
+    // Logika floating label untuk select (Asal RW)
     const asalRwSelect = document.getElementById('asalRw');
     const asalRwLabel = document.querySelector('label[for="asalRw"]');
 
     const updateSelectLabel = () => {
         if (asalRwSelect.value !== "") {
-            asalRwLabel.classList.add('active'); // Tambahkan kelas 'active' untuk label
+            asalRwLabel.classList.add('active'); // CSS akan membuat label naik
         } else {
-            asalRwLabel.classList.remove('active'); // Hapus kelas 'active'
+            asalRwLabel.classList.remove('active'); // CSS akan membuat label turun
         }
     };
 
@@ -111,12 +104,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Perbarui label saat nilai select berubah
     asalRwSelect.addEventListener('change', updateSelectLabel);
-
-    // Perbarui label saat select mendapatkan fokus (opsional, tapi bagus untuk konsistensi)
-    asalRwSelect.addEventListener('focus', () => {
-        asalRwLabel.classList.add('active');
-    });
-
-    // Jika select kehilangan fokus dan kembali ke default "Pilih RW"
+    asalRwSelect.addEventListener('focus', updateSelectLabel);
     asalRwSelect.addEventListener('blur', updateSelectLabel);
 });
