@@ -1,274 +1,343 @@
-:root {
-    --primary-color: #4CAF50; /* Hijau Rumput */
-    --secondary-color: #2196F3; /* Biru Langit */
-    --text-color: #333;
-    --bg-color: #f0f2f5; /* Abu-abu muda */
-    --card-bg: #ffffff;
-    --shadow-light: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-* {
-    box-sizing: border-box;
-}
-
+/* --- GLOBAL STYLES & RESET --- */
 body {
-    font-family: 'Poppins', sans-serif;
     margin: 0;
-    padding: 0;
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    line-height: 1.6;
-    overflow-x: hidden;
+    font-family: 'Poppins', sans-serif; /* Menggunakan Poppins */
+    overflow: hidden; /* Mencegah scroll saat loading */
+    background-color: #f0f2f5; /* Latar belakang abu-abu muda */
+    color: #333;
+    display: flex; /* Menggunakan flexbox untuk body agar loading screen di tengah */
+    justify-content: center;
+    align-items: center;
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
 }
 
-/* --- Hero Section & Animasi Latar Belakang --- */
-.hero-section {
-    position: relative;
+/* --- LOADING SCREEN STYLES --- */
+.loading-container {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
-    height: 300px;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: #1a1a1a; /* Latar belakang gelap untuk loading */
+    z-index: 9999; /* Pastikan di atas semua elemen */
+    color: white;
+}
+
+.background-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('assets/soccer-field-bg.png'); /* Sesuaikan path gambar latar loading */
+    background-size: cover;
+    background-position: center;
+    filter: blur(8px) brightness(50%); /* Efek blur dan gelap pada latar belakang */
+    z-index: 1;
+}
+
+.content-wrapper {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 30px;
+    border-radius: 15px;
+    background-color: rgba(0, 0, 0, 0.7); /* Latar belakang transparan untuk konten loading */
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.6); /* Efek glow hijau */
+}
+
+.loading-container h1 {
+    font-size: 3.5em;
+    margin-bottom: 40px;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+    color: #4CAF50; /* Warna hijau untuk judul loading */
+}
+
+.soccer-ball-animation {
+    margin-bottom: 50px;
+}
+
+.soccer-ball-animation img {
+    width: 180px;
+    height: auto;
+    animation: bounce 1s infinite alternate ease-in-out;
+}
+
+@keyframes bounce {
+    0% { transform: translateY(0) scale(1); }
+    100% { transform: translateY(-25px) scale(1.05); }
+}
+
+.progress-bar-container {
+    width: 80%;
+    max-width: 600px;
+    background-color: #333;
+    border-radius: 30px;
+    height: 35px;
     overflow: hidden;
-    background: linear-gradient(to bottom, var(--primary-color), #388E3C);
-    box-shadow: inset 0 -10px 20px rgba(0,0,0,0.2);
+    margin: 0 auto;
+    position: relative;
+    box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.7);
+    border: 2px solid #555;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(to right, #4CAF50, #8BC34A);
+    border-radius: 30px;
+    position: relative;
+    transition: width 0.2s ease-out;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.progress-icon {
+    width: 45px;
+    height: 45px;
+    position: absolute;
+    right: -22.5px;
+    top: 50%;
+    transform: translateY(-50%) rotate(0deg);
+    transition: right 0.2s ease-out, transform 0.2s linear;
+}
+
+.progress-fill.animating .progress-icon {
+    animation: spin 0.5s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: translateY(-50%) rotate(0deg); }
+    to { transform: translateY(-50%) rotate(360deg); }
+}
+
+.loading-text {
+    margin-top: 20px;
+    font-size: 1.4em;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+/* Animasi untuk transisi saat loading selesai */
+.loading-container.fade-out {
+    opacity: 0;
+    transition: opacity 1s ease-out;
+    pointer-events: none; /* Mencegah interaksi saat fade out */
+}
+
+/* --- MAIN CONTENT STYLES --- */
+.main-content {
+    /* Gaya untuk konten utama Anda (Hero, Form, Footer) */
+    display: flex; /* Akan diubah ke block/flex oleh JS setelah loading */
+    flex-direction: column;
+    min-height: 100vh;
+    width: 100%; /* Pastikan mengisi lebar penuh */
+    opacity: 0; /* Awalnya tersembunyi dengan opacity 0 */
+    transition: opacity 1s ease-in; /* Transisi muncul */
+}
+
+.main-content.show {
+    opacity: 1; /* Tampilkan dengan opacity 1 */
+    overflow-y: auto; /* Izinkan scroll setelah loading */
+}
+
+
+/* --- YOUR ORIGINAL FORM/HERO STYLES (Disesuaikan) --- */
+
+.hero-section {
+    position: relative;
+    width: 100%;
+    height: 250px; /* Tinggi hero section */
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #28a745, #218838); /* Gradien hijau */
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .soccer-field-animation {
     position: absolute;
-    width: 150%;
-    height: 100%;
-    background-image:
-        repeating-linear-gradient(to right,
-            rgba(0,0,0,0.05) 0, rgba(0,0,0,0.05) 2px, transparent 2px, transparent 20px),
-        repeating-linear-gradient(to bottom,
-            rgba(0,0,0,0.05) 0, rgba(0,0,0,0.05) 2px, transparent 2px, transparent 20px);
-    background-size: 20px 20px;
-    transform: perspective(1000px) rotateX(10deg) translateY(50px);
-    opacity: 0.8;
-    animation: fieldMovement 30s linear infinite alternate;
-    z-index: 1;
-}
-
-@keyframes fieldMovement {
-    0% { transform: perspective(1000px) rotateX(10deg) translateY(50px) translateX(0); }
-    100% { transform: perspective(1000px) rotateX(10deg) translateY(50px) translateX(-20%); }
-}
-
-/* --- Tambahan: Logo Mini Soccer --- */
-.logo-mini-soccer {
-    max-height: 150px;
-    width: auto;
-    z-index: 2;
-    position: relative;
-}
-
-/* --- Konten Utama & Kartu Registrasi --- */
-.container {
-    flex-grow: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    min-height: calc(100vh - 300px);
-    margin: 0 auto 50px auto;
-    padding: 20px;
-    position: relative;
-    z-index: 3;
-}
-
-.registration-card {
-    background-color: var(--card-bg);
-    padding: 40px;
-    border-radius: 15px;
-    box-shadow: var(--shadow-light);
-    transition: transform 0.3s ease-in-out;
+    top: 0;
+    left: 0;
     width: 100%;
-    max-width: 500px;
+    height: 100%;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path fill="%2338c257" d="M0 0h100v100H0z"/><circle cx="50" cy="50" r="40" fill="none" stroke="%23ffffff" stroke-width="2"/><line x1="50" y1="10" x2="50" y2="90" stroke="%23ffffff" stroke-width="2"/><rect x="40" y="10" width="20" height="15" fill="none" stroke="%23ffffff" stroke-width="2"/><rect x="40" y="75" width="20" height="15" fill="none" stroke="%23ffffff" stroke-width="2"/></svg>');
+    background-size: 50px; /* Ukuran pola lapangan */
+    opacity: 0.2; /* Transparansi pola */
+    animation: fieldMove 30s linear infinite; /* Animasi bergerak */
 }
 
-.registration-card:hover {
-    transform: translateY(-5px);
+@keyframes fieldMove {
+    from { background-position: 0 0; }
+    to { background-position: 100% 100%; }
+}
+
+.logo-mini-soccer {
+    position: relative;
+    z-index: 2;
+    max-width: 200px; /* Ukuran logo */
+    height: auto;
+    filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5));
+}
+
+/* Container untuk form */
+.container {
+    max-width: 500px;
+    margin: 40px auto; /* Margin atas dan bawah, auto samping */
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .registration-card h2 {
     text-align: center;
-    color: var(--primary-color);
+    color: #28a745;
     margin-bottom: 30px;
     font-size: 2em;
 }
 
-/* --- Input Group & Label Floating --- */
 .input-group {
     position: relative;
-    margin-bottom: 30px;
-    overflow: visible;
-    padding-top: 5px;
-}
-
-.input-group label {
-    position: absolute;
-    top: 15px;
-    left: 15px;
-    color: #999;
-    font-size: 1em;
-    transition: all 0.3s ease;
-    pointer-events: none;
-    background-color: var(--card-bg);
-    padding: 0 5px;
-    z-index: 2;
-    transform-origin: left center;
+    margin-bottom: 25px;
 }
 
 .input-group input,
 .input-group select {
     width: 100%;
-    padding: 15px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 1.1em;
+    padding: 12px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+    box-sizing: border-box;
+    background-color: transparent; /* Penting untuk efek placeholder */
     outline: none;
-    background-color: #f9f9f9;
-    transition: all 0.3s ease;
-    appearance: none;
-    position: relative;
-    z-index: 1;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .input-group input:focus,
 .input-group select:focus {
-    border-color: var(--secondary-color);
-    box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.2);
+    border-color: #28a745;
+    box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.2);
 }
 
-.input-group input:not(:placeholder-shown) + label,
-.input-group input:focus + label {
-    top: -5px;
+.input-group label {
+    position: absolute;
     left: 10px;
-    font-size: 0.85em;
-    color: var(--secondary-color);
-    background-color: var(--card-bg);
-    transform: translateY(-50%) scale(0.8);
-    padding: 0 5px;
-    z-index: 3;
-}
-
-.input-group select:not([value=""]) + .select-label,
-.input-group select:focus + .select-label {
-    top: -5px;
-    left: 10px;
-    font-size: 0.85em;
-    color: var(--secondary-color);
-    background-color: var(--card-bg);
-    transform: translateY(-50%) scale(0.8);
-    padding: 0 5px;
-    z-index: 3;
-}
-
-.input-group select[value=""] + .select-label {
-    top: 15px;
-    left: 15px;
-    font-size: 1em;
+    top: 12px;
     color: #999;
-    background-color: transparent;
-    transform: none;
-    z-index: 2;
+    font-size: 1em;
+    transition: all 0.3s ease;
+    pointer-events: none; /* Agar label tidak menghalangi klik input */
 }
 
-/* Panah kustom dropdown */
-.input-group select {
-    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23000000%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13%205.7L146.2%20202.7%2018.8%2075.1a17.6%2017.6%200%200%200-25.3%2024.7l128%20127.9c7%206.9%2017.2%207%2024.2%200l128-127.9c7.5-7.4%207.5-19.5.2-26.8z%22%2F%3E%3C%2Fsvg%3E');
-    background-repeat: no-repeat;
-    background-position: right 15px center;
-    background-size: 1em;
-    padding-right: 40px;
+/* Efek Floating Label */
+.input-group input:focus + label,
+.input-group input:not(:placeholder-shown) + label {
+    top: -18px;
+    font-size: 0.8em;
+    color: #28a745;
+    background-color: #ffffff;
+    padding: 0 5px;
 }
+
+.input-group select {
+    appearance: none; /* Sembunyikan panah default select */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg fill="%234CAF50" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'); /* Panah kustom */
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 30px; /* Ruang untuk panah */
+}
+
+/* Efek Floating Label untuk Select */
+.input-group .select-label {
+    top: 12px; /* Posisi awal sama dengan input */
+}
+.input-group select:focus + .select-label,
+.input-group select:not([value=""]) + .select-label,
+.input-group select:valid + .select-label { /* Menangani kasus ketika select memiliki nilai */
+    top: -18px;
+    font-size: 0.8em;
+    color: #28a745;
+    background-color: #ffffff;
+    padding: 0 5px;
+}
+
 
 .input-group small {
     display: block;
     margin-top: 5px;
-    color: #777;
+    color: #666;
     font-size: 0.85em;
-    padding-left: 5px;
-    position: relative;
-    z-index: 0;
 }
 
-/* --- Tombol Submit --- */
 .submit-button {
-    display: block;
     width: 100%;
-    padding: 18px;
-    background-color: var(--primary-color);
+    padding: 15px;
+    background-color: #28a745;
     color: white;
+    border: none;
+    border-radius: 5px;
     font-size: 1.2em;
     font-weight: 600;
-    border: none;
-    border-radius: 8px;
     cursor: pointer;
-    transition: all 0.3s ease;
-    overflow: hidden;
-    box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .submit-button:hover {
-    background-color: #388E3C;
+    background-color: #218838;
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(76, 175, 80, 0.5);
 }
 
-.submit-button:active {
-    transform: translateY(1px);
-    box-shadow: 0 2px 5px rgba(76, 175, 80, 0.3);
-}
-
-/* --- Footer --- */
 footer {
     text-align: center;
-    padding: 30px;
+    padding: 20px;
     color: #777;
     font-size: 0.9em;
-    margin-top: auto;
+    margin-top: 40px; /* Jarak dari form */
+    width: 100%;
+    box-sizing: border-box; /* Pastikan padding tidak menambah lebar */
 }
 
-/* --- Responsif --- */
+/* Responsive Design */
 @media (max-width: 768px) {
+    .loading-container h1 {
+        font-size: 2.5em;
+    }
+    .soccer-ball-animation img {
+        width: 120px;
+    }
+    .progress-bar-container {
+        width: 90%;
+    }
     .hero-section {
-        height: 250px;
-    }
-    .container {
-        min-height: auto;
-        margin: -50px 15px 30px 15px;
-        padding: 0;
-    }
-    .registration-card {
-        padding: 25px;
-    }
-    .input-group input,
-    .input-group select {
-        padding: 12px;
-        font-size: 1em;
-    }
-    .submit-button {
-        padding: 15px;
-        font-size: 1.1em;
-    }
-}
-
-@media (max-width: 480px) {
-    .hero-section {
-        height: 180px;
-    }
-    .registration-card h2 {
-        font-size: 1.5em;
-    }
-    .registration-card {
-        padding: 20px;
+        height: 200px;
     }
     .logo-mini-soccer {
-        max-height: 100px;
+        max-width: 150px;
+    }
+    .container {
+        margin: 20px auto;
+        padding: 15px;
+    }
+    .registration-card h2 {
+        font-size: 1.8em;
     }
 }
