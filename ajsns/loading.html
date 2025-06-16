@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading Screen Mini Soccer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="loading-container">
+        <div class="background-overlay"></div>
+        <div class="content-wrapper">
+            <h1>Mini Soccer Dr. Soetomo</h1>
+            <div class="soccer-ball-animation">
+                <img src="soccer-ball-fire.png" alt="Soccer Ball with Fire" id="soccerBall">
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill">
+                        <img src="soccer-ball-icon.png" alt="Soccer Ball Icon" class="progress-icon" id="progressIcon">
+                    </div>
+                </div>
+                <div class="loading-text" id="loadingText">0%</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content" style="display: none;">
+        <h2>Selamat Datang di Aplikasi Mini Soccer!</h2>
+        <p>Ini adalah halaman utama Anda.</p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
