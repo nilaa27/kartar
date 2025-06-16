@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const registrationForm = document.getElementById('registrationForm');
-    const WA_NUMBER = '62881036684241'; // NOMOR WHATSAPP PENYELENGGARA
+    const WA_NUMBER = '881036683241'; // NOMOR WHATSAPP PENYELENGGARA
 
     registrationForm.addEventListener('submit', (event) => {
         event.preventDefault(); // Mencegah form reload halaman
