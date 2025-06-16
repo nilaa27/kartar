@@ -9,11 +9,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const namaKetua = document.getElementById('namaKetua').value;
         const noKetua = document.getElementById('noKetua').value;
         const namaTeam = document.getElementById('namaTeam').value;
-        const asalRw = document.getElementById('asalRw').value;
+        const asalRw = document.getElementById('asalRw').value; // Mengambil nilai dari select
 
         // Validasi sederhana (bisa dikembangkan)
         if (!namaKetua || !noKetua || !namaTeam || !asalRw) {
             alert('Mohon lengkapi semua kolom pendaftaran!');
+            return;
+        }
+
+        // Validasi khusus untuk select Asal RW
+        if (asalRw === "") { // Jika opsi 'Pilih RW' masih terpilih
+            alert('Mohon pilih Asal RW!');
             return;
         }
 
@@ -25,10 +31,9 @@ document.addEventListener('DOMContentLoaded', () => {
             day: 'numeric',
             hour: '2-digit',
             minute: '2-digit',
-            // Pastikan format waktu sesuai WIB, jika tidak, hilangkan timezoneName
-            // Atau gunakan library seperti moment.js untuk handling timezone yang lebih robust
             timeZoneName: 'short'
         };
+        // Format tanggal dan waktu untuk locale Indonesia (Surabaya, WIB)
         const registDate = now.toLocaleDateString('id-ID', options);
 
         // Buat pesan WhatsApp dengan format yang diinginkan
@@ -53,23 +58,65 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Opsional: Reset form setelah berhasil kirim
         registrationForm.reset();
+        // Setelah reset, pastikan label kembali ke posisi awal jika input kosong
+        document.querySelectorAll('.input-group input').forEach(input => {
+            input.classList.remove('has-value');
+        });
+        document.getElementById('asalRw').value = ""; // Reset select ke opsi default
+
         alert('Pendaftaran berhasil! Anda akan diarahkan ke WhatsApp untuk konfirmasi.');
     });
 
-    // Efek floating label untuk input
+    // Efek floating label untuk input (teks dan tel)
     document.querySelectorAll('.input-group input').forEach(input => {
-        // Cek jika input sudah ada isinya saat load (misal dari autocomplete browser)
-        if (input.value) {
-            input.classList.add('has-value');
-        }
-
-        input.addEventListener('focus', () => {
-            input.classList.add('has-value');
-        });
-        input.addEventListener('blur', () => {
-            if (input.value === '') {
+        // Fungsi untuk memeriksa nilai input dan menambahkan/menghapus kelas 'has-value'
+        const checkValue = () => {
+            if (input.value !== '') {
+                input.classList.add('has-value');
+            } else {
                 input.classList.remove('has-value');
             }
+        };
+
+        // Panggil saat DOMContentLoaded (saat halaman pertama kali dimuat)
+        // Ini menangani kasus auto-fill browser
+        checkValue();
+
+        // Panggil saat event 'input' (saat mengetik atau menghapus teks)
+        input.addEventListener('input', checkValue);
+
+        // Panggil saat fokus
+        input.addEventListener('focus', () => {
+            input.classList.add('has-value'); // Pastikan label naik saat fokus
         });
+
+        // Panggil saat blur (keluar dari input)
+        input.addEventListener('blur', checkValue);
     });
+
+    // Untuk elemen select (Asal RW), label harus selalu aktif jika tidak di "Pilih RW"
+    const asalRwSelect = document.getElementById('asalRw');
+    const asalRwLabel = document.querySelector('label[for="asalRw"]');
+
+    const updateSelectLabel = () => {
+        if (asalRwSelect.value !== "") {
+            asalRwLabel.classList.add('active'); // Tambahkan kelas 'active' untuk label
+        } else {
+            asalRwLabel.classList.remove('active'); // Hapus kelas 'active'
+        }
+    };
+
+    // Set kondisi awal label saat halaman dimuat
+    updateSelectLabel();
+
+    // Perbarui label saat nilai select berubah
+    asalRwSelect.addEventListener('change', updateSelectLabel);
+
+    // Perbarui label saat select mendapatkan fokus (opsional, tapi bagus untuk konsistensi)
+    asalRwSelect.addEventListener('focus', () => {
+        asalRwLabel.classList.add('active');
+    });
+
+    // Jika select kehilangan fokus dan kembali ke default "Pilih RW"
+    asalRwSelect.addEventListener('blur', updateSelectLabel);
 });
