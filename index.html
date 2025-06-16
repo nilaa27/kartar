@@ -8,13 +8,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Hero Section dengan Logo -->
+    <div id="loading-screen">
+        <div class="spinner"></div>
+        <p>Memuat...</p>
+    </div>
     <div class="hero-section">
-    <div class="soccer-field-animation"></div>
-    <img src="https://i.postimg.cc/G21LVWjg/Desain-tanpa-judul.png" alt="Mini Soccer Logo" class="logo-mini-soccer">
-</div>
+        <div class="soccer-field-animation"></div>
+        <img src="https://i.postimg.cc/G21LVWjg/Desain-tanpa-judul.png" alt="Mini Soccer Logo" class="logo-mini-soccer">
+    </div>
 
-    <!-- Form Registrasi -->
     <div class="container">
         <div class="registration-card">
             <h2>Daftarkan Timmu Sekarang!</h2>
@@ -54,6 +56,14 @@
         <p>&copy; 2025 Kartar Dr Sutomo. All Rights Reserved.</p>
     </footer>
 
+    <div id="success-popup" class="popup-container">
+        <div class="popup-content">
+            <span class="checkmark">&#10004;</span>
+            <h2>Pendaftaran Berhasil!</h2>
+            <p>Terima kasih sudah mendaftar! Tim Kartar akan segera menghubungi Anda.</p>
+            <button id="close-popup" class="popup-button">Tutup</button>
+        </div>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
