@@ -2,6 +2,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const registrationForm = document.getElementById('registrationForm');
     const WA_NUMBER = '62881036683241'; // NOMOR WHATSAPP PENYELENGGARA
 
+    // Elemen pop-up
+    const successPopup = document.getElementById('success-popup');
+    const closePopupButton = document.getElementById('close-popup');
+
+    // Elemen loading screen
+    const loadingScreen = document.getElementById('loading-screen');
+
+    // Sembunyikan loading screen setelah halaman benar-benar siap
+    // Anda bisa mengatur durasi minimum loading jika diperlukan
+    setTimeout(() => {
+        loadingScreen.classList.add('hidden');
+    }, 1000); // Contoh: loading screen akan terlihat minimal 1 detik
+
     registrationForm.addEventListener('submit', (event) => {
         event.preventDefault(); // Mencegah form reload halaman
 
@@ -39,7 +52,6 @@ document.addEventListener('DOMContentLoaded', () => {
              return;
         }
 
-
         // Dapatkan tanggal dan jam saat ini
         const now = new Date();
         const options = {
@@ -72,13 +84,29 @@ document.addEventListener('DOMContentLoaded', () => {
         // Buka link WhatsApp di tab baru
         window.open(whatsappLink, '_blank');
 
+        // Tampilkan pop-up setelah berhasil membuka link WhatsApp
+        successPopup.style.display = 'flex'; // Menampilkan pop-up container
+        setTimeout(() => successPopup.classList.add('show'), 10); // Menambahkan class 'show' untuk animasi
+
         // Reset form setelah berhasil kirim
         registrationForm.reset();
         updateSelectLabel(); // Pastikan label select kembali ke posisi awal
-
-        // Tampilkan alert yang lebih informatif dan rapi
-        alert('Pendaftaran berhasil! Anda akan diarahkan ke WhatsApp untuk konfirmasi. Pesan yang akan dikirim:\n\n' + waMessage);
     });
+
+    // Menutup pop-up saat tombol 'Tutup' diklik
+    closePopupButton.addEventListener('click', () => {
+        successPopup.classList.remove('show');
+        setTimeout(() => successPopup.style.display = 'none', 400); // Menunggu animasi selesai
+    });
+
+    // Menutup pop-up jika mengklik di luar konten pop-up
+    successPopup.addEventListener('click', (event) => {
+        if (event.target === successPopup) {
+            successPopup.classList.remove('show');
+            setTimeout(() => successPopup.style.display = 'none', 400); // Menunggu animasi selesai
+        }
+    });
+
 
     // Inisialisasi floating label untuk input teks
     document.querySelectorAll('.input-group input').forEach(input => {
@@ -93,14 +121,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const updateSelectLabel = () => {
         if (asalRwSelect.value !== "") {
+            // Memastikan label selalu "aktif" saat ada nilai
             asalRwLabel.classList.add('active');
         } else {
+            // Menghapus "active" hanya jika nilai kosong dan tidak sedang fokus
             asalRwLabel.classList.remove('active');
         }
     };
 
+    // Panggil saat halaman dimuat
     updateSelectLabel();
+    // Panggil saat nilai select berubah
     asalRwSelect.addEventListener('change', updateSelectLabel);
-    asalRwSelect.addEventListener('focus', updateSelectLabel);
+    // Panggil saat select mendapatkan fokus (untuk mencegah label menutupi saat di-tab)
+    asalRwSelect.addEventListener('focus', () => {
+        asalRwLabel.classList.add('active');
+    });
+    // Panggil saat select kehilangan fokus
     asalRwSelect.addEventListener('blur', updateSelectLabel);
 });
