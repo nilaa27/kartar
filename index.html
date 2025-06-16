@@ -3,55 +3,272 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registrasi Turnamen Sepak Bola</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Form Pendaftaran Tim</title>
+    <style>
+        /* Styling untuk body dan container umum */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 25px;
+        }
+
+        /* Styling untuk setiap grup form */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block; /* Membuat label di baris sendiri */
+            margin-bottom: 5px; /* Jarak antara label dan input */
+            font-weight: bold;
+            color: #555;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="tel"],
+        .form-group input[type="email"],
+        .form-group input[type="date"] {
+            width: 100%; /* Membuat input mengisi lebar kontainer */
+            padding: 10px;
+            box-sizing: border-box; /* Agar padding tidak menambah lebar */
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .form-group input:focus {
+            border-color: #007bff;
+            outline: none;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        .form-text {
+            font-size: 0.85em;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+
+        /* Styling untuk tombol submit */
+        button[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            background-color: #28a745; /* Warna hijau */
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #218838;
+        }
+
+        button[type="submit"]:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        /* Styling untuk pesan setelah submit */
+        #submissionStatus {
+            display: none; /* Default hidden */
+            text-align: center;
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #d4edda;
+            background-color: #d4edda;
+            color: #155724;
+            border-radius: 8px;
+        }
+
+        #submissionStatus img {
+            width: 60px; /* Ukuran logo verified */
+            height: 60px;
+            vertical-align: middle;
+            margin-bottom: 10px;
+        }
+
+        #submissionStatus p {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-top: 10px;
+            margin-bottom: 0;
+        }
+
+        #submissionStatus small {
+            font-size: 0.9em;
+            color: #155724;
+        }
+    </style>
 </head>
 <body>
-    <div class="hero-section">
-        <div class="soccer-field-animation"></div>
-        <h1>Registrasi Turnamen Sepak Bola</h1>
-    </div>
 
     <div class="container">
-        <div class="registration-card">
-            <h2>Daftarkan Timmu Sekarang!</h2>
-            <form id="registrationForm">
-                <div class="input-group">
-                    <input type="text" id="namaKetua" name="namaKetua" required placeholder=" ">
-                    <label for="namaKetua">Nama Ketua Tim</label>
-                </div>
-                <div class="input-group">
-                    <input type="text" id="namaTeam" name="namaTeam" required placeholder=" ">
-                    <label for="namaTeam">Nama Tim</label>
-                </div>
-                <div class="input-group">
-                    <select id="asalRw" name="asalRw" required>
-                        <option value="">Pilih RW</option>
-                        <option value="RW 1">RW 1</option>
-                        <option value="RW 2">RW 2</option>
-                        <option value="RW 3">RW 3</option>
-                        <option value="RW 4">RW 4</option>
-                        <option value="RW 5">RW 5</option>
-                        <option value="RW 6">RW 6</option>
-                        <option value="RW 7">RW 7</option>
-                    </select>
-                    <label for="asalRw" class="select-label">Asal RW</label>
-                </div>
-                <div class="input-group">
-                    <input type="tel" id="noKetua" name="noKetua" required placeholder=" ">
-                    <label for="noKetua">No. Ketua/Perwakilan (WhatsApp)</label>
-                    <small>Pastikan nomor aktif WhatsApp diawali kode negara (misal: 6281xxxxxx).</small>
-                </div>
-                <button type="submit" class="submit-button">Daftar Sekarang</button>
-            </form>
+        <div id="submissionStatus">
+            <img src="verified_logo.png" alt="Verified">
+            <p>Terima kasih sudah mendaftar!</p>
+            <small>Tim kamu akan diproses secepatnya.</small>
         </div>
+
+        <form id="registrationForm">
+            <h2>Form Pendaftaran Tim</h2>
+
+            <div class="form-group">
+                <label for="teamName">Nama Tim</label>
+                <input type="text" id="teamName" name="teamName" placeholder="Contoh: Tim Juara Esports" required>
+            </div>
+
+            <div class="form-group">
+                <label for="leaderName">Nama Ketua/Perwakilan</label>
+                <input type="text" id="leaderName" name="leaderName" placeholder="Nama Lengkap Ketua Tim" required>
+            </div>
+
+            <div class="form-group">
+                <label for="whatsappNumber">No. Ketua/Perwakilan (WhatsApp)</label>
+                <input type="tel" id="whatsappNumber" name="whatsappNumber" placeholder="Contoh: 6281234567890" required>
+                <small class="form-text">Pastikan nomor aktif WhatsApp diawali kode negara (misal: 6281xxxxxxxx).</small>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Ketua/Perwakilan</label>
+                <input type="email" id="email" name="email" placeholder="contoh@email.com" required>
+            </div>
+
+            <div class="form-group">
+                <label for="birthDate">Tanggal Lahir Ketua (YYY-MM-DD)</label>
+                <input type="date" id="birthDate" name="birthDate" value="2005-09-28" required>
+                <small class="form-text">Tanggal lahir kamu: 2005-09-28</small>
+            </div>
+
+            <div class="form-group">
+                <label for="duration">Sudah berapa lama kamu bertahan?</label>
+                <input type="text" id="duration" name="duration" placeholder="Contoh: 1 tahun 6 bulan" required>
+                <small class="form-text">Jelaskan durasi kebersamaan tim kamu.</small>
+            </div>
+
+            <button type="submit" id="submitButton">Daftar Sekarang</button>
+        </form>
     </div>
 
-    <footer>
-        <p>&copy; 2025 Turnamen Sepak Bola. All Rights Reserved.</p>
-    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('registrationForm');
+            const submissionStatusDiv = document.getElementById('submissionStatus');
+            const submitButton = document.getElementById('submitButton');
 
-    <script src="script.js"></script>
+            // 1. Cek status submission saat halaman dimuat
+            const isFormSubmitted = localStorage.getItem('formSubmitted') === 'true';
+
+            if (isFormSubmitted) {
+                // Jika sudah submit, tampilkan pesan dan sembunyikan form
+                if (submissionStatusDiv) {
+                    submissionStatusDiv.style.display = 'block'; // Tampilkan blok pesan
+                }
+                if (form) {
+                    form.style.display = 'none'; // Sembunyikan form
+                }
+            } else {
+                // Jika belum submit, pastikan form terlihat dan pesan tersembunyi
+                if (submissionStatusDiv) {
+                    submissionStatusDiv.style.display = 'none'; // Sembunyikan blok pesan
+                }
+                if (form) {
+                    form.style.display = 'block'; // Tampilkan form
+                }
+            }
+
+            // 2. Tangani proses submit form
+            if (form) {
+                form.addEventListener('submit', function(event) {
+                    event.preventDefault(); // Mencegah submit form standar (reload halaman)
+
+                    // Menonaktifkan tombol submit untuk mencegah multiple submission
+                    submitButton.disabled = true;
+                    submitButton.textContent = 'Memproses...';
+
+                    // Kumpulkan data form (contoh sederhana)
+                    const formData = {
+                        teamName: document.getElementById('teamName').value,
+                        leaderName: document.getElementById('leaderName').value,
+                        whatsappNumber: document.getElementById('whatsappNumber').value,
+                        email: document.getElementById('email').value,
+                        birthDate: document.getElementById('birthDate').value,
+                        duration: document.getElementById('duration').value,
+                    };
+
+                    console.log('Data yang akan dikirim:', formData);
+
+                    // --- Simulasi Pengiriman Data ke Server ---
+                    // DI SINI ADALAH TEMPAT DIMANA ANDA AKAN MENGIRIM DATA KE BACKEND/SERVER ANDA
+                    // Gunakan fetch API atau XMLHttpRequest
+                    // Contoh dengan fetch API:
+                    // fetch('/api/register-team', { // Ganti dengan URL API Anda
+                    //     method: 'POST',
+                    //     headers: {
+                    //         'Content-Type': 'application/json',
+                    //     },
+                    //     body: JSON.stringify(formData),
+                    // })
+                    // .then(response => response.json())
+                    // .then(data => {
+                    //     if (data.success) { // Asumsi server merespons dengan { success: true }
+                    //         handleSuccessfulSubmission();
+                    //     } else {
+                    //         alert('Pendaftaran gagal: ' + (data.message || 'Terjadi kesalahan.'));
+                    //         submitButton.disabled = false;
+                    //         submitButton.textContent = 'Daftar Sekarang';
+                    //     }
+                    // })
+                    // .catch(error => {
+                    //     console.error('Error saat mengirim data:', error);
+                    //     alert('Terjadi kesalahan saat pendaftaran. Mohon coba lagi.');
+                    //     submitButton.disabled = false;
+                    //     submitButton.textContent = 'Daftar Sekarang';
+                    // });
+
+                    // --- Untuk DEMO: Langsung panggil fungsi sukses setelah beberapa detik ---
+                    setTimeout(() => {
+                        handleSuccessfulSubmission();
+                    }, 2000); // Simulasi 2 detik proses pengiriman data
+                });
+            }
+
+            // Fungsi untuk menangani submit yang berhasil
+            function handleSuccessfulSubmission() {
+                localStorage.setItem('formSubmitted', 'true'); // Simpan status di localStorage
+                // Sembunyikan form dan tampilkan pesan sukses
+                if (form) {
+                    form.style.display = 'none';
+                }
+                if (submissionStatusDiv) {
+                    submissionStatusDiv.style.display = 'block';
+                }
+                // Opsional: Anda bisa juga melakukan redirect ke halaman lain di sini
+                // window.location.href = 'halaman_terima_kasih.html';
+            }
+        });
+    </script>
 </body>
 </html>
