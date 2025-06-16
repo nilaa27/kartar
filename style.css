@@ -113,10 +113,9 @@ body {
     transform: translateY(-50%); /* Penyesuaian agar benar-benar di tengah */
     transition: all 0.3s ease;
     pointer-events: none; /* Jangan halangi klik input */
-    background-color: transparent;
-    padding: 0 5px;
-    z-index: 5;
-    /* transform-origin: left center; */ /* Tidak perlu jika pakai translateY(-50%) */
+    background-color: var(--card-bg); /* PENTING: Background agar label menutupi input di bawahnya */
+    padding: 0 5px; /* Beri sedikit padding horizontal agar background terlihat rapi */
+    z-index: 2; /* Pastikan label berada di atas input saat di tengah */
 }
 
 /* Gaya dasar untuk input dan select */
@@ -133,6 +132,8 @@ body {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
+    position: relative; /* PENTING: Agar z-index berfungsi pada input */
+    z-index: 1; /* Pastikan input berada di bawah label saat label di tengah */
 }
 
 /* Gaya saat input/select dalam fokus */
@@ -150,8 +151,10 @@ body {
     left: 10px;
     font-size: 0.85em;
     color: var(--secondary-color);
-    background-color: var(--card-bg);
+    background-color: var(--card-bg); /* PENTING: background agar tidak terlihat input di baliknya */
     transform: translateY(-50%) scale(0.8); /* Naik dan mengecil */
+    padding: 0 5px; /* Tambahan padding agar background label rapi */
+    z-index: 3; /* Pastikan label lebih di atas saat floating */
 }
 
 /* Khusus untuk select (label selalu di atas karena select selalu ada value) */
@@ -163,6 +166,8 @@ body {
     color: var(--secondary-color);
     background-color: var(--card-bg);
     transform: translateY(-50%) scale(0.8);
+    padding: 0 5px;
+    z-index: 3;
 }
 /* Untuk select dengan value kosong ('Pilih RW'), label tetap di bawah */
 .input-group select[value=""] + .select-label {
@@ -170,10 +175,10 @@ body {
     left: 15px;
     font-size: 1em;
     color: #999;
-    background-color: transparent;
+    background-color: transparent; /* Pastikan ini transparan saat tidak floating */
     transform: translateY(-50%);
+    z-index: 2;
 }
-
 
 /* Tambahkan arrow kustom untuk select */
 .input-group select {
@@ -184,13 +189,15 @@ body {
     padding-right: 40px; /* Ruang untuk arrow */
 }
 
-
+/* Penyesuaian untuk teks small */
 .input-group small {
-    display: block;
-    margin-top: 5px;
+    display: block; /* Pastikan teks small ada di baris baru */
+    margin-top: 5px; /* Jarak dari input di atasnya */
     color: #777;
     font-size: 0.85em;
-    padding-left: 5px;
+    padding-left: 5px; /* Sedikit padding agar tidak terlalu mepet kiri */
+    position: relative; /* Agar tidak terpengaruh oleh absolute positioning label */
+    z-index: 1; /* Pastikan di bawah label */
 }
 
 /* --- Tombol Submit --- */
