@@ -100,29 +100,31 @@ body {
 
 /* --- Input Group & Label Floating Canggih --- */
 .input-group {
-    position: relative;
+    position: relative; /* Penting: konteks positioning untuk label absolute */
     margin-bottom: 30px;
+    /* Tambahan: Pastikan input-group memiliki overflow hidden untuk jaga-jaga */
+    /* overflow: hidden; */ /* Ini opsional, tapi bisa membantu memastikan label tidak keluar */
 }
 
 .input-group label {
     position: absolute;
-    top: 50%; /* Tengah vertikal dengan input */
+    top: 50%; /* Awalnya di tengah vertikal relatif terhadap .input-group */
     left: 15px;
     color: #999;
     font-size: 1em;
-    transform: translateY(-50%); /* Penyesuaian agar benar-benar di tengah */
+    transform: translateY(-50%); /* Menyesuaikan agar benar-benar di tengah */
     transition: all 0.3s ease;
     pointer-events: none; /* Jangan halangi klik input */
-    background-color: var(--card-bg); /* PENTING: Background agar label menutupi input di bawahnya */
-    padding: 0 5px; /* Beri sedikit padding horizontal agar background terlihat rapi */
-    z-index: 2; /* Pastikan label berada di atas input saat di tengah */
+    background-color: var(--card-bg); /* SAMA DENGAN BACKGROUND KARTU: Ini KUNCI agar label tampak di dalam input */
+    padding: 0 5px; /* Sedikit padding agar background label rapi */
+    z-index: 2; /* Pastikan label berada di atas input */
 }
 
 /* Gaya dasar untuk input dan select */
 .input-group input,
 .input-group select {
-    width: 100%; /* Lebar penuh */
-    padding: 15px;
+    width: 100%;
+    padding: 15px; /* Mengatur tinggi input */
     border: 1px solid #ddd;
     border-radius: 8px;
     font-size: 1.1em;
@@ -132,8 +134,8 @@ body {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    position: relative; /* PENTING: Agar z-index berfungsi pada input */
-    z-index: 1; /* Pastikan input berada di bawah label saat label di tengah */
+    position: relative; /* Penting untuk z-index */
+    z-index: 1; /* Input di bawah label saat label default */
 }
 
 /* Gaya saat input/select dalam fokus */
@@ -147,19 +149,19 @@ body {
 /* Ketika input ada isinya (bukan placeholder) ATAU sedang fokus */
 .input-group input:not(:placeholder-shown) + label,
 .input-group input:focus + label {
-    top: 0; /* Naik ke atas */
+    top: 0; /* Naik ke bagian paling atas dari .input-group */
     left: 10px;
     font-size: 0.85em;
     color: var(--secondary-color);
-    background-color: var(--card-bg); /* PENTING: background agar tidak terlihat input di baliknya */
+    background-color: var(--card-bg); /* Background tetap sama untuk menutupi border atas input */
     transform: translateY(-50%) scale(0.8); /* Naik dan mengecil */
     padding: 0 5px; /* Tambahan padding agar background label rapi */
     z-index: 3; /* Pastikan label lebih di atas saat floating */
 }
 
 /* Khusus untuk select (label selalu di atas karena select selalu ada value) */
-.input-group select:not([value=""]) + .select-label, /* Jika select ada nilai selain kosong */
-.input-group select:focus + .select-label { /* Atau sedang fokus */
+.input-group select:not([value=""]) + .select-label,
+.input-group select:focus + .select-label {
     top: 0;
     left: 10px;
     font-size: 0.85em;
@@ -196,8 +198,8 @@ body {
     color: #777;
     font-size: 0.85em;
     padding-left: 5px; /* Sedikit padding agar tidak terlalu mepet kiri */
-    position: relative; /* Agar tidak terpengaruh oleh absolute positioning label */
-    z-index: 1; /* Pastikan di bawah label */
+    position: relative; /* Penting: agar tidak terpengaruh oleh absolute positioning label, tapi tetap mengikuti flow normal */
+    z-index: 0; /* Pastikan di bawah input dan label */
 }
 
 /* --- Tombol Submit --- */
