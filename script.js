@@ -99,11 +99,12 @@ document.addEventListener('DOMContentLoaded', () => {
         message += `├─ Nama Tim          : *${namaTeam}*\n`;
         message += `└─ Domisili          : *${asalRw}*\n\n`;
         message += `*📅 Waktu Pendaftaran:*\n`;
-        message += `└─ _${registDate}_\n\n`;
+        // Untuk Monospace, bungkus teks dengan 3 backticks
+        message += `└─ \`\`\`${registDate}\`\`\`\n\n`; // Ini akan mengubah font tanggal menjadi monospace
         message += `_Terima kasih atas pendaftaran tim Anda! Kami akan segera menghubungi Anda untuk langkah selanjutnya._\n`;
         message += `_Mohon menunggu konfirmasi dari Admin Kartar Dr. Soetomo._`;
 
-        return encodeURIComponent(message);
+        return encodeURIComponent(message); // Pastikan pesan di-encode untuk URL
     };
 
     /**
@@ -120,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 currentStatusIndex++;
                 if (currentStatusIndex >= loadingStatuses.length) {
-                    currentStatusIndex = 0; // Reset ke awal jika loop dibutuhkan
+                    currentStatusIndex = 0; // Reset ke awal jika loop dibutuhkan (meskipun untuk loading ini tidak diharapkan)
                 }
                 loadingTextElement.textContent = loadingStatuses[currentStatusIndex];
             }
