@@ -1,12 +1,24 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- Konfigurasi & Elemen DOM ---
-    const WA_NUMBER = '62881036683241'; // Nomor WhatsApp penyelenggara
+    const WA_NUMBER = '62881036683241';
     const registrationForm = document.getElementById('registrationForm');
     const successPopup = document.getElementById('success-popup');
     const closePopupButton = document.getElementById('close-popup');
     const loadingScreen = document.getElementById('loading-screen');
     const progressBarFill = document.querySelector('.progress-bar-fill');
     const progressBarContainer = document.querySelector('.progress-bar-container');
+    const loadingTextElement = document.querySelector('.loading-text'); // Ambil elemen teks loading
+    const bodyElement = document.body; // Ambil elemen body
+
+    // Daftar status loading
+    const loadingStatuses = [
+        "Sedang memuat...",
+        "Memuat...",
+        "Selesai!"
+    ];
+    let currentStatusIndex = 0;
+    let loadingInterval; // Untuk menyimpan ID interval
+
 
     // --- Fungsi Bantuan ---
 
@@ -61,9 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
      * Menampilkan pop-up keberhasilan pendaftaran.
      */
     const showSuccessPopup = () => {
-        successPopup.style.display = 'flex';
-        // Memberi sedikit penundaan untuk memastikan display:flex diterapkan sebelum transisi
-        setTimeout(() => successPopup.classList.add('show'), 10);
+        successPopup.classList.add('show');
     };
 
     /**
@@ -71,7 +81,6 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     const hideSuccessPopup = () => {
         successPopup.classList.remove('show');
-        // Menunggu transisi opacity selesai sebelum menyembunyikan sepenuhnya
         setTimeout(() => successPopup.style.display = 'none', 400);
     };
 
@@ -83,8 +92,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const buildWhatsAppMessage = (data) => {
         const { namaKetua, noKetua, namaTeam, asalRw, registDate } = data;
 
-        // Gunakan karakter khusus untuk membuat teks tebal dan spasi di WhatsApp
-        // *teks* untuk tebal, spasi non-breaking (&nbsp;) atau indentasi manual
         let message = `*🌟 PENDAFTARAN TIM BARU 🌟*\n\n`;
         message += `*📝 Detail Pendaftaran:*\n`;
         message += `├─ Nama Captain      : *${namaKetua}*\n`;
@@ -96,42 +103,100 @@ document.addEventListener('DOMContentLoaded', () => {
         message += `_Terima kasih atas pendaftaran tim Anda! Kami akan segera menghubungi Anda untuk langkah selanjutnya._\n`;
         message += `_Mohon menunggu konfirmasi dari Admin Kartar Dr. Soetomo._`;
 
-        return encodeURIComponent(message); // Pastikan pesan di-encode untuk URL
+        return encodeURIComponent(message);
     };
+
+    /**
+     * Mengganti teks loading dengan animasi fade-out dan fade-in.
+     */
+    const updateLoadingText = (isFinalStatus = false) => {
+        // Sembunyikan teks saat ini
+        loadingTextElement.classList.add('is-hidden'); // CSS opacity akan transisi
+
+        setTimeout(() => {
+            if (isFinalStatus) {
+                loadingTextElement.textContent = loadingStatuses[loadingStatuses.length - 1]; // Set ke status terakhir
+                currentStatusIndex = loadingStatuses.length - 1; // Pastikan index juga di-set
+            } else {
+                currentStatusIndex++;
+                if (currentStatusIndex >= loadingStatuses.length) {
+                    currentStatusIndex = 0; // Reset ke awal jika loop dibutuhkan
+                }
+                loadingTextElement.textContent = loadingStatuses[currentStatusIndex];
+            }
+
+            // Tampilkan teks baru
+            loadingTextElement.classList.remove('is-hidden'); // Ini akan memicu fade-in
+
+            // Hentikan interval jika sudah mencapai status terakhir dan dipanggil sebagai final
+            if (isFinalStatus) {
+                clearInterval(loadingInterval);
+            }
+
+        }, 300); // Durasi transisi opacity di CSS (0.3s)
+    };
+
 
     // --- Inisialisasi dan Event Listeners ---
 
     // Sembunyikan loading screen setelah halaman dan semua aset dimuat
     window.addEventListener('load', () => {
-        // Atur lebar progress bar menjadi 100%
+        // Inisialisasi teks loading pertama
+        loadingTextElement.textContent = loadingStatuses[0];
+        loadingTextElement.classList.add('is-visible'); // Tampilkan teks awal dengan transisi
+
+        // Mulai animasi progress bar
         progressBarFill.style.width = '100%';
-        // Tambahkan kelas 'loaded' untuk animasi bola muncul
         progressBarContainer.classList.add('loaded');
 
-        // Setelah animasi progress bar selesai (sesuai transition CSS: 2 detik)
+        // Total durasi progress bar adalah 4 detik
+        const totalProgressBarDuration = 4000;
+        // Waktu untuk setiap status teks (misal 2 detik per status untuk 3 status)
+        // (total 3 status: 0, 1, 2. Butuh 2 kali pergantian)
+        const statusChangeTiming = totalProgressBarDuration / (loadingStatuses.length - 1); // 4000ms / 2 = 2000ms (2 detik)
+
+        // Perbarui teks loading secara berkala untuk 2 status pertama
+        let statusUpdateCount = 0;
+        loadingInterval = setInterval(() => {
+            if (statusUpdateCount < loadingStatuses.length - 1) { // Hanya update untuk status 0 dan 1
+                updateLoadingText();
+                statusUpdateCount++;
+            }
+        }, statusChangeTiming);
+
+        // Setelah progress bar selesai, pastikan teks menjadi "Selesai!" dan loading screen menghilang
         setTimeout(() => {
-            loadingScreen.classList.add('hidden'); // Memudar dan menyembunyikan
-            // Opsional: Hapus elemen dari DOM setelah disembunyikan total
-            // setTimeout(() => loadingScreen.remove(), 700);
-        }, 2000); // Durasi ini harus >= durasi transition 'width' di CSS progress-bar-fill (2s)
+            clearInterval(loadingInterval); // Pastikan interval berhenti
+            updateLoadingText(true); // Panggil sekali lagi untuk status final "Selesai!"
+
+            // Tunggu sedikit setelah teks "Selesai!" muncul dan progress bar penuh, baru sembunyikan loading screen
+            setTimeout(() => {
+                loadingScreen.classList.add('hidden'); // Mulai animasi fadeOutBlurScale
+
+                // Setelah loading screen benar-benar hilang, tambahkan kelas ke body
+                // Durasi animasi fadeOutBlurScale adalah 0.8s
+                setTimeout(() => {
+                    bodyElement.classList.add('content-loaded'); // Tampilkan konten utama dengan animasi
+                }, 800); // Tunggu sampai fadeOutBlurScale selesai
+
+            }, 500); // Tambahan delay 500ms setelah "Selesai!" muncul dan progress bar penuh
+
+        }, totalProgressBarDuration); // Total durasi progress bar (4 detik)
     });
 
     // Event listener untuk submit formulir
     registrationForm.addEventListener('submit', (event) => {
         event.preventDefault();
 
-        // Ambil nilai dari input
         const namaKetua = document.getElementById('namaKetua').value.trim();
         const noKetua = document.getElementById('noKetua').value.trim();
         const namaTeam = document.getElementById('namaTeam').value.trim();
         const asalRw = document.getElementById('asalRw').value;
 
-        // Lakukan validasi
         if (!validateForm(namaKetua, noKetua, namaTeam, asalRw)) {
-            return; // Hentikan proses jika validasi gagal
+            return;
         }
 
-        // Dapatkan tanggal dan jam saat ini
         const now = new Date();
         const options = {
             year: 'numeric',
@@ -140,11 +205,10 @@ document.addEventListener('DOMContentLoaded', () => {
             hour: '2-digit',
             minute: '2-digit',
             timeZoneName: 'short',
-            timeZone: 'Asia/Jakarta' // Pastikan zona waktu WIB
+            timeZone: 'Asia/Jakarta'
         };
         const registDate = now.toLocaleDateString('id-ID', options);
 
-        // Siapkan data untuk pesan WhatsApp
         const registrationData = {
             namaKetua,
             noKetua,
@@ -156,40 +220,33 @@ document.addEventListener('DOMContentLoaded', () => {
         const encodedMessage = buildWhatsAppMessage(registrationData);
         const whatsappLink = `https://wa.me/${WA_NUMBER}?text=${encodedMessage}`;
 
-        // Buka link WhatsApp di tab baru
         window.open(whatsappLink, '_blank');
 
-        // Tampilkan pop-up keberhasilan
         showSuccessPopup();
 
-        // Reset form setelah berhasil kirim
         registrationForm.reset();
-        updateSelectLabel(); // Pastikan label select kembali ke posisi awal
+        updateSelectLabel();
     });
 
-    // Event listener untuk tombol tutup pop-up
     closePopupButton.addEventListener('click', hideSuccessPopup);
 
-    // Event listener untuk menutup pop-up saat klik di luar kontennya
     successPopup.addEventListener('click', (event) => {
         if (event.target === successPopup) {
             hideSuccessPopup();
         }
     });
 
-    // --- Inisialisasi Floating Label (untuk input teks) ---
     document.querySelectorAll('.input-group input').forEach(input => {
         if (!input.placeholder) {
             input.placeholder = ' ';
         }
     });
 
-    // --- Inisialisasi dan Event Listeners untuk Floating Label (untuk select) ---
     const asalRwSelect = document.getElementById('asalRw');
     asalRwSelect.addEventListener('change', updateSelectLabel);
     asalRwSelect.addEventListener('focus', () => {
         document.querySelector('label[for="asalRw"]').classList.add('active');
     });
     asalRwSelect.addEventListener('blur', updateSelectLabel);
-    updateSelectLabel(); // Panggil saat DOMContentLoaded untuk inisialisasi awal
+    updateSelectLabel();
 });
