@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Regist Page</title>
+    <title>Registrasi Tim Mini Soccer</title>
     <link rel="stylesheet" href="style.css"/>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="icon" href="https://i.postimg.cc/tTtVWr7w/20250617-080821.png" type="image/png">
@@ -36,22 +36,46 @@
                     <input type="text" id="namaTeam" name="namaTeam" required placeholder=" ">
                     <label for="namaTeam">Nama Tim</label>
                 </div>
-                <div class="input-group">
-                    <select id="asalRw" name="asalRw" required>
-                        <option value="">Pilih RW</option>
-                        <option value="RW 1">RW 1</option>
-                        <option value="RW 2">RW 2</option>
-                        <option value="RW 3">RW 3</option>
-                        <option value="RW 4">RW 4</option>
-                        <option value="RW 5">RW 5</option>
-                        <option value="RW 6">RW 6</option>
-                        <option value="RW 7">RW 7</option>
-                    </select>
-                    <label for="asalRw" class="select-label">Domisili</label>
+
+                <div class="rw-rt-group">
+                    <div class="input-group">
+                        <select id="asalRt" name="asalRt" required>
+                            <option value="">Pilih RT</option>
+                            <option value="RT 1">RT 1</option>
+                            <option value="RT 2">RT 2</option>
+                            <option value="RT 3">RT 3</option>
+                            <option value="RT 4">RT 4</option>
+                            <option value="RT 5">RT 5</option>
+                            <option value="RT 6">RT 6</option>
+                            <option value="RT 7">RT 7</option>
+                            <option value="RT 8">RT 8</option>
+                            <option value="RT 9">RT 9</option>
+                            <option value="RT 10">RT 10</option>
+                            <option value="RT 11">RT 11</option>
+                            <option value="RT 12">RT 12</option>
+                            <option value="RT 13">RT 13</option>
+                            <option value="RT 14">RT 14</option>
+                            <option value="RT 15">RT 15</option>
+                        </select>
+                        <label for="asalRt" class="select-label">Asal RT</label>
+                    </div>
+                    <div class="input-group">
+                        <select id="asalRw" name="asalRw" required>
+                            <option value="">Pilih RW</option>
+                            <option value="RW 1">RW 1</option>
+                            <option value="RW 2">RW 2</option>
+                            <option value="RW 3">RW 3</option>
+                            <option value="RW 4">RW 4</option>
+                            <option value="RW 5">RW 5</option>
+                            <option value="RW 6">RW 6</option>
+                            <option value="RW 7">RW 7</option>
+                        </select>
+                        <label for="asalRw" class="select-label">Asal RW</label>
+                    </div>
                 </div>
                 <div class="input-group">
                     <input type="tel" id="noKetua" name="noKetua" required placeholder=" ">
-                    <label for="noKetua">No, Wa Captain</label>
+                    <label for="noKetua">Nomor WhatsApp Captain</label>
                     <small>Pastikan nomor aktif diawali kode negara (contoh: 6281xxxxxx).</small>
                 </div>
                 <button type="submit" class="submit-button">Daftar Sekarang</button>
