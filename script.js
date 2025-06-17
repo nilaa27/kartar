@@ -92,15 +92,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const buildWhatsAppMessage = (data) => {
         const { namaKetua, noKetua, namaTeam, asalRw, registDate } = data;
 
-        let message = `*🌟 PENDAFTARAN TIM BARU 🌟*\n\n`;
-        message += `*📝 Detail Pendaftaran:*\n`;
-        message += `├─ Nama Captain      : *${namaKetua}*\n`;
-        message += `├─ No. WhatsApp      : *${noKetua}*\n`;
-        message += `├─ Nama Tim          : *${namaTeam}*\n`;
-        message += `└─ Domisili          : *${asalRw}*\n\n`;
-        message += `*📅 Waktu Pendaftaran:*\n`;
-        // Untuk Monospace, bungkus teks dengan 3 backticks
-        message += `└─ \`\`\`${registDate}\`\`\`\n\n`; // Ini akan mengubah font tanggal menjadi monospace
+        let message = `*🌟 PENDAFTARAN TIM BARU 🌟*\n\n`; // Ini tidak perlu monospace karena judul
+
+        // Bungkus setiap detail dengan tiga backticks untuk format monospace
+        message += `\`\`\`📝 Detail Pendaftaran:\`\`\`\n`;
+        message += `\`\`\`├─ Nama Captain      : ${namaKetua}\`\`\`\n`;
+        message += `\`\`\`├─ No. WhatsApp      : ${noKetua}\`\`\`\n`;
+        message += `\`\`\`├─ Nama Tim          : ${namaTeam}\`\`\`\n`;
+        message += `\`\`\`└─ Domisili          : ${asalRw}\`\`\`\n\n`;
+
+        message += `\`\`\`📅 Waktu Pendaftaran:\`\`\`\n`;
+        message += `\`\`\`└─ ${registDate}\`\`\`\n\n`;
+
+        // Pesan penutup mungkin tidak perlu monospace, agar lebih mudah dibaca
         message += `_Terima kasih atas pendaftaran tim Anda! Kami akan segera menghubungi Anda untuk langkah selanjutnya._\n`;
         message += `_Mohon menunggu konfirmasi dari Admin Kartar Dr. Soetomo._`;
 
