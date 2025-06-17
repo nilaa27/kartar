@@ -1,20 +1,37 @@
+/* style.css atau di dalam <style> tag di HTML */
+
+/* Variabel CSS Anda tetap sama */
 :root {
     --primary-color: #4CAF50; /* Hijau Rumput */
     --secondary-color: #2196F3; /* Biru Langit */
     --text-color: #333;
-    --bg-color: #f0f2f5; /* Abu-abu muda */
+    --light-text-color: #555;
+    --bg-color: #f8f9fa;
     --card-bg: #ffffff;
-    --shadow-light: 0 4px 15px rgba(0, 0, 0, 0.1);
+    --border-color: #e0e0e0;
+
+    /* Variabel baru untuk efek 3D */
+    --shadow-depth-1: 0 4px 8px rgba(0, 0, 0, 0.1);
+    --shadow-depth-2: 0 8px 20px rgba(0, 0, 0, 0.15); /* Lebih dalam untuk hover/focus */
+    --shadow-depth-3: 0 12px 30px rgba(0, 0, 0, 0.2); /* Paling dalam untuk button */
+    --shadow-inset: inset 0 2px 4px rgba(0, 0, 0, 0.05); /* Shadow ke dalam untuk input */
+    --gradient-light-top: linear-gradient(to bottom, #f9f9f9, #f0f0f0);
+    --gradient-light-bottom: linear-gradient(to top, #f9f9f9, #f0f0f0);
 }
 
+/* --- Global Reset & Base Styles --- */
 * {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
 }
 
 body {
     font-family: 'Poppins', sans-serif;
-    margin: 0;
-    padding: 0;
     background-color: var(--bg-color);
     color: var(--text-color);
     line-height: 1.6;
@@ -22,6 +39,8 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 /* --- LOADING SCREEN STYLES --- */
@@ -31,9 +50,19 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: #004d40; /* Hijau gelap, sesuai tema bola */
-    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2220%22%3E%3Cpath%20fill%3D%22%23ffffff%22%20fill-opacity%3D%220.05%22%20d%3D%22M8%200H0V8h8V0zM20%200h-8v8h8V0zM8%2012H0v8h8v-8zM20%2012h-8v8h8v-8z%22%2F%3E%3C%2Fsvg%3E'); /* Pola samar lapangan */
-    background-size: 40px 40px;
+    background-color: #004d40;
+    background-image:
+        radial-gradient(circle at 100% 150%, rgba(255,255,255,0.08) 24%, transparent 25%, transparent 100%),
+        radial-gradient(circle at 0% 150%, rgba(255,255,255,0.08) 24%, transparent 25%, transparent 100%),
+        radial-gradient(circle at 50% 100%, rgba(255,255,255,0.08) 24%, transparent 25%, transparent 100%),
+        radial-gradient(circle at 100% 50%, rgba(255,255,255,0.08) 24%, transparent 25%, transparent 100%),
+        radial-gradient(circle at 0% 50%, rgba(255,255,255,0.08) 24%, transparent 25%, transparent 100%),
+        radial-gradient(circle at 50% 0%, rgba(255,255,255,0.08) 24%, transparent 25%, transparent 100%),
+        radial-gradient(circle at 100% 50%, rgba(255,255,255,0.08) 24%, transparent 25%, transparent 100%);
+    background-size: 80px 140px;
+    background-position: 0 0, 40px 70px;
+    background-repeat: repeat;
+    animation: hexMove 30s linear infinite;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -41,13 +70,20 @@ body {
     z-index: 99999;
     color: white;
     font-size: 1.2em;
-    animation: none; /* Reset agar tidak ada transisi awal yang mengganggu */
 }
 
-/* KAMI AKAN MENGGUNAKAN KEYFRAMES UNTUK FADE OUT + BLUR/SCALE */
+@keyframes hexMove {
+    from {
+        background-position: 0 0, 40px 70px;
+    }
+    to {
+        background-position: 80px 140px, 120px 210px;
+    }
+}
+
 #loading-screen.hidden {
-    animation: fadeOutBlurScale 0.8s ease-out forwards; /* Animasi baru untuk menghilang */
-    pointer-events: none; /* Agar tidak bisa diklik setelah mulai menghilang */
+    animation: fadeOutBlurScale 0.8s ease-out forwards;
+    pointer-events: none;
 }
 
 @keyframes fadeOutBlurScale {
@@ -58,63 +94,56 @@ body {
     }
     100% {
         opacity: 0;
-        filter: blur(5px); /* Efek blur saat menghilang */
-        transform: scale(1.02); /* Sedikit zoom out atau in */
-        visibility: hidden; /* Pastikan benar-benar hilang dari layout */
+        filter: blur(8px);
+        transform: scale(1.05);
+        visibility: hidden;
     }
 }
 
 .loading-logo {
-    max-width: 80%;
+    max-width: 70%;
     height: auto;
-    margin-bottom: 50px;
-    animation: pulse 2s infinite alternate;
-}
-
-@keyframes pulse {
-    0% { transform: scale(1); opacity: 0.8; }
-    100% { transform: scale(1.05); opacity: 1; }
+    margin-bottom: 40px;
 }
 
 .progress-bar-container {
-    width: 80%;
-    max-width: 400px;
-    height: 35px;
+    width: 85%;
+    max-width: 450px;
+    height: 30px;
     background-color: rgba(255, 255, 255, 0.2);
     border-radius: 20px;
     overflow: hidden;
     position: relative;
-    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+    box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.25);
 }
 
 .progress-bar-fill {
     height: 100%;
     width: 0%;
-    background: linear-gradient(to right, var(--secondary-color), #00BCD4);
+    background: linear-gradient(to right, var(--secondary-color), #00BCD4, #4CAF50);
     border-radius: 20px;
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    padding-right: 10px;
+    padding-right: 12px;
     transition: width 4s ease-out;
     position: relative;
 }
 
-/* MODIFIKASI: ANIMASI TEKS LOADING LEBIH HALUS DAN TERLIHAT */
 .loading-text {
     color: white;
-    font-weight: 600;
-    position: absolute; /* Posisikan absolut dalam container */
+    font-weight: 700;
+    position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%); /* Pusatkan dengan presisi */
+    transform: translate(-50%, -50%);
     white-space: nowrap;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
-    z-index: 10; /* Pastikan di atas progress bar dan bola */
-    font-size: 0.9em;
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
+    z-index: 10;
+    font-size: 1em;
 
-    opacity: 0; /* Dimulai tersembunyi, akan diubah JS */
-    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    opacity: 0;
+    transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
 }
 
 .loading-text.is-visible {
@@ -124,18 +153,17 @@ body {
 
 .loading-text.is-hidden {
     opacity: 0;
-    transform: translate(-50%, -50%) scale(0.9);
+    transform: translate(-50%, -50%) scale(0.95);
 }
 
-
 .loading-ball {
-    height: 45px;
+    height: 40px;
     width: auto;
     position: absolute;
-    right: -15px;
+    right: -10px;
     animation: ballRoll 4s linear infinite;
     transform: scale(0);
-    transition: transform 0.5s ease-out;
+    transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
     z-index: 9;
 }
 
@@ -145,124 +173,175 @@ body {
 
 @keyframes ballRoll {
     0% { transform: translateX(0) rotate(0deg); }
-    100% { transform: translateX(calc(100% - 40px)) rotate(360deg); }
+    100% { transform: translateX(calc(100% - 30px)) rotate(360deg); }
 }
-/* --- AKHIR LOADING SCREEN STYLES --- */
 
-
-/* --- KONTEN UTAMA - ANIMASI MASUK --- */
-/* Sembunyikan konten utama secara default */
+/* --- MAIN CONTENT - Entry Animation --- */
 .hero-section,
 .container,
-footer { /* Tambahkan footer juga agar ikut animasi */
+footer {
     opacity: 0;
-    transform: translateY(20px); /* Mulai dari sedikit di bawah */
-    transition: opacity 0.8s ease-out, transform 0.8s ease-out; /* Transisi halus */
+    transform: translateY(30px);
+    transition: opacity 1s ease-out, transform 1s ease-out;
 }
 
-/* Kelas yang ditambahkan ke body setelah loading selesai */
 body.content-loaded .hero-section,
 body.content-loaded .container,
-body.content-loaded footer { /* Tambahkan footer juga */
+body.content-loaded footer {
     opacity: 1;
-    transform: translateY(0); /* Geser ke posisi normal */
+    transform: translateY(0);
 }
 
-/* --- Hero Section & Animasi Latar Belakang --- */
+/* --- Hero Section & Background Animation --- */
 .hero-section {
     position: relative;
     width: 100%;
-    height: 300px;
+    height: 350px;
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    background: linear-gradient(to bottom, var(--primary-color), #388E3C);
-    box-shadow: inset 0 -10px 20px rgba(0,0,0,0.2);
+    background: linear-gradient(to bottom, var(--primary-color), #388E3C, #2C6C2F);
+    box-shadow: inset 0 -15px 30px rgba(0,0,0,0.3);
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
 }
 
 .soccer-field-animation {
     position: absolute;
-    width: 150%;
-    height: 100%;
+    width: 180%;
+    height: 120%;
     background-image:
         repeating-linear-gradient(to right,
-            rgba(0,0,0,0.05) 0, rgba(0,0,0,0.05) 2px, transparent 2px, transparent 20px),
+            rgba(0,0,0,0.06) 0, rgba(0,0,0,0.06) 2px, transparent 2px, transparent 25px),
         repeating-linear-gradient(to bottom,
-            rgba(0,0,0,0.05) 0, rgba(0,0,0,0.05) 2px, transparent 2px, transparent 20px);
-    background-size: 20px 20px;
-    transform: perspective(1000px) rotateX(10deg) translateY(50px);
-    opacity: 0.8;
-    animation: fieldMovement 30s linear infinite alternate;
+            rgba(0,0,0,0.06) 0, rgba(0,0,0,0.06) 2px, transparent 2px, transparent 25px);
+    background-size: 25px 25px;
+    transform: perspective(1200px) rotateX(15deg) translateY(60px);
+    opacity: 0.7;
+    animation: fieldMovement 40s linear infinite alternate;
     z-index: 1;
 }
 
 @keyframes fieldMovement {
-    0% { transform: perspective(1000px) rotateX(10deg) translateY(50px) translateX(0); }
-    100% { transform: perspective(1000px) rotateX(10deg) translateY(50px) translateX(-20%); }
+    0% { transform: perspective(1200px) rotateX(15deg) translateY(60px) translateX(0); }
+    100% { transform: perspective(1200px) rotateX(15deg) translateY(60px) translateX(-25%); }
 }
 
-/* --- Tambahan: Logo Mini Soccer --- */
+/* --- Logo Mini Soccer Animation --- */
 .logo-mini-soccer {
-    max-height: 150px;
+    max-height: 180px;
     width: auto;
     z-index: 2;
     position: relative;
+    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
+    opacity: 0; /* Mulai dengan logo tidak terlihat */
+    transform: scale(0.8); /* Mulai sedikit lebih kecil */
 }
 
-/* --- Konten Utama & Kartu Registrasi --- */
+/* Animasi Fade-in (hanya sekali) */
+@keyframes logoFadeIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Animasi Denyutan (terus menerus) */
+@keyframes logoPulse {
+    0%, 100% {
+        transform: scale(1); /* Ukuran normal */
+    }
+    50% {
+        transform: scale(1.05); /* Membesar sedikit */
+    }
+}
+
+/* Terapkan animasi saat class 'content-loaded' ditambahkan ke <body> */
+body.content-loaded .logo-mini-soccer {
+    /* Animasi fade-in berlangsung 1 detik, lalu berhenti di state akhir */
+    animation: logoFadeIn 1s ease-out forwards,
+               /* Animasi denyut dimulai setelah 1 detik (setelah fade-in selesai) dan berulang terus */
+               logoPulse 2s infinite alternate ease-in-out 1s;
+}
+
+/* --- Main Content & Registration Card --- */
 .container {
     flex-grow: 1;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    min-height: calc(100vh - 300px);
-    margin: 0 auto 50px auto;
-    padding: 20px;
+    min-height: calc(100vh - 350px);
+    margin: -60px auto 80px auto;
+    padding: 0 20px;
     position: relative;
     z-index: 3;
 }
 
 .registration-card {
     background-color: var(--card-bg);
-    padding: 40px;
-    border-radius: 15px;
-    box-shadow: var(--shadow-light);
-    transition: transform 0.3s ease-in-out;
+    padding: 45px;
+    border-radius: 20px;
+    /* --- PERUBAHAN DI SINI: BOX-SHADOW LEBIH BOLDER --- */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25), 0 0 0 1px var(--border-color); /* Lebih tebal & gelap */
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
     width: 100%;
-    max-width: 500px;
+    max-width: 550px;
+    position: relative;
+    transform: perspective(1000px) rotateX(2deg) translateY(-25px); /* Geser ke atas 25px */
+    transform-origin: center top;
 }
 
 .registration-card:hover {
-    transform: translateY(-5px);
+    /* --- SESUAIKAN JUGA UNTUK HOVER AGAR LEBIH BOLDER --- */
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.35), 0 0 0 1px var(--border-color); /* Lebih tebal lagi saat hover */
+    transform: perspective(1000px) rotateX(0deg) translateY(-33px); /* Geser ke atas 25px + 8px dari hover */
 }
 
 .registration-card h2 {
     text-align: center;
     color: var(--primary-color);
-    margin-bottom: 30px;
-    font-size: 2em;
+    margin-bottom: 35px;
+    font-size: 2.4em;
+    font-weight: 700;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+    /* --- ANIMASI FLICKER BARU DI SINI --- */
+    animation: subtleFlicker 1.5s infinite alternate ease-in-out;
 }
 
-/* --- Input Group & Label Floating --- */
+/* --- Keyframes untuk efek Flicker Tipis-Tipis pada Tulisan --- */
+@keyframes subtleFlicker {
+    0%, 100% {
+        opacity: 1; /* Sepenuhnya terlihat */
+    }
+    50% {
+        opacity: 0.7; /* Nilai diubah agar lebih terlihat */
+    }
+}
+
+/* --- Input Group & Floating Label --- */
 .input-group {
     position: relative;
-    margin-bottom: 30px;
-    overflow: visible;
-    padding-top: 5px;
+    margin-bottom: 35px;
+    padding-top: 8px;
+    transform: perspective(800px);
 }
 
 .input-group label {
     position: absolute;
-    top: 15px;
-    left: 15px;
+    top: 18px;
+    left: 18px;
     color: #999;
-    font-size: 1em;
-    transition: all 0.3s ease;
+    font-size: 1.05em;
+    transition: all 0.3s ease-out;
     pointer-events: none;
     background-color: var(--card-bg);
-    padding: 0 5px;
+    padding: 0 6px;
     z-index: 2;
     transform-origin: left center;
 }
@@ -270,178 +349,284 @@ body.content-loaded footer { /* Tambahkan footer juga */
 .input-group input,
 .input-group select {
     width: 100%;
-    padding: 15px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 1.1em;
+    padding: 18px;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 1.15em;
     outline: none;
-    background-color: #f9f9f9;
+    background-color: #fcfcfc;
     transition: all 0.3s ease;
-    appearance: none;
+    appearance: none; /* Penting! Ini menyembunyikan panah bawaan browser */
     position: relative;
     z-index: 1;
+    color: var(--text-color);
+    box-shadow: var(--shadow-inset), var(--shadow-depth-1);
 }
 
 .input-group input:focus,
 .input-group select:focus {
     border-color: var(--secondary-color);
-    box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.2);
+    box-shadow: var(--shadow-inset), 0 0 0 4px rgba(33, 150, 243, 0.25), var(--shadow-depth-2);
+    background-color: white;
 }
 
+/* Floating Label Logic */
 .input-group input:not(:placeholder-shown) + label,
 .input-group input:focus + label {
-    top: -5px;
-    left: 10px;
-    font-size: 0.85em;
+    top: -8px;
+    left: 15px;
+    font-size: 0.9em;
     color: var(--secondary-color);
     background-color: var(--card-bg);
-    transform: translateY(-50%) scale(0.8);
+    transform: translateY(-50%) scale(0.9);
     padding: 0 5px;
     z-index: 3;
 }
 
 .input-group select:not([value=""]) + .select-label,
 .input-group select:focus + .select-label {
-    top: -5px;
-    left: 10px;
-    font-size: 0.85em;
+    top: -8px;
+    left: 15px;
+    font-size: 0.9em;
     color: var(--secondary-color);
     background-color: var(--card-bg);
-    transform: translateY(-50%) scale(0.8);
+    transform: translateY(-50%) scale(0.9);
     padding: 0 5px;
     z-index: 3;
 }
 
 .input-group select[value=""] + .select-label {
-    top: 15px;
-    left: 15px;
-    font-size: 1em;
+    top: 18px;
+    left: 18px;
+    font-size: 1.05em;
     color: #999;
     background-color: transparent;
     transform: none;
     z-index: 2;
 }
 
-/* Panah kustom dropdown */
+/* --- Kustomisasi Panah Dropdown (menggunakan background-image) --- */
 .input-group select {
-    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23000000%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13%205.7L146.2%20202.7%2018.8%2075.1a17.6%2017.6%200%200%200-25.3%2024.7l128%20127.9c7%206.9%2017.2%207%2024.2%200l128-127.9c7.5-7.4%207.5-19.5.2-26.8z%22%2F%3E%3C%2Fsvg%3E');
+    /* Panah default SVG (menunjuk ke bawah), warna #666666 */
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23666666%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13%205.7L146.2%20202.7%2018.8%2075.1a17.6%2017.6%200%200%200-25.3%2024.7l128%20127.9c7%206.9%2017.2%207%2024.2%200l128-127.9c7.5-7.4%207.5-19.5.2-26.8z%22%2F%3E%3C%2Fsvg%3E');
     background-repeat: no-repeat;
-    background-position: right 15px center;
-    background-size: 1em;
-    padding-right: 40px;
+    background-position: right 20px center; /* Posisi panah */
+    background-size: 0.9em; /* Ukuran panah */
+    padding-right: 50px; /* Memberi ruang agar panah tidak menutupi teks */
+
+    /* Tambahkan transisi untuk properti yang akan diubah */
+    transition: background-position 0.3s ease, background-image 0.3s ease;
 }
+
+/* Panah saat select fokus (dropdown terbuka) */
+.input-group select:focus {
+    /* Warna border dan shadow saat fokus sudah diatur di atas, tidak perlu diulang */
+
+    /* Panah bergeser sedikit ke atas (dari tengah vertikal) */
+    background-position: right 20px 45%; /* Sesuaikan nilai 45% untuk posisi yang pas */
+
+    /* Ganti warna panah saat fokus (opsional, ganti nilai fill di SVG data URI) */
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%232196F3%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13%205.7L146.2%20202.7%2018.8%2075.1a17.6%2017.6%200%200%200-25.3%2024.7l128%20127.9c7%206.9%2017.2%207%2024.2%200l128-127.9c7.5-7.4%207.5-19.5.2-26.8z%22%2F%3E%3C%2Fsvg%3E');
+}
+
+/* Panah saat select tidak fokus (kembali ke posisi awal) */
+.input-group select:not(:focus) {
+    /* Kembali ke posisi default (tengah vertikal) */
+    background-position: right 20px center;
+
+    /* Mengembalikan warna panah ke default saat tidak fokus (opsional) */
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23666666%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13%205.7L146.2%20202.7%2018.8%2075.1a17.6%2017.6%200%200%200-25.3%2024.7l128%20127.9c7%206.9%2017.2%207%2024.2%200l128-127.9c7.5-7.4%207.5-19.5.2-26.8z%22%2F%3E%3C%2Fsvg%3E');
+}
+
 
 .input-group small {
     display: block;
-    margin-top: 5px;
-    color: #777;
-    font-size: 0.85em;
-    padding-left: 5px;
+    margin-top: 8px;
+    color: var(--light-text-color);
+    font-size: 0.9em;
+    padding-left: 8px;
     position: relative;
     z-index: 0;
 }
 
-/* --- Tombol Submit --- */
+/* --- Submit Button --- */
 .submit-button {
     display: block;
     width: 100%;
-    padding: 18px;
+    padding: 20px;
     background-color: var(--primary-color);
     color: white;
-    font-size: 1.2em;
-    font-weight: 600;
+    font-size: 1.3em;
+    font-weight: 700;
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: pointer;
     transition: all 0.3s ease;
     overflow: hidden;
-    box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+    box-shadow: var(--shadow-depth-3);
+    transform: translateY(0);
+    position: relative;
+    letter-spacing: 0.5px;
+    background: linear-gradient(to bottom, var(--primary-color) 0%, #388E3C 100%);
 }
 
 .submit-button:hover {
-    background-color: #388E3C;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(76, 175, 80, 0.5);
+    background: linear-gradient(to bottom, #388E3C 0%, #2C6C2F 100%);
+    transform: translateY(-4px);
+    box-shadow: 0 15px 35px rgba(76, 175, 80, 0.6);
 }
 
 .submit-button:active {
     transform: translateY(1px);
-    box-shadow: 0 2px 5px rgba(76, 175, 80, 0.3);
+    box-shadow: inset 0 3px 5px rgba(0,0,0,0.2), 0 2px 8px rgba(76, 175, 80, 0.3);
 }
 
 /* --- Footer --- */
 footer {
     text-align: center;
-    padding: 30px;
+    padding: 40px;
     color: #777;
-    font-size: 0.9em;
+    font-size: 0.95em;
     margin-top: auto;
+    border-top: 1px solid #eee;
+    background-color: var(--card-bg);
 }
 
-/* --- Responsif --- */
+/* --- Responsive Design --- */
 @media (max-width: 768px) {
     .hero-section {
-        height: 250px;
+        height: 280px;
+        border-bottom-left-radius: 15px;
+        border-bottom-right-radius: 15px;
+    }
+    .logo-mini-soccer {
+        /* Tidak ada margin-bottom di sini */
     }
     .container {
         min-height: auto;
-        margin: -50px 15px 30px 15px;
-        padding: 0;
+        margin: -40px 15px 50px 15px;
+        padding: 0 15px;
     }
     .registration-card {
-        padding: 25px;
+        padding: 30px;
+        border-radius: 15px;
+        /* --- PERUBAHAN DI SINI UNTUK RESPONSIVE --- */
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2), 0 0 0 1px var(--border-color); /* Lebih tebal & gelap */
+        transform: perspective(1000px) rotateX(1deg) translateY(-15px); /* Geser ke atas 15px */
+    }
+    .registration-card:hover {
+        /* --- SESUAIKAN JUGA UNTUK HOVER RESPONSIVE --- */
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3), 0 0 0 1px var(--border-color); /* Lebih tebal lagi saat hover */
+        transform: perspective(1000px) rotateX(0deg) translateY(-20px); /* Geser ke atas 15px + 5px dari hover */
+    }
+    .registration-card h2 {
+        font-size: 2em;
+        margin-bottom: 25px;
     }
     .input-group input,
     .input-group select {
-        padding: 12px;
-        font-size: 1em;
+        padding: 15px;
+        font-size: 1.05em;
+        border-radius: 8px;
+        box-shadow: var(--shadow-inset), 0 2px 5px rgba(0,0,0,0.08);
+    }
+    .input-group input:focus,
+    .input-group select:focus {
+        box-shadow: var(--shadow-inset), 0 0 0 3px rgba(33, 150, 243, 0.2), 0 4px 10px rgba(0,0,0,0.1);
     }
     .submit-button {
-        padding: 15px;
-        font-size: 1.1em;
+        padding: 16px;
+        font-size: 1.2em;
+        box-shadow: 0 8px 20px rgba(76, 175, 80, 0.4);
     }
-    /* Responsif untuk loading screen */
+    .submit-button:hover {
+        box-shadow: 0 12px 28px rgba(76, 175, 80, 0.5);
+    }
+    /* Loading screen responsive */
     .loading-logo {
-        margin-bottom: 30px;
+        margin-bottom: 25px;
     }
     .progress-bar-container {
         width: 90%;
-    }
-    .progress-bar-fill {
-        padding-right: 8px;
+        max-width: 350px;
+        height: 28px;
     }
     .loading-ball {
         height: 35px;
-        right: -10px;
+        right: -8px;
     }
     .loading-text {
-        font-size: 0.8em; /* Lebih kecil lagi untuk mobile */
+        font-size: 0.9em;
     }
 }
 
 @media (max-width: 480px) {
     .hero-section {
-        height: 180px;
-    }
-    .registration-card h2 {
-        font-size: 1.5em;
-    }
-    .registration-card {
-        padding: 20px;
+        height: 200px;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
     }
     .logo-mini-soccer {
-        max-height: 100px;
+        max-height: 120px;
+        /* Tidak ada margin-bottom di sini */
     }
-    /* Responsif untuk loading screen */
+    .container {
+        min-height: auto;
+        margin: -20px 15px 50px 15px; /* Menyesuaikan margin untuk 480px juga */
+        padding: 0 15px;
+    }
+    .registration-card {
+        padding: 25px;
+        border-radius: 12px;
+        /* --- PERUBAHAN DI SINI UNTUK RESPONSIVE --- */
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.18), 0 0 0 1px var(--border-color); /* Lebih tebal & gelap */
+        transform: perspective(1000px) rotateX(1deg) translateY(-10px); /* Geser ke atas 10px */
+    }
+    .registration-card h2 {
+        font-size: 1.8em;
+        margin-bottom: 20px;
+    }
+    .input-group {
+        margin-bottom: 25px;
+    }
+    .input-group input,
+    .input-group select {
+        padding: 12px;
+        font-size: 1em;
+        border-radius: 8px;
+    }
+    .input-group select {
+        padding-right: 40px;
+        background-position: right 15px center;
+        background-size: 0.8em;
+    }
+    .submit-button {
+        padding: 14px;
+        font-size: 1.1em;
+    }
+    /* Loading screen responsive */
     .loading-logo {
-        max-width: 90%;
+        max-width: 85%;
+        margin-bottom: 20px;
     }
     .progress-bar-container {
         width: 95%;
+        height: 25px;
+    }
+    .loading-ball {
+        height: 30px;
+        right: -6px;
+    }
+    .loading-text {
+        font-size: 0.8em;
+    }
+    footer {
+        padding: 25px;
+        font-size: 0.85em;
     }
 }
 
-/* --- POP-UP NOTIFIKASI --- */
+/* --- POP-UP NOTIFICATION --- */
 .popup-container {
     display: none;
     position: fixed;
@@ -449,13 +634,13 @@ footer {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(0, 0, 0, 0.7);
     justify-content: center;
     align-items: center;
     z-index: 10000;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
 }
 
 .popup-container.show {
@@ -466,26 +651,26 @@ footer {
 
 .popup-content {
     background-color: var(--card-bg);
-    padding: 40px;
-    border-radius: 15px;
+    padding: 50px;
+    border-radius: 20px;
     text-align: center;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-    max-width: 450px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    max-width: 500px;
     width: 90%;
-    transform: scale(0.8);
-    transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    transform: scale(0.7);
+    transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    border: 1px solid var(--border-color);
 }
 
 .popup-container.show .popup-content {
     transform: scale(1);
 }
 
-/* Container untuk animasi lingkaran dan centang */
 .checkmark-animation-wrapper {
     position: relative;
-    width: 100px;
-    height: 100px;
-    margin: 0 auto 30px auto;
+    width: 110px;
+    height: 110px;
+    margin: 0 auto 35px auto;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -498,7 +683,7 @@ footer {
     position: absolute;
     width: 100%;
     height: 100%;
-    border: 5px solid rgba(76, 175, 80, 0.3);
+    border: 6px solid rgba(76, 175, 80, 0.3);
     border-radius: 50%;
     box-sizing: border-box;
     border-top-color: var(--primary-color);
@@ -506,15 +691,15 @@ footer {
     border-bottom-color: var(--primary-color);
     border-left-color: transparent;
     transform: rotate(-45deg);
-    animation: circleFill 1s ease-out forwards;
+    animation: circleFill 1.2s ease-out forwards;
     opacity: 0;
-    animation-delay: 0.2s;
+    animation-delay: 0.3s;
     z-index: 1;
 }
 
 @keyframes circleFill {
     0% {
-        transform: rotate(-45deg) scale(0.8);
+        transform: rotate(-45deg) scale(0.7);
         opacity: 0;
         border-left-color: transparent;
     }
@@ -529,93 +714,60 @@ footer {
     }
 }
 
-/* Centang itu sendiri */
 .checkmark {
-    font-size: 70px;
+    font-size: 80px;
     color: white;
     display: block;
     position: relative;
     z-index: 2;
     opacity: 0;
     transform: scale(0);
-    animation: checkmarkAppear 0.6s ease-out forwards;
-    animation-delay: 1.1s;
-    text-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+    animation: checkmarkAppear 0.7s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+    animation-delay: 1.3s;
+    text-shadow: 3px 3px 8px rgba(0,0,0,0.3);
 }
 
 @keyframes checkmarkAppear {
-    0% { transform: scale(0); opacity: 0; color: white; }
-    50% { transform: scale(1.2); opacity: 1; color: var(--primary-color); }
+    0% { transform: scale(0); opacity: 0; }
+    50% { transform: scale(1.3); opacity: 1; color: white; }
     100% { transform: scale(1); opacity: 1; color: var(--primary-color); }
 }
 
-
 .popup-content h2 {
     color: var(--primary-color);
-    margin-bottom: 15px;
-    font-size: 2.2em;
+    margin-bottom: 20px;
+    font-size: 2.5em;
     line-height: 1.2;
+    font-weight: 700;
 }
 
 .popup-content p {
     color: var(--text-color);
-    margin-bottom: 30px;
-    font-size: 1.1em;
+    margin-bottom: 40px;
+    font-size: 1.15em;
 }
 
 .popup-button {
     background-color: var(--secondary-color);
     color: white;
     border: none;
-    padding: 15px 30px;
-    border-radius: 8px;
+    padding: 18px 35px;
+    border-radius: 10px;
     cursor: pointer;
-    font-size: 1.1em;
-    font-weight: 600;
+    font-size: 1.2em;
+    font-weight: 700;
     transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-    box-shadow: 0 4px 10px rgba(33, 150, 243, 0.3);
+    box-shadow: 0 5px 15px rgba(33, 150, 243, 0.4);
+    letter-spacing: 0.5px;
 }
 
 .popup-button:hover {
     background-color: #1976D2;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(33, 150, 243, 0.4);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(33, 150, 243, 0.55);
 }
 
 .popup-button:active {
     transform: translateY(0);
-    box-shadow: 0 2px 5px rgba(33, 150, 243, 0.2);
-}
-
-/* Responsif untuk pop-up */
-@media (max-width: 480px) {
-    .popup-content {
-        padding: 25px;
-    }
-    .checkmark {
-        font-size: 55px;
-    }
-    .popup-content h2 {
-        font-size: 1.8em;
-    }
-    .popup-content p {
-        font-size: 1em;
-    }
-    .popup-button {
-        padding: 12px 25px;
-        font-size: 1em;
-    }
-    .checkmark-animation-wrapper {
-        width: 80px;
-        height: 80px;
-        margin-bottom: 20px;
-    }
-    .checkmark-animation-wrapper::before {
-        width: 100%;
-        height: 100%;
-        border-width: 4px;
-    }
-    .checkmark {
-        font-size: 45px;
-    }
+    box-shadow: 0 3px 8px rgba(33, 150, 243, 0.2);
 }
