@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+Document.addEventListener('DOMContentLoaded', () => {
     // --- Konfigurasi & Elemen DOM ---
     const WA_NUMBER = '62881036683241';
     const registrationForm = document.getElementById('registrationForm');
@@ -7,8 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const loadingScreen = document.getElementById('loading-screen');
     const progressBarFill = document.querySelector('.progress-bar-fill');
     const progressBarContainer = document.querySelector('.progress-bar-container');
-    const loadingTextElement = document.querySelector('.loading-text'); // Ambil elemen teks loading
-    const bodyElement = document.body; // Ambil elemen body
+    const loadingTextElement = document.querySelector('.loading-text');
+    const bodyElement = document.body;
 
     // Daftar status loading
     const loadingStatuses = [
@@ -17,21 +17,23 @@ document.addEventListener('DOMContentLoaded', () => {
         "Selesai!"
     ];
     let currentStatusIndex = 0;
-    let loadingInterval; // Untuk menyimpan ID interval
+    let loadingInterval;
 
 
     // --- Fungsi Bantuan ---
 
     /**
-     * Mengatur ulang posisi label pada elemen <select> 'Asal RW'.
+     * Mengatur ulang posisi label pada elemen <select> 'Domisili'.
      */
     const updateSelectLabel = () => {
-        const asalRwSelect = document.getElementById('asalRw');
-        const asalRwLabel = document.querySelector('label[for="asalRw"]');
-        if (asalRwSelect.value !== "") {
-            asalRwLabel.classList.add('active');
+        const domisiliSelect = document.getElementById('domisili'); // Mengacu ke ID 'domisili'
+        const domisiliLabel = document.querySelector('label[for="domisili"]'); // Mengacu ke 'for="domisili"'
+
+        // Logika floating label untuk select
+        if (domisiliSelect.value !== "") {
+            domisiliLabel.classList.add('active');
         } else {
-            asalRwLabel.classList.remove('active');
+            domisiliLabel.classList.remove('active');
         }
     };
 
@@ -39,9 +41,9 @@ document.addEventListener('DOMContentLoaded', () => {
      * Memvalidasi input formulir.
      * @returns {boolean} True jika validasi berhasil, false jika tidak.
      */
-    const validateForm = (namaKetua, noKetua, namaTeam, asalRw) => {
+    const validateForm = (namaKetua, noKetua, namaTeam, domisili) => { // Parameter diganti
         if (!namaKetua) {
-            alert('Nama Ketua Tim tidak boleh kosong!');
+            alert('Nama Captain tidak boleh kosong!');
             document.getElementById('namaKetua').focus();
             return false;
         }
@@ -50,13 +52,13 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('namaTeam').focus();
             return false;
         }
-        if (asalRw === "") {
-            alert('Mohon pilih Asal RW!');
-            document.getElementById('asalRw').focus();
+        if (domisili === "") { // Diganti
+            alert('Mohon pilih Domisili!'); // Teks alert diganti
+            document.getElementById('domisili').focus(); // Diganti
             return false;
         }
         if (!noKetua) {
-            alert('Nomor WhatsApp Ketua tidak boleh kosong!');
+            alert('Nomor WhatsApp Captain tidak boleh kosong!');
             document.getElementById('noKetua').focus();
             return false;
         }
@@ -73,7 +75,8 @@ document.addEventListener('DOMContentLoaded', () => {
      * Menampilkan pop-up keberhasilan pendaftaran.
      */
     const showSuccessPopup = () => {
-        successPopup.classList.add('show');
+        successPopup.style.display = 'flex';
+        setTimeout(() => successPopup.classList.add('show'), 10);
     };
 
     /**
@@ -90,55 +93,40 @@ document.addEventListener('DOMContentLoaded', () => {
      * @returns {string} Pesan WhatsApp yang sudah diformat.
      */
     const buildWhatsAppMessage = (data) => {
-        const { namaKetua, noKetua, namaTeam, asalRw, registDate } = data;
+        const { namaKetua, noKetua, namaTeam, domisili, registDate } = data; // Diganti
 
-        let message = `*🌟 PENDAFTARAN TIM BARU 🌟*\n\n`; // Ini tidak perlu monospace karena judul
+        let message = `*🌟 PENDAFTARAN TIM BARU 🌟*\n\n`;
 
-        // Bungkus setiap detail dengan tiga backticks untuk format monospace
         message += `\`\`\`📝 Detail Pendaftaran:\`\`\`\n`;
         message += `\`\`\`├─ Nama Captain      : ${namaKetua}\`\`\`\n`;
         message += `\`\`\`├─ No. WhatsApp      : ${noKetua}\`\`\`\n`;
         message += `\`\`\`├─ Nama Tim          : ${namaTeam}\`\`\`\n`;
-        message += `\`\`\`└─ Domisili          : ${asalRw}\`\`\`\n\n`;
+        message += `\`\`\`└─ Domisili          : ${domisili}\`\`\`\n\n`; // Diganti
 
         message += `\`\`\`📅 Waktu Pendaftaran:\`\`\`\n`;
         message += `\`\`\`└─ ${registDate}\`\`\`\n\n`;
 
-        // Pesan penutup mungkin tidak perlu monospace, agar lebih mudah dibaca
         message += `_Terima kasih atas pendaftaran tim Anda! Kami akan segera menghubungi Anda untuk langkah selanjutnya._\n`;
         message += `_Mohon menunggu konfirmasi dari Admin Kartar Dr. Soetomo._`;
 
-        return encodeURIComponent(message); // Pastikan pesan di-encode untuk URL
+        return encodeURIComponent(message);
     };
 
     /**
      * Mengganti teks loading dengan animasi fade-out dan fade-in.
      */
     const updateLoadingText = (isFinalStatus = false) => {
-        // Sembunyikan teks saat ini
-        loadingTextElement.classList.add('is-hidden'); // CSS opacity akan transisi
+        loadingTextElement.classList.add('is-hidden');
 
         setTimeout(() => {
             if (isFinalStatus) {
-                loadingTextElement.textContent = loadingStatuses[loadingStatuses.length - 1]; // Set ke status terakhir
-                currentStatusIndex = loadingStatuses.length - 1; // Pastikan index juga di-set
+                loadingTextElement.textContent = loadingStatuses[loadingStatuses.length - 1];
             } else {
-                currentStatusIndex++;
-                if (currentStatusIndex >= loadingStatuses.length) {
-                    currentStatusIndex = 0; // Reset ke awal jika loop dibutuhkan (meskipun untuk loading ini tidak diharapkan)
-                }
+                currentStatusIndex = (currentStatusIndex + 1) % (loadingStatuses.length - 1);
                 loadingTextElement.textContent = loadingStatuses[currentStatusIndex];
             }
-
-            // Tampilkan teks baru
-            loadingTextElement.classList.remove('is-hidden'); // Ini akan memicu fade-in
-
-            // Hentikan interval jika sudah mencapai status terakhir dan dipanggil sebagai final
-            if (isFinalStatus) {
-                clearInterval(loadingInterval);
-            }
-
-        }, 300); // Durasi transisi opacity di CSS (0.3s)
+            loadingTextElement.classList.remove('is-hidden');
+        }, 300);
     };
 
 
@@ -146,47 +134,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Sembunyikan loading screen setelah halaman dan semua aset dimuat
     window.addEventListener('load', () => {
-        // Inisialisasi teks loading pertama
         loadingTextElement.textContent = loadingStatuses[0];
-        loadingTextElement.classList.add('is-visible'); // Tampilkan teks awal dengan transisi
+        loadingTextElement.classList.add('is-visible');
 
-        // Mulai animasi progress bar
         progressBarFill.style.width = '100%';
         progressBarContainer.classList.add('loaded');
 
-        // Total durasi progress bar adalah 4 detik
         const totalProgressBarDuration = 4000;
-        // Waktu untuk setiap status teks (misal 2 detik per status untuk 3 status)
-        // (total 3 status: 0, 1, 2. Butuh 2 kali pergantian)
-        const statusChangeTiming = totalProgressBarDuration / (loadingStatuses.length - 1); // 4000ms / 2 = 2000ms (2 detik)
+        const statusChangeTiming = totalProgressBarDuration / (loadingStatuses.length - 1);
 
-        // Perbarui teks loading secara berkala untuk 2 status pertama
         let statusUpdateCount = 0;
         loadingInterval = setInterval(() => {
-            if (statusUpdateCount < loadingStatuses.length - 1) { // Hanya update untuk status 0 dan 1
+            if (statusUpdateCount < loadingStatuses.length - 1) {
                 updateLoadingText();
                 statusUpdateCount++;
+            } else {
+                clearInterval(loadingInterval);
             }
         }, statusChangeTiming);
 
-        // Setelah progress bar selesai, pastikan teks menjadi "Selesai!" dan loading screen menghilang
         setTimeout(() => {
-            clearInterval(loadingInterval); // Pastikan interval berhenti
-            updateLoadingText(true); // Panggil sekali lagi untuk status final "Selesai!"
+            clearInterval(loadingInterval);
+            updateLoadingText(true);
 
-            // Tunggu sedikit setelah teks "Selesai!" muncul dan progress bar penuh, baru sembunyikan loading screen
             setTimeout(() => {
-                loadingScreen.classList.add('hidden'); // Mulai animasi fadeOutBlurScale
+                loadingScreen.classList.add('hidden');
 
-                // Setelah loading screen benar-benar hilang, tambahkan kelas ke body
-                // Durasi animasi fadeOutBlurScale adalah 0.8s
                 setTimeout(() => {
-                    bodyElement.classList.add('content-loaded'); // Tampilkan konten utama dengan animasi
-                }, 800); // Tunggu sampai fadeOutBlurScale selesai
-
-            }, 500); // Tambahan delay 500ms setelah "Selesai!" muncul dan progress bar penuh
-
-        }, totalProgressBarDuration); // Total durasi progress bar (4 detik)
+                    bodyElement.classList.add('content-loaded');
+                }, 800);
+            }, 500);
+        }, totalProgressBarDuration);
     });
 
     // Event listener untuk submit formulir
@@ -196,9 +174,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const namaKetua = document.getElementById('namaKetua').value.trim();
         const noKetua = document.getElementById('noKetua').value.trim();
         const namaTeam = document.getElementById('namaTeam').value.trim();
-        const asalRw = document.getElementById('asalRw').value;
+        const domisili = document.getElementById('domisili').value; // Diganti
 
-        if (!validateForm(namaKetua, noKetua, namaTeam, asalRw)) {
+        if (!validateForm(namaKetua, noKetua, namaTeam, domisili)) { // Diganti
             return;
         }
 
@@ -218,7 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
             namaKetua,
             noKetua,
             namaTeam,
-            asalRw,
+            domisili, // Diganti
             registDate
         };
 
@@ -245,13 +223,17 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!input.placeholder) {
             input.placeholder = ' ';
         }
+        if (input.value.trim() !== '') {
+            input.nextElementSibling.classList.add('active');
+        }
     });
 
-    const asalRwSelect = document.getElementById('asalRw');
-    asalRwSelect.addEventListener('change', updateSelectLabel);
-    asalRwSelect.addEventListener('focus', () => {
-        document.querySelector('label[for="asalRw"]').classList.add('active');
+    // Event listeners untuk select Domisili
+    const domisiliSelect = document.getElementById('domisili'); // Diganti
+    domisiliSelect.addEventListener('change', updateSelectLabel);
+    domisiliSelect.addEventListener('focus', () => {
+        document.querySelector('label[for="domisili"]').classList.add('active'); // Diganti
     });
-    asalRwSelect.addEventListener('blur', updateSelectLabel);
+    domisiliSelect.addEventListener('blur', updateSelectLabel);
     updateSelectLabel();
 });
