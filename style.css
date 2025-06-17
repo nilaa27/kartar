@@ -287,20 +287,18 @@ body.content-loaded .logo-mini-soccer {
     background-color: var(--card-bg);
     padding: 45px;
     border-radius: 20px;
-    /* --- PERUBAHAN DI SINI: BOX-SHADOW LEBIH BOLDER --- */
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25), 0 0 0 1px var(--border-color); /* Lebih tebal & gelap */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25), 0 0 0 1px var(--border-color);
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
     width: 100%;
     max-width: 550px;
     position: relative;
-    transform: perspective(1000px) rotateX(2deg) translateY(-25px); /* Geser ke atas 25px */
+    transform: perspective(1000px) rotateX(2deg) translateY(-25px);
     transform-origin: center top;
 }
 
 .registration-card:hover {
-    /* --- SESUAIKAN JUGA UNTUK HOVER AGAR LEBIH BOLDER --- */
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.35), 0 0 0 1px var(--border-color); /* Lebih tebal lagi saat hover */
-    transform: perspective(1000px) rotateX(0deg) translateY(-33px); /* Geser ke atas 25px + 8px dari hover */
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.35), 0 0 0 1px var(--border-color);
+    transform: perspective(1000px) rotateX(0deg) translateY(-33px);
 }
 
 .registration-card h2 {
@@ -310,7 +308,6 @@ body.content-loaded .logo-mini-soccer {
     font-size: 2.4em;
     font-weight: 700;
     text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
-    /* --- ANIMASI FLICKER BARU DI SINI --- */
     animation: subtleFlicker 1.5s infinite alternate ease-in-out;
 }
 
@@ -331,6 +328,24 @@ body.content-loaded .logo-mini-soccer {
     padding-top: 8px;
     transform: perspective(800px);
 }
+
+/* --- Container for RW and RT inputs (Always horizontal) --- */
+.rw-rt-group {
+    display: flex;
+    /* !important untuk memastikan tidak ditimpa oleh style lain */
+    flex-direction: row !important; 
+    gap: 20px; /* Jarak antara RW dan RT */
+    margin-bottom: 35px; /* Margin bawah untuk grup ini, sama seperti input-group lainnya */
+    /* Tambahkan wrap agar bisa ke baris baru jika terlalu sempit, tapi tetap coba sejajar */
+    flex-wrap: wrap; 
+}
+
+.rw-rt-group .input-group {
+    flex: 1; /* Setiap input-group di dalamnya akan mengambil ruang yang sama */
+    min-width: 120px; /* NEW: Batasi lebar minimum agar tidak terlalu kecil */
+    margin-bottom: 0; /* Hapus margin bawah dari input-group individu di dalam grup ini */
+}
+
 
 .input-group label {
     position: absolute;
@@ -510,14 +525,12 @@ footer {
     .registration-card {
         padding: 30px;
         border-radius: 15px;
-        /* --- PERUBAHAN DI SINI UNTUK RESPONSIVE --- */
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2), 0 0 0 1px var(--border-color); /* Lebih tebal & gelap */
-        transform: perspective(1000px) rotateX(1deg) translateY(-15px); /* Geser ke atas 15px */
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2), 0 0 0 1px var(--border-color);
+        transform: perspective(1000px) rotateX(1deg) translateY(-15px);
     }
     .registration-card:hover {
-        /* --- SESUAIKAN JUGA UNTUK HOVER RESPONSIVE --- */
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3), 0 0 0 1px var(--border-color); /* Lebih tebal lagi saat hover */
-        transform: perspective(1000px) rotateX(0deg) translateY(-20px); /* Geser ke atas 15px + 5px dari hover */
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3), 0 0 0 1px var(--border-color);
+        transform: perspective(1000px) rotateX(0deg) translateY(-20px);
     }
     .registration-card h2 {
         font-size: 2em;
@@ -558,6 +571,16 @@ footer {
     .loading-text {
         font-size: 0.9em;
     }
+
+    /* RW/RT group remains horizontal on smaller screens */
+    .rw-rt-group {
+        gap: 15px; /* Sedikit kurangi jarak untuk mobile agar lebih sempit */
+        margin-bottom: 30px; /* Sesuaikan margin bawah */
+    }
+
+    .rw-rt-group .input-group {
+        margin-bottom: 0; /* Pastikan tidak ada margin bawah tambahan */
+    }
 }
 
 @media (max-width: 480px) {
@@ -568,19 +591,17 @@ footer {
     }
     .logo-mini-soccer {
         max-height: 120px;
-        /* Tidak ada margin-bottom di sini */
     }
     .container {
         min-height: auto;
-        margin: -20px 15px 50px 15px; /* Menyesuaikan margin untuk 480px juga */
+        margin: -20px 15px 50px 15px;
         padding: 0 15px;
     }
     .registration-card {
         padding: 25px;
         border-radius: 12px;
-        /* --- PERUBAHAN DI SINI UNTUK RESPONSIVE --- */
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.18), 0 0 0 1px var(--border-color); /* Lebih tebal & gelap */
-        transform: perspective(1000px) rotateX(1deg) translateY(-10px); /* Geser ke atas 10px */
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.18), 0 0 0 1px var(--border-color);
+        transform: perspective(1000px) rotateX(1deg) translateY(-10px);
     }
     .registration-card h2 {
         font-size: 1.8em;
@@ -624,7 +645,17 @@ footer {
         padding: 25px;
         font-size: 0.85em;
     }
+
+    /* RW/RT group remains horizontal even on very small screens */
+    .rw-rt-group {
+        gap: 10px; /* Kurangi jarak lebih jauh untuk layar sangat kecil */
+        margin-bottom: 25px; /* Sesuaikan margin bawah */
+    }
+    .rw-rt-group .input-group {
+        margin-bottom: 0; /* Pastikan tidak ada margin bawah tambahan */
+    }
 }
+
 
 /* --- POP-UP NOTIFICATION --- */
 .popup-container {
