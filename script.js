@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
         message += `Halo *${namaKetua}*,\n`;
         message += `Tim Anda, *${namaTeam}* (${domisiliFormatted}), telah terdaftar!\n\n`;
         message += `========================\n`;
-        message += `      ⚽️ *Detail Datamu*⚽️\n`;
+        message += `      ⚽️ *Detail Datamu* ⚽️\n`;
         message += `========================\n`;
         message += `\`\`\`\n`; // Pembuka blok teks
         message += `✨ Captain  : ${namaKetua}\n`;
