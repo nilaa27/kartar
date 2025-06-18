@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Regist Page</title>
+    <title>Registrasi Tim Mini Soccer</title>
     <link rel="stylesheet" href="style.css"/>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="icon" href="https://i.postimg.cc/tTtVWr7w/20250617-080821.png" type="image/png">
@@ -73,10 +73,30 @@
                         <label for="asalRw" class="select-label">Asal RW</label>
                     </div>
                 </div>
+
                 <div class="input-group">
-                    <input type="tel" id="noKetua" name="noKetua" required placeholder=" ">
-                    <label for="noKetua">Nomor WhatsApp Captain</label>
-                    <small>Pastikan nomor aktif diawali kode negara (contoh: 6281xxxxxx).</small>
+                    <div class="phone-input-wrapper">
+                        <select id="countryCode" class="country-code-select">
+                            <option value="+62">🇮🇩 +62</option>
+                            <option value="+1">🇺🇸 +1</option>
+                            <option value="+44">🇬🇧 +44</option>
+                            <option value="+61">🇦🇺 +61</option>
+                            <option value="+65">🇸🇬 +65</option>
+                            <option value="+81">🇯🇵 +81</option>
+                            <option value="+86">🇨🇳 +86</option>
+                            <option value="+49">🇩🇪 +49</option>
+                            <option value="+33">🇫🇷 +33</option>
+                            <option value="+34">🇪🇸 +34</option>
+                            <option value="+39">🇮🇹 +39</option>
+                            <option value="+52">🇲🇽 +52</option>
+                            <option value="+55">🇧🇷 +55</option>
+                            <option value="+27">🇿🇦 +27</option>
+                            <option value="+91">🇮🇳 +91</option>
+                        </select>
+                        <input type="tel" id="noKetua" name="noKetua" required placeholder=" ">
+                    </div>
+                    <label for="noKetua">Nomor WhatsApp</label>
+                    <small>Pastikan No WhatsApp Anda Aktif</small>
                 </div>
                 <button type="submit" class="submit-button">Daftar Sekarang</button>
             </form>
