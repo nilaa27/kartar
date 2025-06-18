@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let message = `*🎉 Pendaftaran Tim Berhasil 🎉*\n\n`;
         message += `Halo *${namaKetua}*,\n`;
-        message += `Tim Anda, *${namaTeam}* (RT ${asalRt}/RW ${asalRw}), telah terdaftar!\n\n`;
+        message += `Tim Anda, *${namaTeam}* (${asalRt}/RW ${asalRw}), telah terdaftar!\n\n`;
         message += `========================\n`;
         message += `      ⚽️ *Detail Datamu* ⚽️\n`;
         message += `========================\n`;
