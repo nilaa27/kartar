@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
         message += "```\n"; // Tanda kutip pembuka untuk blok kode
         message += `✨ Captain  : ${namaKetua}\n`;
         message += `📞 WA       : ${noKetua}\n`;
-        message += `📍 Domisili : RT ${asalRt}/RW ${asalRw}\n`;
+        message += `📍 Domisili : ${asalRt}/RW ${asalRw}\n`;
         message += `🗓️ Waktu    : ${cleanDate}\n`;
         message += "```\n"; // Tanda kutip penutup untuk blok kode
         message += `========================\n\n`;
