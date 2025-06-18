@@ -85,14 +85,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let message = `*🎉 Pendaftaran Tim Berhasil 🎉*\n\n`;
         message += `Halo *${namaKetua}*,\n`;
-        message += `Tim Anda, *${namaTeam}* (${asalRt}/RW ${asalRw}), telah terdaftar!\n\n`;
+        message += `Tim Anda, *${namaTeam}* (${asalRt}/${asalRw}), telah terdaftar!\n\n`;
         message += `========================\n`;
         message += `      ⚽️ *Detail Datamu* ⚽️\n`;
         message += `========================\n`;
         message += "```\n"; // Tanda kutip pembuka untuk blok kode
         message += `✨ Captain  : ${namaKetua}\n`;
         message += `📞 WA       : ${noKetua}\n`;
-        message += `📍 Domisili : ${asalRt}/RW ${asalRw}\n`;
+        message += `📍 Domisili : ${asalRt}/${asalRw}\n`;
         message += `🗓️ Waktu    : ${cleanDate}\n`;
         message += "```\n"; // Tanda kutip penutup untuk blok kode
         message += `========================\n\n`;
