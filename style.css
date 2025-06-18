@@ -2,21 +2,29 @@
 
 /* Variabel CSS Anda tetap sama */
 :root {
-    --primary-color: #4CAF50; /* Hijau Rumput */
-    --secondary-color: #2196F3; /* Biru Langit */
-    --text-color: #333;
-    --light-text-color: #555;
-    --bg-color: #f8f9fa;
-    --card-bg: #ffffff;
-    --border-color: #e0e0e0;
+    --primary-color: #4CAF50; /* Hijau Rumput - Dikembalikan untuk checkmark/progress bar */
+    --secondary-color: #2196F3; /* Biru Langit - Dikembalikan untuk pop-up button */
+    --text-color: #e0e0e0; /* Teks berwarna terang untuk kontras dengan latar gelap (digunakan di body, input, dll) */
+    --light-text-color: #a0a0a0; /* Teks lebih terang lagi (digunakan di small text, footer general) */
+    --bg-color: #f8f9fa; /* Default light background - Tetap tidak terpakai untuk body */
+    --card-bg: #ffffff; /* Default light card - Tetap tidak terpakai untuk card utama */
+    --border-color: #e0e0e0; /* Default border - Tetap tidak terpakai untuk card utama */
 
-    /* Variabel baru untuk efek 3D */
+    /* Variabel baru untuk efek 3D (digunakan di tempat lain selain input/card utama) */
     --shadow-depth-1: 0 4px 8px rgba(0, 0, 0, 0.1);
-    --shadow-depth-2: 0 8px 20px rgba(0, 0, 0, 0.15); /* Lebih dalam untuk hover/focus */
-    --shadow-depth-3: 0 12px 30px rgba(0, 0, 0, 0.2); /* Paling dalam untuk button */
-    --shadow-inset: inset 0 2px 4px rgba(0, 0, 0, 0.05); /* Shadow ke dalam untuk input */
+    --shadow-depth-2: 0 8px 20px rgba(0, 0, 0, 0.15);
+    --shadow-depth-3: 0 12px 30px rgba(0, 0, 0, 0.2);
+    --shadow-inset: inset 0 2px 4px rgba(0, 0, 0, 0.05);
     --gradient-light-top: linear-gradient(to bottom, #f9f9f9, #f0f0f0);
     --gradient-light-bottom: linear-gradient(to top, #f9f9f9, #f0f0f0);
+
+    /* --- Warna yang Diambil dari Gambar (untuk card dan elemen terkait) --- */
+    --dark-blue-card-bg: #2a2a3a; /* Warna latar belakang card dari gambar */
+    --bright-green-text: #00ff00; /* Warna hijau cerah untuk teks 'Hi Mayfa', teks input, dan tombol */
+    --input-field-bg: #3a3a4a; /* Warna latar belakang input field dari gambar */
+    --input-border-color: #4a4a5a; /* Warna border input field */
+    --placeholder-color: #a0a0a0; /* Warna placeholder di input */
+    --dark-body-bg: #1a1a2e; /* Warna latar belakang body dari gambar */
 }
 
 /* --- Global Reset & Base Styles --- */
@@ -32,8 +40,8 @@ html {
 
 body {
     font-family: 'Poppins', sans-serif;
-    background-color: var(--bg-color);
-    color: var(--text-color);
+    background-color: var(--dark-body-bg);
+    color: var(--text-color); /* Menggunakan warna teks terang untuk body secara umum */
     line-height: 1.6;
     overflow-x: hidden;
     min-height: 100vh;
@@ -41,6 +49,11 @@ body {
     flex-direction: column;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background-image: none; /* Menghilangkan background pixelated */
+    background-size: auto;
+    /* Ini membantu memusatkan konten utama seperti .hero-section, .container, footer
+       jika lebar kontennya tidak 100% dari viewport. */
+    align-items: center;
 }
 
 /* --- LOADING SCREEN STYLES --- */
@@ -115,12 +128,13 @@ body {
     overflow: hidden;
     position: relative;
     box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.25);
+    display: block; /* Pastikan ini terlihat */
 }
 
 .progress-bar-fill {
     height: 100%;
     width: 0%;
-    background: linear-gradient(to right, var(--secondary-color), #00BCD4, #4CAF50);
+    background: linear-gradient(to right, var(--secondary-color), #00BCD4, var(--primary-color)); /* Menggunakan primary/secondary color */
     border-radius: 20px;
     display: flex;
     align-items: center;
@@ -165,16 +179,14 @@ body {
     transform: scale(0);
     transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
     z-index: 9;
-}
-
-.progress-bar-container.loaded .progress-bar-fill .loading-ball {
-    transform: scale(1);
+    display: block; /* Pastikan ini terlihat */
 }
 
 @keyframes ballRoll {
     0% { transform: translateX(0) rotate(0deg); }
     100% { transform: translateX(calc(100% - 30px)) rotate(360deg); }
 }
+
 
 /* --- MAIN CONTENT - Entry Animation --- */
 .hero-section,
@@ -201,7 +213,7 @@ body.content-loaded footer {
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    background: linear-gradient(to bottom, var(--primary-color), #388E3C, #2C6C2F);
+    background: var(--dark-body-bg);
     box-shadow: inset 0 -15px 30px rgba(0,0,0,0.3);
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
@@ -213,14 +225,15 @@ body.content-loaded footer {
     height: 120%;
     background-image:
         repeating-linear-gradient(to right,
-            rgba(0,0,0,0.06) 0, rgba(0,0,0,0.06) 2px, transparent 2px, transparent 25px),
+            rgba(255,255,255,0.06) 0, rgba(255,255,255,0.06) 2px, transparent 2px, transparent 25px),
         repeating-linear-gradient(to bottom,
-            rgba(0,0,0,0.06) 0, rgba(0,0,0,0.06) 2px, transparent 2px, transparent 25px);
+            rgba(255,255,255,0.06) 0, rgba(255,255,255,0.06) 2px, transparent 2px, transparent 25px);
     background-size: 25px 25px;
     transform: perspective(1200px) rotateX(15deg) translateY(60px);
     opacity: 0.7;
     animation: fieldMovement 40s linear infinite alternate;
     z-index: 1;
+    display: block; /* Pastikan ini terlihat */
 }
 
 @keyframes fieldMovement {
@@ -228,15 +241,15 @@ body.content-loaded footer {
     100% { transform: perspective(1200px) rotateX(15deg) translateY(60px) translateX(-25%); }
 }
 
-/* --- Logo Mini Soccer Animation --- */
 .logo-mini-soccer {
-    max-height: 180px;
+    max-height: 120px; /* Ukuran logo yang disesuaikan */
     width: auto;
     z-index: 2;
     position: relative;
     filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
-    opacity: 0; /* Mulai dengan logo tidak terlihat */
-    transform: scale(0.8); /* Mulai sedikit lebih kecil */
+    opacity: 0;
+    transform: scale(0.8);
+    display: block; /* Pastikan ini terlihat */
 }
 
 /* Animasi Fade-in (hanya sekali) */
@@ -254,20 +267,18 @@ body.content-loaded footer {
 /* Animasi Denyutan (terus menerus) */
 @keyframes logoPulse {
     0%, 100% {
-        transform: scale(1); /* Ukuran normal */
+        transform: scale(1);
     }
     50% {
-        transform: scale(1.05); /* Membesar sedikit */
+        transform: scale(1.05);
     }
 }
 
-/* Terapkan animasi saat class 'content-loaded' ditambahkan ke <body> */
 body.content-loaded .logo-mini-soccer {
-    /* Animasi fade-in berlangsung 1 detik, lalu berhenti di state akhir */
     animation: logoFadeIn 1s ease-out forwards,
-               /* Animasi denyut dimulai setelah 1 detik (setelah fade-in selesai) dan berulang terus */
                logoPulse 2s infinite alternate ease-in-out 1s;
 }
+
 
 /* --- Main Content & Registration Card --- */
 .container {
@@ -277,180 +288,283 @@ body.content-loaded .logo-mini-soccer {
     align-items: center;
     flex-direction: column;
     min-height: calc(100vh - 350px);
-    margin: -60px auto 80px auto;
+    margin: 0px 20px 80px 20px; /* Sesuaikan margin horizontal jika perlu */
     padding: 0 20px;
     position: relative;
     z-index: 3;
+    width: 100%; /* Pastikan container mengisi lebar penuh agar centering body berfungsi */
+    max-width: 1200px; /* Opsional: Batasi lebar container keseluruhan */
 }
 
 .registration-card {
-    background-color: var(--card-bg);
+    background-color: var(--dark-blue-card-bg);
     padding: 45px;
     border-radius: 20px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25), 0 0 0 1px var(--border-color);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1);
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
     width: 100%;
     max-width: 550px;
     position: relative;
-    transform: perspective(1000px) rotateX(2deg) translateY(-25px);
+    transform: perspective(1000px) rotateX(2deg) translateY(-50px); /* KARTU NAIK LEBIH ATAS */
     transform-origin: center top;
+    border: none;
+    background-image: none;
+    background-size: auto;
 }
 
 .registration-card:hover {
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.35), 0 0 0 1px var(--border-color);
-    transform: perspective(1000px) rotateX(0deg) translateY(-33px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.15);
+    transform: perspective(1000px) rotateX(0deg) translateY(-58px); /* KARTU NAIK LEBIH ATAS SAAT HOVER */
 }
 
 .registration-card h2 {
     text-align: center;
-    color: var(--primary-color);
+    color: var(--bright-green-text);
     margin-bottom: 35px;
-    font-size: 2.4em;
+    font-size: 2.8em;
     font-weight: 700;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
-    animation: subtleFlicker 1.5s infinite alternate ease-in-out;
+    text-shadow: 0 0 8px rgba(0, 255, 0, 0.5); /* Efek glowing pada teks judul */
+    font-family: 'Poppins', sans-serif;
+    animation: subtlePulse 1.5s infinite alternate ease-in-out;
+    line-height: 1.2;
 }
 
-/* --- Keyframes untuk efek Flicker Tipis-Tipis pada Tulisan --- */
-@keyframes subtleFlicker {
+@keyframes subtlePulse {
     0%, 100% {
-        opacity: 1; /* Sepenuhnya terlihat */
+        transform: scale(1);
+        opacity: 1;
     }
     50% {
-        opacity: 0.7; /* Nilai diubah agar lebih terlihat */
+        transform: scale(1.02);
+        opacity: 0.9;
     }
 }
 
-/* --- Input Group & Floating Label --- */
-.input-group {
-    position: relative;
-    margin-bottom: 35px;
-    padding-top: 8px;
-    transform: perspective(800px);
+
+/* --- Input Group & Floating Label (dengan lebar sempit, warna teks sesuai h2, & tanpa text-shadow/box-shadow pada input) --- */
+.registration-card form {
+    display: flex;
+    flex-direction: column;
+    /* Ini tetap penting, meskipun margin auto juga digunakan. Keduanya bisa bekerja sama. */
+    align-items: center; /* Memusatkan semua elemen di dalam form secara horizontal */
 }
 
-/* --- Container for RW and RT inputs (Always horizontal) --- */
+.input-group {
+    position: relative;
+    width: 100%; /* Default 100% di dalam parent */
+    max-width: 350px; /* Batasi lebar maksimum input field */
+    /* DITAMBAHKAN/DIMODIFIKASI: Menggunakan margin auto untuk pemusatan horizontal yang lebih eksplisit */
+    margin: 0 auto 25px auto; /* 0 atas, auto kiri, 30px bawah, auto kanan */
+    padding-top: 8px;
+    transform: perspective(800px); /* Efek 3D */
+}
+
+/* Container untuk RW dan RT inputs (Selalu horizontal) */
 .rw-rt-group {
     display: flex;
-    /* !important untuk memastikan tidak ditimpa oleh style lain */
-    flex-direction: row !important; 
-    gap: 20px; /* Jarak antara RW dan RT */
-    margin-bottom: 35px; /* Margin bawah untuk grup ini, sama seperti input-group lainnya */
-    /* Tambahkan wrap agar bisa ke baris baru jika terlalu sempit, tapi tetap coba sejajar */
-    flex-wrap: wrap; 
+    flex-direction: row !important; /* Pastikan selalu horizontal */
+    gap: 20px;
+    /* DITAMBAHKAN/DIMODIFIKASI: Menggunakan margin auto untuk pemusatan horizontal yang lebih eksplisit */
+    margin: 0 auto 35px auto; /* 0 atas, auto kiri, 35px bawah, auto kanan */
+    flex-wrap: wrap;
+    width: 100%; /* Agar grup ini juga mengikuti max-width */
+    max-width: 350px; /* Samakan dengan input group lainnya agar terpusat dengan benar */
 }
 
 .rw-rt-group .input-group {
-    flex: 1; /* Setiap input-group di dalamnya akan mengambil ruang yang sama */
-    min-width: 120px; /* NEW: Batasi lebar minimum agar tidak terlalu kecil */
-    margin-bottom: 0; /* Hapus margin bawah dari input-group individu di dalam grup ini */
+    flex: 1; /* Biarkan mereka berbagi ruang secara merata */
+    min-width: 120px; /* Minimal lebar untuk setiap input RT/RW */
+    margin-bottom: 0; /* Hapus margin bawah individual jika sudah diatur di parent group */
+}
+
+/* --- WRAPPER BARU UNTUK INPUT NOMOR TELEPON DAN KODE NEGARA --- */
+.phone-input-wrapper {
+    display: flex; /* Mengatur select dan input berdampingan */
+    width: 100%; /* Mengisi lebar penuh dari input-group */
+    border: 1px solid var(--input-border-color); /* Border untuk seluruh wrapper */
+    border-radius: 10px; /* Border radius untuk wrapper */
+    overflow: hidden; /* Penting untuk border-radius di dalamnya */
+    background-color: var(--input-field-bg); /* Background untuk seluruh wrapper */
+    transition: all 0.3s ease; /* Transisi untuk fokus */
+    align-items: center; /* Pusatkan secara vertikal */
+    padding: 0; /* Hapus padding default */
+    gap: 15px; /* Memberi jarak antara kode negara dan input nomor telepon */
+    position: relative; /* Diperlukan agar label bisa absolute di dalamnya jika ada */
+}
+
+.phone-input-wrapper:focus-within { /* Saat elemen di dalamnya fokus */
+    border-color: var(--bright-green-text);
+    box-shadow: 0 0 0 4px rgba(0, 255, 0, 0.25);
+}
+
+.phone-input-wrapper .country-code-select {
+    padding: 18px 10px; /* Padding select */
+    border: none; /* Hapus border individu */
+    outline: none;
+    background-color: var(--input-field-bg); /* Background sama dengan wrapper */
+    color: var(--bright-green-text); /* Warna teks kode negara */
+    font-size: 1.15em;
+    appearance: none; /* Hapus panah default */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+    border-right: 1px solid var(--input-border-color); /* Border pemisah */
+    flex-shrink: 0; /* Jangan menyusut */
+    font-family: 'Poppins', sans-serif;
+    width: auto; /* Biarkan lebar menyesuaikan konten */
+    min-width: 80px; /* Lebar minimum untuk kode negara */
+    text-align: center; /* Pusatkan teks */
+    font-weight: 600; /* Font lebih tebal untuk kode negara */
+
+    /* Custom arrow for select */
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23a0a0a0%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13%205.7L146.2%20202.7%2018.8%2075.1a17.6%2017.6%200%200%200-25.3%2024.7l128%20127.9c7%206.9%2017.2%207%2024.2%200l128-127.9c7.5-7.4%207.5-19.5.2-26.8z%22%2F%3E%3C%2Fsvg%3E');
+    background-repeat: no-repeat;
+    background-position: right 5px center; /* Position the arrow */
+    background-size: 0.7em; /* Size the arrow */
+    padding-right: 25px; /* Make space for the arrow */
+}
+
+.phone-input-wrapper .country-code-select:focus {
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2300ff00%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13%205.7L146.2%20202.7%2018.8%2075.1a17.6%2017.6%200%200%200-25.3%2024.7l128%20127.9c7%206.9%2017.2%207%2024.2%200l128-127.9c7.5-7.4%207.5-19.5.2-26.8z%22%2F%3E%3C%2Fsvg%3E');
+    background-position: right 5px 45%; /* Arrow slightly up on focus */
+}
+
+
+.phone-input-wrapper input[type="tel"] {
+    flex-grow: 1; /* Takes up all available remaining space */
+    padding: 18px; /* Padding asli, jaga agar tidak ada perubahan vertikal atau kanan */
+    /* REMOVED: padding-left: 40px; karena label akan ada di sini */
+    border: none; /* No individual border */
+    outline: none; /* No outline on focus */
+    background-color: transparent; /* Transparan so wrapper's background shows */
+    color: var(--bright-green-text); /* Green text color */
+    font-size: 1.15em;
+    font-family: 'Poppins', sans-serif;
+    box-shadow: none; /* No shadow */
+    text-shadow: none; /* No text shadow */
+    font-weight: 600; /* Font lebih tebal untuk nomor telepon */
+}
+
+/* DITAMBAHKAN: Mengatur warna dan ketebalan font untuk teks placeholder di dalam input nomor telepon */
+.phone-input-wrapper input[type="tel"]::placeholder {
+    color: var(--placeholder-color); /* Menggunakan warna pudar yang sudah didefinisikan */
+    font-weight: 600; /* Menjaga konsistensi ketebalan font */
+    opacity: 1; /* Pastikan tidak terlalu transparan secara default browser */
+}
+/* --- END WRAPPER BARU UNTUK INPUT NOMOR TELEPON DAN KODE NEGARA --- */
+
+
+/* Aturan input & select lainnya tetap ada untuk elemen selain nomor WA */
+.input-group input:not([type="tel"]), /* Exclude type="tel" */
+.input-group select:not(.country-code-select) { /* Exclude country-code-select */
+    width: 100%;
+    padding: 11px;
+    border: 1px solid var(--input-border-color);
+    border-radius: 10px;
+    font-size: 1.15em;
+    outline: none;
+    background-color: var(--input-field-bg);
+    transition: all 0.3s ease;
+    appearance: none; /* Menghilangkan panah default browser */
+    position: relative;
+    z-index: 1;
+    color: var(--bright-green-text);
+    box-shadow: none;
+    text-shadow: none;
+    font-weight: 600; /* Font lebih tebal untuk Nama Captain, Nama Tim, dll. */
+}
+
+/* Tambahkan juga styling placeholder untuk input umum (Nama Captain, Nama Tim) agar konsisten */
+.input-group input:not([type="tel"])::placeholder {
+    color: var(--placeholder-color);
+    font-weight: 600;
+    opacity: 1;
+}
+
+
+/* Custom arrow for RT/RW selects */
+.input-group select:not(.country-code-select) {
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23a0a0a0%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13%205.7L146.2%20202.7%2018.8%2075.1a17.6%2017.6%200%200%200-25.3%2024.7l128%20127.9c7%206.9%2017.2%207%2024.2%200l128-127.9c7.5-7.4%207.5-19.5.2-26.8z%22%2F%3E%3C%2Fsvg%3E');
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 0.7em;
+    padding-right: 40px; /* Make space for the arrow */
+    font-weight: 600; /* Font lebih tebal untuk select RT/RW */
+}
+
+.input-group select:not(.country-code-select):focus {
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2300ff00%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13%205.7L146.2%20202.7%2018.8%2075.1a17.6%2017.6%200%200%200-25.3%2024.7l128%20127.9c7%206.9%2017.2%207%2024.2%200l128-127.9c7.5-7.4%207.5-19.5.2-26.8z%22%2F%3E%3C%2Fsvg%3E');
+    background-position: right 15px 45%; /* Arrow slightly up on focus */
+}
+
+
+/* Aturan fokus untuk input & select lainnya */
+.input-group input:not([type="tel"]):focus,
+.input-group select:not(.country-code-select):focus {
+    border-color: var(--bright-green-text);
+    box-shadow: 0 0 0 4px rgba(0, 255, 0, 0.25);
+    background-color: var(--input-field-bg);
 }
 
 
 .input-group label {
     position: absolute;
     top: 18px;
-    left: 18px;
-    color: #999;
+    left: 18px; /* Mengatur agar semua label default berada di posisi yang sama */
+    color: var(--placeholder-color);
     font-size: 1.05em;
     transition: all 0.3s ease-out;
     pointer-events: none;
-    background-color: var(--card-bg);
     padding: 0 6px;
     z-index: 2;
     transform-origin: left center;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600; /* Font lebih tebal untuk floating label */
 }
 
-.input-group input,
-.input-group select {
-    width: 100%;
-    padding: 18px;
-    border: 1px solid var(--border-color);
-    border-radius: 10px;
-    font-size: 1.15em;
-    outline: none;
-    background-color: #fcfcfc;
-    transition: all 0.3s ease;
-    appearance: none; /* Penting! Ini menyembunyikan panah bawaan browser */
-    position: relative;
-    z-index: 1;
-    color: var(--text-color);
-    box-shadow: var(--shadow-inset), var(--shadow-depth-1);
+/* [BARU] Atur posisi awal spesifik untuk label No. WA agar berada di kanan kode negara. */
+/* Sesuaikan nilai 'left' ini jika lebar kode negara Anda berbeda. */
+.input-group .phone-input-wrapper + label {
+    left: 110px; 
 }
 
-.input-group input:focus,
-.input-group select:focus {
-    border-color: var(--secondary-color);
-    box-shadow: var(--shadow-inset), 0 0 0 4px rgba(33, 150, 243, 0.25), var(--shadow-depth-2);
-    background-color: white;
-}
 
-/* Floating Label Logic */
-.input-group input:not(:placeholder-shown) + label,
-.input-group input:focus + label {
+/* Floating Label Logic untuk semua input (termasuk nomor telepon) dan select */
+.input-group input:not([type="tel"]):not(:placeholder-shown) + label,
+.input-group input:not([type="tel"]):focus + label,
+.input-group select:not(.country-code-select):not([value=""]) + .select-label,
+.input-group select:not(.country-code-select):focus + .select-label,
+.input-group .phone-input-wrapper:focus-within + label,
+.input-group .phone-input-wrapper:has(input[type="tel"]:not(:placeholder-shown)) + label {
     top: -8px;
     left: 15px;
     font-size: 0.9em;
-    color: var(--secondary-color);
-    background-color: var(--card-bg);
+    color: var(--bright-green-text);
+    background-color: var(--dark-blue-card-bg); /* TETAP ADA SAAT AKTIF/FOKUS */
     transform: translateY(-50%) scale(0.9);
     padding: 0 5px;
     z-index: 3;
+    font-weight: 600; /* Font lebih tebal untuk floating label saat aktif */
 }
 
-.input-group select:not([value=""]) + .select-label,
-.input-group select:focus + .select-label {
-    top: -8px;
-    left: 15px;
-    font-size: 0.9em;
-    color: var(--secondary-color);
-    background-color: var(--card-bg);
-    transform: translateY(-50%) scale(0.9);
-    padding: 0 5px;
-    z-index: 3;
+/* [BARU] Override posisi 'left' khusus untuk label No. WA saat aktif (naik ke atas). */
+/* Ini akan menimpa 'left: 15px' dari aturan di atas khusus untuk input telepon. */
+.input-group .phone-input-wrapper:focus-within + label,
+.input-group .phone-input-wrapper:has(input[type="tel"]:not(:placeholder-shown)) + label {
+    left: 105px;
 }
 
+
+/* Label default untuk select RT/RW saat belum ada pilihan */
 .input-group select[value=""] + .select-label {
     top: 18px;
     left: 18px;
     font-size: 1.05em;
-    color: #999;
-    background-color: transparent;
+    color: var(--placeholder-color);
+    background-color: transparent; /* Tetap transparan saat default/placeholder terlihat */
     transform: none;
     z-index: 2;
-}
-
-/* --- Kustomisasi Panah Dropdown (menggunakan background-image) --- */
-.input-group select {
-    /* Panah default SVG (menunjuk ke bawah), warna #666666 */
-    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23666666%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13%205.7L146.2%20202.7%2018.8%2075.1a17.6%2017.6%200%200%200-25.3%2024.7l128%20127.9c7%206.9%2017.2%207%2024.2%200l128-127.9c7.5-7.4%207.5-19.5.2-26.8z%22%2F%3E%3C%2Fsvg%3E');
-    background-repeat: no-repeat;
-    background-position: right 20px center; /* Posisi panah */
-    background-size: 0.9em; /* Ukuran panah */
-    padding-right: 50px; /* Memberi ruang agar panah tidak menutupi teks */
-
-    /* Tambahkan transisi untuk properti yang akan diubah */
-    transition: background-position 0.3s ease, background-image 0.3s ease;
-}
-
-/* Panah saat select fokus (dropdown terbuka) */
-.input-group select:focus {
-    /* Warna border dan shadow saat fokus sudah diatur di atas, tidak perlu diulang */
-
-    /* Panah bergeser sedikit ke atas (dari tengah vertikal) */
-    background-position: right 20px 45%; /* Sesuaikan nilai 45% untuk posisi yang pas */
-
-    /* Ganti warna panah saat fokus (opsional, ganti nilai fill di SVG data URI) */
-    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%232196F3%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13%205.7L146.2%20202.7%2018.8%2075.1a17.6%2017.6%200%200%200-25.3%2024.7l128%20127.9c7%206.9%2017.2%207%2024.2%200l128-127.9c7.5-7.4%207.5-19.5.2-26.8z%22%2F%3E%3C%2Fsvg%3E');
-}
-
-/* Panah saat select tidak fokus (kembali ke posisi awal) */
-.input-group select:not(:focus) {
-    /* Kembali ke posisi default (tengah vertikal) */
-    background-position: right 20px center;
-
-    /* Mengembalikan warna panah ke default saat tidak fokus (opsional) */
-    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23666666%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13%205.7L146.2%20202.7%2018.8%2075.1a17.6%2017.6%200%200%200-25.3%2024.7l128%20127.9c7%206.9%2017.2%207%2024.2%200l128-127.9c7.5-7.4%207.5-19.5.2-26.8z%22%2F%3E%3C%2Fsvg%3E');
+    font-weight: 600; /* Font lebih tebal untuk label RT/RW saat default */
 }
 
 
@@ -462,50 +576,62 @@ body.content-loaded .logo-mini-soccer {
     padding-left: 8px;
     position: relative;
     z-index: 0;
+    font-family: 'Poppins', sans-serif;
 }
 
 /* --- Submit Button --- */
 .submit-button {
     display: block;
     width: 100%;
+    max-width: 350px; /* Pertahankan max-width untuk konsistensi centering */
     padding: 20px;
-    background-color: var(--primary-color);
-    color: white;
+    background-color: var(--bright-green-text);
+    color: black;
     font-size: 1.3em;
-    font-weight: 700;
+    font-weight: 700; /* Sudah tebal */
     border: none;
     border-radius: 10px;
     cursor: pointer;
     transition: all 0.3s ease;
     overflow: hidden;
-    box-shadow: var(--shadow-depth-3);
+    box-shadow: 0 8px 20px rgba(0, 255, 0, 0.4);
     transform: translateY(0);
     position: relative;
     letter-spacing: 0.5px;
-    background: linear-gradient(to bottom, var(--primary-color) 0%, #388E3C 100%);
+    background: linear-gradient(to bottom, var(--bright-green-text) 0%, #00cc00 100%);
+    font-family: 'Poppins', sans-serif;
 }
 
 .submit-button:hover {
-    background: linear-gradient(to bottom, #388E3C 0%, #2C6C2F 100%);
+    background: linear-gradient(to bottom, #00cc00 0%, #00b300 100%);
     transform: translateY(-4px);
-    box-shadow: 0 15px 35px rgba(76, 175, 80, 0.6);
+    box-shadow: 0 12px 28px rgba(0, 255, 0, 0.55);
 }
 
 .submit-button:active {
     transform: translateY(1px);
-    box-shadow: inset 0 3px 5px rgba(0,0,0,0.2), 0 2px 8px rgba(76, 175, 80, 0.3);
+    box-shadow: inset 0 3px 5px rgba(0,0,0,0.2), 0 2px 8px rgba(0, 255, 0, 0.3);
 }
 
-/* --- Footer --- */
+/* --- Footer (Memberi Warna pada Copyright) --- */
 footer {
     text-align: center;
     padding: 40px;
-    color: #777;
+    color: var(--light-text-color); /* Warna teks umum footer */
     font-size: 0.95em;
     margin-top: auto;
-    border-top: 1px solid #eee;
-    background-color: var(--card-bg);
+    border-top: 1px solid rgba(255,255,255,0.1); /* Border lebih terang untuk dark theme */
+    background-color: var(--dark-blue-card-bg); /* Background footer mengikuti warna card */
+    display: block;
+    width: 100%; /* Pastikan footer mengisi lebar penuh */
 }
+
+
+footer p { /* Asumsikan teks copyright ada di dalam tag <p> */
+    color: var(--bright-green-text); /* Warna hijau cerah untuk copyright */
+    font-weight: 600; /* Sedikit lebih tebal */
+}
+
 
 /* --- Responsive Design --- */
 @media (max-width: 768px) {
@@ -514,72 +640,80 @@ footer {
         border-bottom-left-radius: 15px;
         border-bottom-right-radius: 15px;
     }
-    .logo-mini-soccer {
-        /* Tidak ada margin-bottom di sini */
-    }
     .container {
         min-height: auto;
-        margin: -40px 15px 50px 15px;
+        margin: 0px 15px 50px 15px; /* Sesuaikan margin untuk responsif */
         padding: 0 15px;
     }
     .registration-card {
         padding: 30px;
         border-radius: 15px;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2), 0 0 0 1px var(--border-color);
-        transform: perspective(1000px) rotateX(1deg) translateY(-15px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.08);
+        transform: perspective(1000px) rotateX(1deg) translateY(-40px); /* KARTU NAIK LEBIH ATAS UNTUK TABLET */
     }
     .registration-card:hover {
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3), 0 0 0 1px var(--border-color);
-        transform: perspective(1000px) rotateX(0deg) translateY(-20px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1);
+        transform: perspective(1000px) rotateX(0deg) translateY(-45px); /* KARTU NAIK LEBIH ATAS SAAT HOVER UNTUK TABLET */
     }
     .registration-card h2 {
-        font-size: 2em;
+        font-size: 2.2em;
         margin-bottom: 25px;
     }
-    .input-group input,
-    .input-group select {
-        padding: 15px;
-        font-size: 1.05em;
-        border-radius: 8px;
-        box-shadow: var(--shadow-inset), 0 2px 5px rgba(0,0,0,0.08);
+
+    .input-group {
+        max-width: 300px; /* Batasi lebar input di tablet */
     }
-    .input-group input:focus,
-    .input-group select:focus {
-        box-shadow: var(--shadow-inset), 0 0 0 3px rgba(33, 150, 243, 0.2), 0 4px 10px rgba(0,0,0,0.1);
+    .submit-button {
+        max-width: 300px;
+    }
+    .rw-rt-group {
+        max-width: 300px;
+    }
+
+    /* Penyesuaian untuk input telepon di tablet */
+    .phone-input-wrapper .country-code-select {
+        padding: 15px 8px;
+        font-size: 1em;
+        min-width: 70px;
+    }
+    .phone-input-wrapper input[type="tel"] {
+        padding: 15px;
+        font-size: 1em;
+    }
+
+    .input-group input:not([type="tel"]):focus,
+    .input-group select:not(.country-code-select):focus {
+        box-shadow: 0 0 0 3px rgba(0, 255, 0, 0.2); /* Pastikan shadow fokus juga tanpa inset */
     }
     .submit-button {
         padding: 16px;
         font-size: 1.2em;
-        box-shadow: 0 8px 20px rgba(76, 175, 80, 0.4);
+        box-shadow: 0 8px 20px rgba(0, 255, 0, 0.4);
     }
     .submit-button:hover {
-        box-shadow: 0 12px 28px rgba(76, 175, 80, 0.5);
+        box-shadow: 0 12px 28px rgba(0, 255, 0, 0.5);
     }
     /* Loading screen responsive */
     .loading-logo {
         margin-bottom: 25px;
     }
     .progress-bar-container {
-        width: 90%;
-        max-width: 350px;
-        height: 28px;
+        display: block;
     }
     .loading-ball {
-        height: 35px;
-        right: -8px;
+        display: block;
     }
     .loading-text {
         font-size: 0.9em;
     }
 
-    /* RW/RT group remains horizontal on smaller screens */
     .rw-rt-group {
-        gap: 15px; /* Sedikit kurangi jarak untuk mobile agar lebih sempit */
-        margin-bottom: 30px; /* Sesuaikan margin bawah */
+        gap: 15px;
+        margin-bottom: 30px;
     }
 
     .rw-rt-group .input-group {
-        margin-bottom: 0; /* Pastikan tidak ada margin bawah tambahan */
+        margin-bottom: 0;
     }
 }
 
@@ -589,19 +723,20 @@ footer {
         border-bottom-left-radius: 10px;
         border-bottom-right-radius: 10px;
     }
-    .logo-mini-soccer {
-        max-height: 120px;
-    }
     .container {
         min-height: auto;
-        margin: -20px 15px 50px 15px;
+        margin: 0px 15px 50px 15px; /* Sesuaikan margin untuk responsif */
         padding: 0 15px;
     }
     .registration-card {
         padding: 25px;
         border-radius: 12px;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.18), 0 0 0 1px var(--border-color);
-        transform: perspective(1000px) rotateX(1deg) translateY(-10px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.05);
+        transform: perspective(1000px) rotateX(1deg) translateY(-30px); /* KARTU NAIK LEBIH ATAS UNTUK MOBILE */
+    }
+    .registration-card:hover {
+        /* ... */
+        transform: perspective(1000px) rotateX(0deg) translateY(-35px); /* KARTU NAIK LEBIH ATAS SAAT HOVER UNTUK MOBILE */
     }
     .registration-card h2 {
         font-size: 1.8em;
@@ -610,12 +745,41 @@ footer {
     .input-group {
         margin-bottom: 25px;
     }
-    .input-group input,
-    .input-group select {
+
+    .input-group {
+        max-width: 280px; /* Batasi lebar input di mobile */
+    }
+    .submit-button {
+        max-width: 280px;
+    }
+    .rw-rt-group {
+        max-width: 280px;
+    }
+
+    /* Penyesuaian untuk input telepon di mobile */
+    .phone-input-wrapper .country-code-select {
+        padding: 12px 6px;
+        font-size: 0.9em;
+        min-width: 60px;
+        background-position: right 3px center;
+        background-size: 0.6em;
+        padding-right: 20px;
+    }
+    .phone-input-wrapper input[type="tel"] {
         padding: 12px;
         font-size: 1em;
-        border-radius: 8px;
     }
+    
+    /* [BARU] Penyesuaian posisi label No. WA untuk mobile */
+    .input-group .phone-input-wrapper + label {
+        left: 80px; 
+    }
+    .input-group .phone-input-wrapper:focus-within + label,
+    .input-group .phone-input-wrapper:has(input[type="tel"]:not(:placeholder-shown)) + label {
+        left: 75px;
+    }
+
+
     .input-group select {
         padding-right: 40px;
         background-position: right 15px center;
@@ -631,12 +795,10 @@ footer {
         margin-bottom: 20px;
     }
     .progress-bar-container {
-        width: 95%;
-        height: 25px;
+        display: block;
     }
     .loading-ball {
-        height: 30px;
-        right: -6px;
+        display: block;
     }
     .loading-text {
         font-size: 0.8em;
@@ -646,13 +808,12 @@ footer {
         font-size: 0.85em;
     }
 
-    /* RW/RT group remains horizontal even on very small screens */
     .rw-rt-group {
-        gap: 10px; /* Kurangi jarak lebih jauh untuk layar sangat kecil */
-        margin-bottom: 25px; /* Sesuaikan margin bawah */
+        gap: 10px;
+        margin-bottom: 25px;
     }
     .rw-rt-group .input-group {
-        margin-bottom: 0; /* Pastikan tidak ada margin bawah tambahan */
+        margin-bottom: 0;
     }
 }
 
@@ -681,7 +842,7 @@ footer {
 }
 
 .popup-content {
-    background-color: var(--card-bg);
+    background-color: var(--card-bg); /* Menggunakan default card-bg untuk popup (warna putih) */
     padding: 50px;
     border-radius: 20px;
     text-align: center;
@@ -714,12 +875,12 @@ footer {
     position: absolute;
     width: 100%;
     height: 100%;
-    border: 6px solid rgba(76, 175, 80, 0.3);
+    border: 6px solid rgba(0, 255, 0, 0.3);
     border-radius: 50%;
     box-sizing: border-box;
-    border-top-color: var(--primary-color);
-    border-right-color: var(--primary-color);
-    border-bottom-color: var(--primary-color);
+    border-top-color: var(--bright-green-text);
+    border-right-color: var(--bright-green-text);
+    border-bottom-color: var(--bright-green-text);
     border-left-color: transparent;
     transform: rotate(-45deg);
     animation: circleFill 1.2s ease-out forwards;
@@ -736,12 +897,12 @@ footer {
     }
     50% {
         opacity: 1;
-        border-left-color: var(--primary-color);
+        border-left-color: var(--bright-green-text);
     }
     100% {
         transform: rotate(315deg) scale(1);
         opacity: 1;
-        border-color: var(--primary-color);
+        border-color: var(--bright-green-text);
     }
 }
 
@@ -761,11 +922,11 @@ footer {
 @keyframes checkmarkAppear {
     0% { transform: scale(0); opacity: 0; }
     50% { transform: scale(1.3); opacity: 1; color: white; }
-    100% { transform: scale(1); opacity: 1; color: var(--primary-color); }
+    100% { transform: scale(1); opacity: 1; color: var(--bright-green-text); }
 }
 
 .popup-content h2 {
-    color: var(--primary-color);
+    color: var(--bright-green-text);
     margin-bottom: 20px;
     font-size: 2.5em;
     line-height: 1.2;
