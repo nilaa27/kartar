@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
         message += `✨ Captain  : ${namaKetua}\n`;
         message += `📞 WA       : ${noKetua}\n`;
         message += `📍 Domisili : ${asalRt}/${asalRw}\n`;
-        message += `🗓️ Waktu    : ${cleanDate}\n`;
+        message += `🗓️ Regist Date : ${cleanDate}\n`;
         message += "```\n"; // Tanda kutip penutup untuk blok kode
         message += `========================\n\n`;
         message += `Admin akan segera menghubungi Anda untuk info turnamen.\n`;
