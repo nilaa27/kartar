@@ -20,19 +20,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // --- Fungsi Bantuan ---
-    const updateSelectLabel = () => {
-        const asalRwSelect = document.getElementById('asalRw');
-        const asalRwLabel = document.querySelector('label[for="asalRw"]');
-        if (asalRwSelect && asalRwLabel) {
-            if (asalRwSelect.value !== "") {
-                asalRwLabel.classList.add('active');
+    const updateSelectLabel = (selectId) => {
+        const selectElement = document.getElementById(selectId);
+        const selectLabel = document.querySelector(`label[for="${selectId}"]`);
+        if (selectElement && selectLabel) {
+            if (selectElement.value !== "") {
+                selectLabel.classList.add('active');
             } else {
-                asalRwLabel.classList.remove('active');
+                selectLabel.classList.remove('active');
             }
         }
     };
 
-    const validateForm = (namaKetua, noKetua, namaTeam, asalRw) => {
+    // [MODIFIKASI] Menambahkan validasi untuk asalRt
+    const validateForm = (namaKetua, noKetua, namaTeam, asalRt, asalRw) => {
         if (!namaKetua) {
             alert('Nama Ketua Tim tidak boleh kosong!');
             document.getElementById('namaKetua').focus();
@@ -41,6 +42,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!namaTeam) {
             alert('Nama Tim tidak boleh kosong!');
             document.getElementById('namaTeam').focus();
+            return false;
+        }
+        if (asalRt === "") {
+            alert('Mohon pilih Asal RT!');
+            document.getElementById('asalRt').focus();
             return false;
         }
         if (asalRw === "") {
@@ -70,22 +76,33 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => successPopup.style.display = 'none', 400);
     };
 
+    // [MODIFIKASI TOTAL] Mengganti format pesan WhatsApp sesuai template baru
     const buildWhatsAppMessage = (data) => {
-        const { namaKetua, noKetua, namaTeam, asalRw, registDate } = data;
+        const { namaKetua, noKetua, namaTeam, asalRt, asalRw, registDate } = data;
 
-        let message = `*🌟 PENDAFTARAN TIM BARU 🌟*\n\n`;
-        message += `\`\`\`📝 Detail Pendaftaran:\`\`\`\n`;
-        message += `\`\`\`├─ Nama Captain      : ${namaKetua}\`\`\`\n`;
-        message += `\`\`\`├─ No. WhatsApp      : ${noKetua}\`\`\`\n`; // Ini akan berisi nomor yang sudah diformat
-        message += `\`\`\`├─ Nama Tim          : ${namaTeam}\`\`\`\n`;
-        message += `\`\`\`└─ Domisili          : ${asalRw}\`\`\`\n\n`;
-        message += `\`\`\`📅 Waktu Pendaftaran:\`\`\`\n`;
-        message += `\`\`\`└─ ${registDate}\`\`\`\n\n`;
-        message += `_Terima kasih atas pendaftaran tim Anda! Kami akan segera menghubungi Anda untuk langkah selanjutnya._\n`;
-        message += `_Mohon menunggu konfirmasi dari Admin Kartar Dr. Soetomo._`;
+        // Hilangkan bagian 'WIB' atau zona waktu lain dari tanggal untuk kebersihan
+        const cleanDate = registDate.split(',').slice(0, 2).join(',');
+
+        let message = `*🎉 Pendaftaran Tim Berhasil 🎉*\n\n`;
+        message += `Halo *${namaKetua}*,\n`;
+        message += `Tim Anda, *${namaTeam}* (RT ${asalRt}/RW ${asalRw}), telah terdaftar!\n\n`;
+        message += `========================\n`;
+        message += `      ⚽️ *Detail Datamu* ⚽️\n`;
+        message += `========================\n`;
+        message += "```\n"; // Tanda kutip pembuka untuk blok kode
+        message += `✨ Captain  : ${namaKetua}\n`;
+        message += `📞 WA       : ${noKetua}\n`;
+        message += `📍 Domisili : RT ${asalRt}/RW ${asalRw}\n`;
+        message += `🗓️ Waktu    : ${cleanDate}\n`;
+        message += "```\n"; // Tanda kutip penutup untuk blok kode
+        message += `========================\n\n`;
+        message += `Admin akan segera menghubungi Anda untuk info turnamen.\n`;
+        message += `Siapkan tim terbaikmu! 🚀\n\n`;
+        message += `*Kartar Dr. Sutomo*`;
 
         return encodeURIComponent(message);
     };
+
 
     const updateLoadingText = (isFinalStatus = false) => {
         loadingTextElement.classList.add('is-hidden');
@@ -141,32 +158,25 @@ document.addEventListener('DOMContentLoaded', () => {
     registrationForm.addEventListener('submit', (event) => {
         event.preventDefault();
 
-        // Mengambil nilai dari form
         const namaKetua = document.getElementById('namaKetua').value.trim();
-        const noKetuaRaw = document.getElementById('noKetua').value.trim(); // Ambil nomor mentah
+        const noKetuaRaw = document.getElementById('noKetua').value.trim();
         const namaTeam = document.getElementById('namaTeam').value.trim();
+        // [BARU] Mengambil data RT dan RW
+        const asalRt = document.getElementById('asalRt').value;
         const asalRw = document.getElementById('asalRw').value;
-
-        // [BARU] Ambil nilai kode negara dari dropdown
         const countryCode = document.getElementById('countryCode').value;
 
-        // Validasi form dengan nomor mentah
-        if (!validateForm(namaKetua, noKetuaRaw, namaTeam, asalRw)) {
+        // [MODIFIKASI] Memasukkan asalRt ke dalam validasi
+        if (!validateForm(namaKetua, noKetuaRaw, namaTeam, asalRt, asalRw)) {
             return;
         }
         
-        // [BARU] Format nomor WhatsApp
-        // 1. Hapus angka 0 di depan jika ada (misal: 0812... -> 812...)
         let formattedNumber = noKetuaRaw;
         if (formattedNumber.startsWith('0')) {
             formattedNumber = formattedNumber.substring(1);
         }
-
-        // 2. Gabungkan kode negara dengan nomor yang sudah diformat
         const fullWhatsAppNumber = `${countryCode}${formattedNumber}`;
 
-
-        // Atur tanggal pendaftaran
         const now = new Date();
         const options = {
             year: 'numeric',
@@ -177,14 +187,14 @@ document.addEventListener('DOMContentLoaded', () => {
             timeZoneName: 'short',
             timeZone: 'Asia/Jakarta'
         };
-        const registDate = now.toLocaleDateString('id-ID', options);
+        const registDate = now.toLocaleString('id-ID', options);
 
-        // Buat objek data dengan nomor yang sudah lengkap
         const registrationData = {
             namaKetua,
-            // [MODIFIKASI] Gunakan nomor yang sudah diformat
             noKetua: fullWhatsAppNumber,
             namaTeam,
+            // [BARU] Menambahkan asalRt dan asalRw ke data
+            asalRt,
             asalRw,
             registDate
         };
@@ -193,16 +203,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const whatsappLink = `https://wa.me/${WA_NUMBER}?text=${encodedMessage}`;
 
         window.open(whatsappLink, '_blank');
-
         showSuccessPopup();
-
         registrationForm.reset();
 
-        // Reset semua label setelah submit
         document.querySelectorAll('.input-group label').forEach(label => {
             label.classList.remove('active');
         });
-        updateSelectLabel(); // Pastikan label select juga di-reset
+        updateSelectLabel('asalRt');
+        updateSelectLabel('asalRw');
     });
 
     closePopupButton.addEventListener('click', hideSuccessPopup);
@@ -219,14 +227,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    const asalRwSelect = document.getElementById('asalRw');
-    if (asalRwSelect) {
-        asalRwSelect.addEventListener('change', updateSelectLabel);
-        asalRwSelect.addEventListener('focus', () => {
-            const label = document.querySelector('label[for="asalRw"]');
-            if(label) label.classList.add('active');
-        });
-        asalRwSelect.addEventListener('blur', updateSelectLabel);
-        updateSelectLabel();
-    }
+    // Menangani update label untuk select RT dan RW
+    ['asalRt', 'asalRw'].forEach(id => {
+        const selectElement = document.getElementById(id);
+        if (selectElement) {
+            selectElement.addEventListener('change', () => updateSelectLabel(id));
+            selectElement.addEventListener('focus', () => {
+                const label = document.querySelector(`label[for="${id}"]`);
+                if(label) label.classList.add('active');
+            });
+            selectElement.addEventListener('blur', () => updateSelectLabel(id));
+            updateSelectLabel(id); // Panggil saat awal load
+        }
+    });
 });
